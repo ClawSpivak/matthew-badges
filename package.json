@@ -1,0 +1,12 @@
+{
+  "name": "matthew-badge-vault",
+  "version": "1.0.0",
+  "description": "Matthew's Car Badge Collection",
+  "main": "web-server.js",
+  "scripts": {
+    "start": "node web-server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

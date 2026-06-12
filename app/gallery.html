@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Matthew's Badge Collection 🏆</title>
+<style>
+  :root {
+    --navy:   #1d3557;
+    --blue:   #457b9d;
+    --yellow: #ffd166;
+    --red:    #e63946;
+    --green:  #06d6a0;
+    --orange: #fb8500;
+    --bg:     #f0f4f8;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    background: var(--bg);
+    min-height: 100vh;
+  }
+
+  /* ── Header ── */
+  header {
+    background: linear-gradient(135deg, var(--navy) 0%, var(--blue) 100%);
+    color: white;
+    padding: 28px 24px 20px;
+    text-align: center;
+  }
+  header h1 {
+    font-size: clamp(1.8rem, 5vw, 2.8rem);
+    font-weight: 900;
+    letter-spacing: -1px;
+  }
+  header h1 span { color: var(--yellow); }
+  .header-sub {
+    font-size: 1rem;
+    opacity: 0.75;
+    margin-top: 6px;
+  }
+
+  /* ── Toolbar ── */
+  .toolbar {
+    background: white;
+    border-bottom: 3px solid var(--yellow);
+    padding: 12px 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  }
+  .toolbar-title {
+    font-weight: 900;
+    color: var(--navy);
+    font-size: 1rem;
+    margin-right: auto;
+  }
+  .filter-btn {
+    padding: 7px 16px;
+    border-radius: 20px;
+    border: 2px solid #dee2e6;
+    background: white;
+    color: #555;
+    font-size: 0.85rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .filter-btn.active, .filter-btn:hover {
+    background: var(--navy);
+    color: white;
+    border-color: var(--navy);
+  }
+  .export-btn {
+    padding: 8px 18px;
+    border-radius: 20px;
+    border: none;
+    background: var(--green);
+    color: #004d3d;
+    font-size: 0.9rem;
+    font-weight: 800;
+    cursor: pointer;
+    transition: all 0.15s;
+    box-shadow: 0 3px 0 #04a07a;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .export-btn:hover { transform: translateY(-1px); box-shadow: 0 5px 0 #04a07a; }
+  .export-btn:active { transform: scale(0.96); }
+
+  /* ── Stats bar ── */
+  .stats-bar {
+    display: flex;
+    gap: 12px;
+    padding: 16px 20px;
+    flex-wrap: wrap;
+  }
+  .stat-pill {
+    background: white;
+    border-radius: 14px;
+    padding: 12px 18px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+    flex: 1;
+    min-width: 110px;
+  }
+  .stat-icon { font-size: 1.6rem; }
+  .stat-num {
+    font-size: 1.6rem;
+    font-weight: 900;
+    color: var(--navy);
+    line-height: 1;
+  }
+  .stat-label {
+    font-size: 0.7rem;
+    color: #888;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  /* ── Grid ── */
+  .grid-container { padding: 0 16px 40px; }
+
+  .badge-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 16px;
+  }
+
+  @media (max-width: 480px) {
+    .badge-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  }
+
+  .badge-card {
+    background: white;
+    border-radius: 18px;
+    overflow: hidden;
+    box-shadow: 0 3px 12px rgba(0,0,0,0.09);
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    animation: pop-in 0.35s cubic-bezier(0.34,1.56,0.64,1) both;
+  }
+  .badge-card:hover { transform: translateY(-4px); box-shadow: 0 10px 28px rgba(0,0,0,0.15); }
+
+  @keyframes pop-in {
+    from { transform: scale(0.8); opacity: 0; }
+    to   { transform: scale(1);   opacity: 1; }
+  }
+
+  .badge-photo {
+    width: 100%;
+    height: 130px;
+    object-fit: contain;
+    background: #f5f7fa;
+    padding: 8px;
+    border-bottom: 2px solid #f0f0f0;
+  }
+  .badge-no-photo {
+    width: 100%;
+    height: 130px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3rem;
+    background: linear-gradient(135deg, #e9ecef, #dee2e6);
+    border-bottom: 2px solid #f0f0f0;
+  }
+
+  .rarity-stripe {
+    height: 4px;
+  }
+  .rarity-stripe.common    { background: #adb5bd; }
+  .rarity-stripe.uncommon  { background: var(--blue); }
+  .rarity-stripe.rare      { background: var(--orange); }
+  .rarity-stripe.very_rare { background: linear-gradient(90deg, var(--red), var(--yellow), var(--red)); }
+
+  .badge-info { padding: 12px 12px 10px; }
+  .badge-make {
+    font-size: 0.65rem;
+    color: #aaa;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+  }
+  .badge-name {
+    font-size: 0.9rem;
+    font-weight: 900;
+    color: var(--navy);
+    line-height: 1.25;
+    margin: 3px 0 5px;
+  }
+  .badge-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 6px;
+  }
+  .rarity-stars { font-size: 0.75rem; }
+  .value-tag {
+    font-size: 0.7rem;
+    font-weight: 800;
+    color: #856404;
+    background: #fff3cd;
+    padding: 2px 7px;
+    border-radius: 10px;
+  }
+
+  /* ── Empty state ── */
+  .empty {
+    text-align: center;
+    padding: 80px 20px;
+    color: #bbb;
+  }
+  .empty div:first-child { font-size: 5rem; margin-bottom: 16px; }
+  .empty p { font-size: 1.1rem; }
+
+  /* ── Modal ── */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.65);
+    z-index: 200;
+    align-items: flex-end;
+    justify-content: center;
+  }
+  .modal-overlay.show { display: flex; }
+
+  @media (min-width: 600px) {
+    .modal-overlay { align-items: center; }
+    .modal { border-radius: 24px !important; max-width: 520px; margin: 0 auto; }
+  }
+
+  .modal {
+    background: white;
+    border-radius: 24px 24px 0 0;
+    width: 100%;
+    max-height: 88vh;
+    overflow-y: auto;
+    animation: slide-up 0.3s ease;
+  }
+  @keyframes slide-up {
+    from { transform: translateY(60px); opacity: 0; }
+    to   { transform: translateY(0);    opacity: 1; }
+  }
+
+  .modal-handle {
+    width: 44px; height: 5px;
+    background: #e0e0e0;
+    border-radius: 3px;
+    margin: 14px auto 0;
+  }
+  .modal-body { padding: 20px 22px 28px; }
+
+  .modal-photo {
+    width: 100%;
+    max-height: 260px;
+    object-fit: contain;
+    background: #f5f7fa;
+    border-radius: 16px;
+    margin-bottom: 18px;
+  }
+  .modal-make { font-size: 0.8rem; color: #aaa; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; }
+  .modal-name { font-size: 2rem; font-weight: 900; color: var(--navy); line-height: 1.15; margin: 4px 0 2px; }
+  .modal-years { font-size: 0.9rem; color: #777; margin-bottom: 16px; }
+
+  .modal-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 18px;
+  }
+  .pill {
+    padding: 5px 14px;
+    border-radius: 20px;
+    font-size: 0.82rem;
+    font-weight: 700;
+  }
+  .pill-rarity  { background: #e8f4f8; color: var(--blue); }
+  .pill-value   { background: #fff3cd; color: #856404; }
+  .pill-date    { background: #f0f0f0; color: #666; }
+
+  .modal-desc {
+    font-size: 1rem;
+    color: #333;
+    line-height: 1.55;
+    margin-bottom: 14px;
+  }
+  .fun-fact {
+    background: #fff9e6;
+    border-left: 4px solid var(--yellow);
+    border-radius: 0 12px 12px 0;
+    padding: 13px 15px;
+    font-size: 0.92rem;
+    color: #555;
+    line-height: 1.45;
+    margin-bottom: 10px;
+  }
+  .fun-fact strong { color: #b08400; }
+
+  .modal-close {
+    width: 100%;
+    margin-top: 18px;
+    padding: 13px;
+    border-radius: 14px;
+    border: 2px solid #dee2e6;
+    background: white;
+    color: #666;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+  }
+  .modal-close:hover { background: #f8f9fa; }
+
+  /* ── Makes modal ── */
+  .makes-modal {
+    background: white;
+    border-radius: 24px 24px 0 0;
+    width: 100%;
+    max-height: 80vh;
+    overflow-y: auto;
+    animation: slide-up 0.3s ease;
+  }
+  @media (min-width: 600px) {
+    .makes-modal { border-radius: 24px !important; max-width: 420px; margin: 0 auto; }
+  }
+  .makes-list { padding: 8px 0 24px; }
+  .make-row {
+    display: flex;
+    align-items: center;
+    padding: 11px 22px;
+    cursor: pointer;
+    transition: background 0.15s;
+    gap: 12px;
+  }
+  .make-row:hover { background: #f5f7fa; }
+  .make-row + .make-row { border-top: 1px solid #f0f0f0; }
+  .make-name { flex: 1; font-size: 1rem; font-weight: 800; color: var(--navy); }
+  .make-count {
+    background: var(--navy);
+    color: white;
+    font-size: 0.82rem;
+    font-weight: 900;
+    padding: 4px 12px;
+    border-radius: 20px;
+    min-width: 32px;
+    text-align: center;
+  }
+  .make-rare { font-size: 0.78rem; color: #aaa; font-weight: 700; }
+  .stat-pill.clickable { cursor: pointer; transition: box-shadow 0.15s, transform 0.15s; }
+  .stat-pill.clickable:hover { box-shadow: 0 4px 14px rgba(0,0,0,0.13); transform: translateY(-2px); }
+
+  /* ── Toast ── */
+  .toast {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    background: var(--navy);
+    color: white;
+    padding: 12px 22px;
+    border-radius: 30px;
+    font-weight: 700;
+    font-size: 0.95rem;
+    opacity: 0;
+    transition: all 0.3s;
+    z-index: 999;
+    white-space: nowrap;
+  }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>🏆 Matthew's <span>Badge Collection</span></h1>
+  <div class="header-sub" id="header-sub">Loading...</div>
+</header>
+
+<div class="toolbar">
+  <span class="toolbar-title" id="toolbar-title">All Badges</span>
+  <button class="filter-btn active" onclick="setFilter('all')">All</button>
+  <button class="filter-btn" onclick="setFilter('rare')">⭐⭐⭐ Rare+</button>
+  <button class="filter-btn" onclick="setFilter('very_rare')">🔥 Very Rare</button>
+  <button class="export-btn" onclick="exportExcel()">📊 Export to Excel</button>
+</div>
+
+<div class="stats-bar" id="stats-bar"></div>
+
+<div class="grid-container">
+  <div class="badge-grid" id="badge-grid"></div>
+  <div class="empty" id="empty" style="display:none">
+    <div>🚗</div>
+    <p>No badges yet — start scanning!</p>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal-overlay" id="modal-overlay" onclick="maybeCloseModal(event)">
+  <div class="modal" id="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-body" id="modal-body"></div>
+  </div>
+</div>
+
+<!-- Makes modal -->
+<div class="modal-overlay" id="makes-overlay" onclick="maybeCloseMakes(event)">
+  <div class="makes-modal">
+    <div class="modal-handle"></div>
+    <div style="padding: 18px 22px 6px; display:flex; align-items:center; justify-content:space-between;">
+      <div style="font-size:1.25rem; font-weight:900; color:var(--navy)">🚗 Badges by Make</div>
+      <button onclick="closeMakes()" style="background:none;border:none;font-size:1.3rem;cursor:pointer;color:#aaa;">✕</button>
+    </div>
+    <div class="makes-list" id="makes-list"></div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<script>
+const RARITY_STARS = { common: '⭐', uncommon: '⭐⭐', rare: '⭐⭐⭐', very_rare: '⭐⭐⭐⭐' };
+const RARITY_LABEL = { common: 'Common', uncommon: 'Uncommon', rare: 'Rare!', very_rare: '🔥 Very Rare!' };
+
+let allBadges = [];
+let currentFilter = 'all';
+
+// ── Load ────────────────────────────────────────────────────────────────────
+
+async function load() {
+  try {
+    const resp = await fetch('/api/collection');
+    const data = await resp.json();
+    allBadges = (data.badges || []).slice().reverse();
+    render();
+  } catch(e) {
+    document.getElementById('header-sub').textContent = 'Could not load collection';
+  }
+}
+
+// ── Filter ──────────────────────────────────────────────────────────────────
+
+function setFilter(f) {
+  currentFilter = f;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  render();
+}
+
+function clearMakeFilter() {
+  setFilter('all');
+  document.querySelector('.filter-btn').classList.add('active');
+}
+
+function filtered() {
+  if (currentFilter === 'rare')           return allBadges.filter(b => b.rarity === 'rare' || b.rarity === 'very_rare');
+  if (currentFilter === 'very_rare')      return allBadges.filter(b => b.rarity === 'very_rare');
+  if (currentFilter.startsWith('make:')) {
+    const make = currentFilter.slice(5);
+    return allBadges.filter(b => b.make === make);
+  }
+  return allBadges;
+}
+
+// ── Render ──────────────────────────────────────────────────────────────────
+
+function render() {
+  const badges = filtered();
+
+  // Header sub
+  document.getElementById('header-sub').textContent =
+    `${allBadges.length} badge${allBadges.length !== 1 ? 's' : ''} collected`;
+
+  // Toolbar
+  document.getElementById('toolbar-title').textContent =
+    currentFilter === 'all'       ? `All Badges (${badges.length})` :
+    currentFilter === 'rare'      ? `Rare+ Badges (${badges.length})` :
+    currentFilter === 'very_rare' ? `Very Rare (${badges.length})` :
+    currentFilter.startsWith('make:') ? `${currentFilter.slice(5)} (${badges.length})` :
+    `Badges (${badges.length})`;
+
+  // Stats
+  const makes = new Set(allBadges.map(b => b.make).filter(Boolean));
+  const rare  = allBadges.filter(b => b.rarity === 'rare' || b.rarity === 'very_rare').length;
+  const vRare = allBadges.filter(b => b.rarity === 'very_rare').length;
+  document.getElementById('stats-bar').innerHTML = `
+    <div class="stat-pill">
+      <div class="stat-icon">🏅</div>
+      <div>
+        <div class="stat-num">${allBadges.length}</div>
+        <div class="stat-label">Total</div>
+      </div>
+    </div>
+    <div class="stat-pill clickable" onclick="showMakes()">
+      <div class="stat-icon">🚗</div>
+      <div>
+        <div class="stat-num">${makes.size}</div>
+        <div class="stat-label">Makes ↗</div>
+      </div>
+    </div>
+    <div class="stat-pill">
+      <div class="stat-icon">⭐</div>
+      <div>
+        <div class="stat-num">${rare}</div>
+        <div class="stat-label">Rare+</div>
+      </div>
+    </div>
+    <div class="stat-pill">
+      <div class="stat-icon">🔥</div>
+      <div>
+        <div class="stat-num">${vRare}</div>
+        <div class="stat-label">Very Rare</div>
+      </div>
+    </div>
+  `;
+
+  // Grid
+  const grid = document.getElementById('badge-grid');
+  const empty = document.getElementById('empty');
+
+  if (badges.length === 0) {
+    grid.innerHTML = '';
+    empty.style.display = 'block';
+    return;
+  }
+  empty.style.display = 'none';
+
+  grid.innerHTML = badges.map((b, i) => {
+    const photoEl = b.photo
+      ? `<img class="badge-photo" src="${b.photo}" alt="${esc(b.badge_name || '')}" loading="lazy">`
+      : `<div class="badge-no-photo">🏅</div>`;
+    return `
+      <div class="badge-card" onclick="showDetail('${b.id}')"
+           style="animation-delay:${Math.min(i * 0.04, 0.4)}s">
+        ${photoEl}
+        <div class="rarity-stripe ${b.rarity || 'common'}"></div>
+        <div class="badge-info">
+          <div class="badge-make">${esc(b.make || 'Unknown')}</div>
+          <div class="badge-name">${esc(b.badge_name || b.model || 'Badge')}</div>
+          <div class="badge-meta">
+            <span class="rarity-stars">${RARITY_STARS[b.rarity] || '⭐'}</span>
+            ${b.value_estimate ? `<span class="value-tag">💰 ${esc(b.value_estimate)}</span>` : ''}
+          </div>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+// ── Detail modal ─────────────────────────────────────────────────────────────
+
+function showDetail(id) {
+  const b = allBadges.find(x => x.id === id);
+  if (!b) return;
+
+  const dateStr = b.added
+    ? new Date(b.added).toLocaleDateString('en-US', { month:'long', day:'numeric', year:'numeric' })
+    : '';
+
+  document.getElementById('modal-body').innerHTML = `
+    ${b.photo ? `<img class="modal-photo" src="${b.photo}" alt="${esc(b.badge_name || '')}">` : ''}
+    <div class="modal-make">${esc(b.make || 'Unknown')}</div>
+    <div class="modal-name">${esc(b.badge_name || b.model || 'Badge')}</div>
+    <div class="modal-years">${esc(b.years || '')}${b.model && b.years ? ' · ' + esc(b.model) : esc(b.model || '')}</div>
+    <div class="modal-pills">
+      ${b.rarity ? `<span class="pill pill-rarity">${RARITY_STARS[b.rarity] || ''} ${RARITY_LABEL[b.rarity] || b.rarity}</span>` : ''}
+      ${b.value_estimate ? `<span class="pill pill-value">💰 ${esc(b.value_estimate)}</span>` : ''}
+      ${dateStr ? `<span class="pill pill-date">📅 ${dateStr}</span>` : ''}
+    </div>
+    ${b.description ? `<div class="modal-desc">${esc(b.description)}</div>` : ''}
+    ${b.fun_fact ? `<div class="fun-fact"><strong>⚡ Fun Fact:</strong> ${esc(b.fun_fact)}</div>` : ''}
+    <button class="modal-close" onclick="closeModal()">Close</button>
+  `;
+
+  document.getElementById('modal-overlay').classList.add('show');
+}
+
+function maybeCloseModal(e) {
+  if (e.target === document.getElementById('modal-overlay')) closeModal();
+}
+function closeModal() {
+  document.getElementById('modal-overlay').classList.remove('show');
+}
+
+// ── Export ────────────────────────────────────────────────────────────────────
+
+async function exportExcel() {
+  showToast('⏳ Building spreadsheet...');
+  try {
+    const resp = await fetch('/api/export/excel');
+    if (!resp.ok) throw new Error('Export failed');
+    const blob = await resp.blob();
+    const url  = URL.createObjectURL(blob);
+    const a    = document.createElement('a');
+    a.href     = url;
+    a.download = `MatthewBadges_${new Date().toISOString().slice(0,10)}.xlsx`;
+    a.click();
+    URL.revokeObjectURL(url);
+    showToast('✅ Downloaded!');
+  } catch(e) {
+    showToast('❌ Export failed — try again');
+  }
+}
+
+// ── Toast ─────────────────────────────────────────────────────────────────────
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+// ── Makes breakdown ───────────────────────────────────────────────────────────
+
+function showMakes() {
+  // Count badges per make, sorted by count desc
+  const counts = {};
+  const rares  = {};
+  allBadges.forEach(b => {
+    const m = b.make || 'Unknown';
+    counts[m] = (counts[m] || 0) + 1;
+    if (b.rarity === 'rare' || b.rarity === 'very_rare')
+      rares[m] = (rares[m] || 0) + 1;
+  });
+
+  const sorted = Object.entries(counts).sort((a, b) => b[1] - a[1]);
+
+  document.getElementById('makes-list').innerHTML = sorted.map(([make, count]) => {
+    const r = rares[make] || 0;
+    return `
+      <div class="make-row" onclick="filterByMake('${esc(make)}')">
+        <div class="make-name">${esc(make)}</div>
+        ${r ? `<div class="make-rare">⭐ ${r} rare</div>` : ''}
+        <div class="make-count">${count}</div>
+      </div>
+    `;
+  }).join('');
+
+  document.getElementById('makes-overlay').classList.add('show');
+}
+
+function filterByMake(make) {
+  closeMakes();
+  currentFilter = `make:${make}`;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('toolbar-title').textContent = `${make} (${allBadges.filter(b => b.make === make).length})`;
+  render();
+}
+
+function maybeCloseMakes(e) {
+  if (e.target === document.getElementById('makes-overlay')) closeMakes();
+}
+function closeMakes() {
+  document.getElementById('makes-overlay').classList.remove('show');
+}
+
+// ── Helpers ───────────────────────────────────────────────────────────────────
+
+function esc(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+load();
+</script>
+</body>
+</html>

@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Matthew's Badge Vault</title>
+<link href="https://fonts.googleapis.com/css2?family=Bangers&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --common:     #6b7280;
+    --uncommon:   #3b82f6;
+    --rare:       #f59e0b;
+    --ultra-rare: #ec4899;
+    --bg:         #0f0f1a;
+    --card-bg:    #1a1b2e;
+    --border:     #2a2b40;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: #e2e8f0;
+    font-family: 'Inter', sans-serif;
+    min-height: 100vh;
+  }
+
+  /* ── Header ── */
+  header {
+    background: linear-gradient(135deg, #1a1b2e 0%, #16213e 50%, #0f3460 100%);
+    border-bottom: 2px solid #e53e3e;
+    padding: 24px 20px 20px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  header::before {
+    content: '🏎️';
+    position: absolute; left: 20px; top: 50%;
+    transform: translateY(-50%);
+    font-size: 48px;
+    opacity: 0.15;
+  }
+  header::after {
+    content: '🏁';
+    position: absolute; right: 20px; top: 50%;
+    transform: translateY(-50%);
+    font-size: 48px;
+    opacity: 0.15;
+  }
+  h1 {
+    font-family: 'Bangers', cursive;
+    font-size: clamp(2.4rem, 7vw, 4.2rem);
+    letter-spacing: 3px;
+    background: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1.1;
+  }
+  .tagline {
+    font-size: 0.95rem;
+    color: #94a3b8;
+    margin-top: 4px;
+  }
+
+  /* ── Stats bar ── */
+  .stats-bar {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    padding: 16px 20px;
+    background: #12131f;
+    border-bottom: 1px solid var(--border);
+  }
+  .stat-chip {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 6px 16px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #cbd5e1;
+  }
+  .stat-chip span { color: #f59e0b; }
+
+  /* ── Filters ── */
+  .filters {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 16px 20px;
+  }
+  .filter-btn {
+    background: var(--card-bg);
+    border: 1.5px solid var(--border);
+    border-radius: 999px;
+    padding: 6px 18px;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: #94a3b8;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .filter-btn:hover, .filter-btn.active {
+    color: #fff;
+    border-color: currentColor;
+  }
+  .filter-btn[data-rarity="all"].active    { border-color: #e2e8f0; color: #e2e8f0; }
+  .filter-btn[data-rarity="common"].active     { border-color: var(--common);     color: var(--common); }
+  .filter-btn[data-rarity="uncommon"].active   { border-color: var(--uncommon);   color: var(--uncommon); }
+  .filter-btn[data-rarity="rare"].active       { border-color: var(--rare);       color: var(--rare); }
+  .filter-btn[data-rarity="ultra-rare"].active { border-color: var(--ultra-rare); color: var(--ultra-rare); }
+
+  /* ── Grid ── */
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 18px;
+    padding: 20px;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  /* ── Card ── */
+  .card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+    transition: transform 0.2s, box-shadow 0.2s;
+    cursor: pointer;
+    position: relative;
+  }
+  .card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.5);
+  }
+  .card[data-rarity="common"]     { border-color: #374151; }
+  .card[data-rarity="uncommon"]   { border-color: #1d4ed8; }
+  .card[data-rarity="rare"]       { border-color: #d97706; box-shadow: 0 0 12px rgba(245,158,11,0.15); }
+  .card[data-rarity="ultra-rare"] {
+    border-color: #db2777;
+    box-shadow: 0 0 20px rgba(236,72,153,0.25);
+    animation: ultraPulse 3s ease-in-out infinite;
+  }
+  @keyframes ultraPulse {
+    0%,100% { box-shadow: 0 0 20px rgba(236,72,153,0.25); }
+    50%      { box-shadow: 0 0 35px rgba(236,72,153,0.5); }
+  }
+
+  .card-photo {
+    width: 100%;
+    aspect-ratio: 1;
+    object-fit: cover;
+    background: #0d0e1a;
+    display: block;
+  }
+  .card-photo.no-photo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 60px;
+  }
+
+  .card-body { padding: 14px; }
+
+  .rarity-chip {
+    display: inline-block;
+    font-size: 0.68rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 3px 10px;
+    border-radius: 999px;
+    margin-bottom: 8px;
+  }
+  .rarity-common     { background: #374151; color: #9ca3af; }
+  .rarity-uncommon   { background: #1e3a8a; color: #93c5fd; }
+  .rarity-rare       { background: #78350f; color: #fcd34d; }
+  .rarity-ultra-rare {
+    background: linear-gradient(135deg, #831843, #1e1b4b);
+    color: #f9a8d4;
+  }
+
+  .card-name {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #f1f5f9;
+    line-height: 1.3;
+    margin-bottom: 4px;
+  }
+  .card-make {
+    font-size: 0.8rem;
+    color: #64748b;
+    margin-bottom: 10px;
+  }
+  .card-make strong { color: #94a3b8; }
+
+  .card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 10px;
+    border-top: 1px solid var(--border);
+    margin-top: 4px;
+  }
+  .card-value { font-size: 0.78rem; color: #4ade80; font-weight: 600; }
+  .card-date  { font-size: 0.72rem; color: #475569; }
+
+  /* ── Modal ── */
+  .modal-overlay {
+    display: none;
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.85);
+    z-index: 100;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  .modal-overlay.open { display: flex; }
+
+  .modal {
+    background: var(--card-bg);
+    border-radius: 20px;
+    max-width: 520px;
+    width: 100%;
+    overflow: hidden;
+    position: relative;
+    border: 1px solid var(--border);
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+  .modal-photo {
+    width: 100%;
+    aspect-ratio: 1;
+    object-fit: cover;
+    max-height: 300px;
+  }
+  .modal-body { padding: 20px; }
+  .modal-name {
+    font-family: 'Bangers', cursive;
+    font-size: 1.8rem;
+    letter-spacing: 1px;
+    color: #f1f5f9;
+    margin: 10px 0 4px;
+  }
+  .modal-make { color: #94a3b8; font-size: 0.9rem; margin-bottom: 16px; }
+  .modal-section { margin-bottom: 14px; }
+  .modal-label {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #475569;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+  .modal-text { font-size: 0.9rem; color: #cbd5e1; line-height: 1.6; }
+  .modal-funfact {
+    background: #12131f;
+    border-left: 3px solid #f59e0b;
+    padding: 10px 14px;
+    border-radius: 0 8px 8px 0;
+    font-size: 0.88rem;
+    color: #fcd34d;
+    font-style: italic;
+    line-height: 1.5;
+  }
+  .modal-close {
+    position: absolute; top: 14px; right: 14px;
+    background: rgba(0,0,0,0.6);
+    border: none;
+    color: #fff;
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    font-size: 18px;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    z-index: 10;
+  }
+
+  /* ── Empty/loading ── */
+  .empty {
+    grid-column: 1/-1;
+    text-align: center;
+    padding: 60px 20px;
+    color: #475569;
+    font-size: 1.1rem;
+  }
+  .spinner {
+    width: 40px; height: 40px;
+    border: 3px solid var(--border);
+    border-top-color: #f59e0b;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin: 0 auto 16px;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* ── Footer ── */
+  footer {
+    text-align: center;
+    padding: 30px;
+    color: #334155;
+    font-size: 0.8rem;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Matthew's Badge Vault</h1>
+  <p class="tagline">Every badge tells a story 🔩</p>
+</header>
+
+<div class="stats-bar" id="stats-bar">
+  <div class="stat-chip">Loading...</div>
+</div>
+
+<div class="filters">
+  <button class="filter-btn active" data-rarity="all">All</button>
+  <button class="filter-btn" data-rarity="ultra-rare">⭐ Ultra Rare</button>
+  <button class="filter-btn" data-rarity="rare">🥇 Rare</button>
+  <button class="filter-btn" data-rarity="uncommon">💙 Uncommon</button>
+  <button class="filter-btn" data-rarity="common">⚙️ Common</button>
+</div>
+
+<div class="grid" id="grid">
+  <div class="empty"><div class="spinner"></div>Loading the vault...</div>
+</div>
+
+<div class="modal-overlay" id="modal-overlay">
+  <div class="modal" id="modal">
+    <button class="modal-close" id="modal-close">✕</button>
+    <img class="modal-photo" id="modal-photo" src="" alt="">
+    <div class="modal-body">
+      <div id="modal-rarity-chip"></div>
+      <div class="modal-name" id="modal-name"></div>
+      <div class="modal-make" id="modal-make"></div>
+      <div class="modal-section">
+        <div class="modal-label">Description</div>
+        <div class="modal-text" id="modal-desc"></div>
+      </div>
+      <div class="modal-section">
+        <div class="modal-label">⚡ Fun Fact</div>
+        <div class="modal-funfact" id="modal-fact"></div>
+      </div>
+      <div class="modal-section" style="display:flex;gap:20px;">
+        <div>
+          <div class="modal-label">Est. Value</div>
+          <div class="modal-text" id="modal-value" style="color:#4ade80;font-weight:700;"></div>
+        </div>
+        <div>
+          <div class="modal-label">Confidence</div>
+          <div class="modal-text" id="modal-conf"></div>
+        </div>
+        <div>
+          <div class="modal-label">Found</div>
+          <div class="modal-text" id="modal-date"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>Built for Matthew Spivak 🏎️ — Keep hunting!</footer>
+
+<script>
+const GITHUB_RAW = 'https://raw.githubusercontent.com/ClawSpivak/matthew-badges/main';
+
+const RARITY_ORDER = ['ultra-rare','rare','uncommon','common'];
+
+function rarityClass(r) {
+  return 'rarity-' + (r || 'common').toLowerCase().replace(' ','-');
+}
+function rarityLabel(r) {
+  const map = {'ultra-rare':'⭐ Ultra Rare','rare':'🥇 Rare','uncommon':'💙 Uncommon','common':'⚙️ Common'};
+  return map[(r||'').toLowerCase()] || r || 'Common';
+}
+function photoUrl(photo) {
+  if (!photo) return null;
+  const file = photo.replace(/^\/photos\//, '');
+  return `${GITHUB_RAW}/app/photos/${file}`;
+}
+function fmtDate(iso) {
+  if (!iso) return '';
+  return new Date(iso).toLocaleDateString('en-US', {month:'short', day:'numeric', year:'numeric'});
+}
+
+let allBadges = [];
+let activeFilter = 'all';
+
+async function loadBadges() {
+  try {
+    const res = await fetch('/api/badges');
+    const data = await res.json();
+    allBadges = (data.badges || []).sort((a,b) => {
+      const ai = RARITY_ORDER.indexOf((a.rarity||'').toLowerCase());
+      const bi = RARITY_ORDER.indexOf((b.rarity||'').toLowerCase());
+      return (ai === -1 ? 99 : ai) - (bi === -1 ? 99 : bi);
+    });
+    renderStats();
+    renderGrid();
+  } catch(e) {
+    document.getElementById('grid').innerHTML =
+      '<div class="empty">Couldn\'t load badges. Try refreshing!</div>';
+  }
+}
+
+function renderStats() {
+  const total  = allBadges.length;
+  const makes  = new Set(allBadges.map(b => b.make).filter(Boolean)).size;
+  const valued = allBadges.filter(b => b.value_estimate && b.value_estimate !== 'N/A');
+  const minVal = valued.reduce((sum, b) => {
+    const m = (b.value_estimate||'').match(/\$?([\d,]+)/);
+    return sum + (m ? parseInt(m[1].replace(',','')) : 0);
+  }, 0);
+  const rares  = allBadges.filter(b => ['rare','ultra-rare'].includes((b.rarity||'').toLowerCase())).length;
+
+  document.getElementById('stats-bar').innerHTML = `
+    <div class="stat-chip">🏅 <span>${total}</span> Badges</div>
+    <div class="stat-chip">🚗 <span>${makes}</span> Makes</div>
+    <div class="stat-chip">💰 Est. <span>$${minVal.toLocaleString()}+</span></div>
+    <div class="stat-chip">⭐ <span>${rares}</span> Rare+</div>
+  `;
+}
+
+function renderGrid() {
+  const filtered = activeFilter === 'all'
+    ? allBadges
+    : allBadges.filter(b => (b.rarity||'').toLowerCase() === activeFilter);
+
+  if (!filtered.length) {
+    document.getElementById('grid').innerHTML =
+      `<div class="empty">No ${activeFilter} badges yet — keep hunting!</div>`;
+    return;
+  }
+
+  document.getElementById('grid').innerHTML = filtered.map(b => {
+    const r    = (b.rarity || 'common').toLowerCase();
+    const pUrl = photoUrl(b.photo);
+    const img  = pUrl
+      ? `<img class="card-photo" src="${pUrl}" alt="${b.badge_name}" loading="lazy" onerror="this.style.display='none'">`
+      : `<div class="card-photo no-photo">🏅</div>`;
+    return `
+    <div class="card" data-rarity="${r}" data-id="${b.id}" onclick="openModal('${b.id}')">
+      ${img}
+      <div class="card-body">
+        <div class="rarity-chip ${rarityClass(r)}">${rarityLabel(r)}</div>
+        <div class="card-name">${b.badge_name || 'Unknown Badge'}</div>
+        <div class="card-make"><strong>${b.make || '?'}</strong>${b.model ? ' · ' + b.model : ''}${b.years ? ' · ' + b.years : ''}</div>
+        <div class="card-footer">
+          <div class="card-value">${b.value_estimate || ''}</div>
+          <div class="card-date">${fmtDate(b.added)}</div>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function openModal(id) {
+  const b = allBadges.find(x => x.id === id);
+  if (!b) return;
+  const r = (b.rarity || 'common').toLowerCase();
+  const pUrl = photoUrl(b.photo);
+
+  document.getElementById('modal-photo').src = pUrl || '';
+  document.getElementById('modal-photo').style.display = pUrl ? 'block' : 'none';
+  document.getElementById('modal-rarity-chip').innerHTML =
+    `<div class="rarity-chip ${rarityClass(r)}" style="margin-bottom:8px">${rarityLabel(r)}</div>`;
+  document.getElementById('modal-name').textContent  = b.badge_name || 'Unknown Badge';
+  document.getElementById('modal-make').textContent  = [b.make, b.model, b.years].filter(Boolean).join(' · ');
+  document.getElementById('modal-desc').textContent  = b.description || '';
+  document.getElementById('modal-fact').textContent  = b.fun_fact || '';
+  document.getElementById('modal-value').textContent = b.value_estimate || '—';
+  document.getElementById('modal-conf').textContent  = b.confidence || '—';
+  document.getElementById('modal-date').textContent  = fmtDate(b.added);
+  document.getElementById('modal-overlay').classList.add('open');
+}
+
+document.getElementById('modal-close').onclick = () =>
+  document.getElementById('modal-overlay').classList.remove('open');
+document.getElementById('modal-overlay').onclick = (e) => {
+  if (e.target === document.getElementById('modal-overlay'))
+    document.getElementById('modal-overlay').classList.remove('open');
+};
+
+document.querySelectorAll('.filter-btn').forEach(btn => {
+  btn.onclick = () => {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    activeFilter = btn.dataset.rarity;
+    renderGrid();
+  };
+});
+
+loadBadges();
+</script>
+</body>
+</html>

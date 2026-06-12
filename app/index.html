@@ -1,0 +1,1205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>🏆 Badge Hunter</title>
+<style>
+  :root {
+    --red: #e63946;
+    --blue: #1d3557;
+    --light-blue: #457b9d;
+    --yellow: #ffd166;
+    --green: #06d6a0;
+    --orange: #fb8500;
+    --bg: #f8f9fa;
+    --white: #ffffff;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: var(--bg);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── Header ── */
+  header {
+    background: linear-gradient(135deg, var(--blue) 0%, var(--light-blue) 100%);
+    color: white;
+    padding: 16px 20px 12px;
+    text-align: center;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  header h1 {
+    font-size: 1.8rem;
+    font-weight: 900;
+    letter-spacing: -0.5px;
+  }
+  header h1 span { color: var(--yellow); }
+  .header-sub {
+    font-size: 0.85rem;
+    opacity: 0.85;
+    margin-top: 2px;
+  }
+
+  /* ── Nav tabs ── */
+  nav {
+    display: flex;
+    background: var(--blue);
+    border-bottom: 3px solid var(--yellow);
+  }
+  nav button {
+    flex: 1;
+    padding: 12px;
+    background: none;
+    border: none;
+    color: rgba(255,255,255,0.6);
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  nav button.active {
+    color: var(--yellow);
+    border-bottom: 3px solid var(--yellow);
+    margin-bottom: -3px;
+  }
+  nav button:hover { color: white; }
+
+  /* ── Views ── */
+  .view { display: none; padding: 20px; }
+  .view.active { display: block; }
+
+  /* ── Scan View ── */
+  .scan-area {
+    background: white;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    margin-bottom: 20px;
+  }
+
+  #preview-container {
+    position: relative;
+    width: 100%;
+    padding-bottom: 75%;
+    background: #1a1a2e;
+    overflow: hidden;
+  }
+  #video-preview, #photo-canvas, #photo-preview {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    object-fit: cover;
+  }
+  #photo-canvas { display: none; }
+  #photo-preview { display: none; object-fit: contain; background: #1a1a2e; }
+
+  .camera-overlay {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 60%; height: 60%;
+    border: 3px solid rgba(255,209,102,0.7);
+    border-radius: 12px;
+    pointer-events: none;
+  }
+  .camera-overlay::before, .camera-overlay::after {
+    content: '';
+    position: absolute;
+    width: 20px; height: 20px;
+    border-color: var(--yellow);
+    border-style: solid;
+  }
+  .camera-overlay::before { top: -3px; left: -3px; border-width: 3px 0 0 3px; border-radius: 3px 0 0 0; }
+  .camera-overlay::after  { bottom: -3px; right: -3px; border-width: 0 3px 3px 0; border-radius: 0 0 3px 0; }
+
+  .no-camera-msg {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    text-align: center;
+    font-size: 0.9rem;
+    opacity: 0.7;
+  }
+  .no-camera-msg div { font-size: 3rem; margin-bottom: 8px; }
+
+  /* Scan buttons */
+  .scan-buttons {
+    padding: 16px;
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .scan-buttons label {
+    flex: 1;
+    min-width: 120px;
+  }
+  .btn {
+    display: block;
+    width: 100%;
+    padding: 14px 20px;
+    border: none;
+    border-radius: 14px;
+    font-size: 1.05rem;
+    font-weight: 800;
+    cursor: pointer;
+    transition: transform 0.15s, box-shadow 0.15s;
+    text-align: center;
+    letter-spacing: 0.3px;
+  }
+  .btn:active { transform: scale(0.96); }
+  .btn-yellow {
+    background: var(--yellow);
+    color: var(--blue);
+    box-shadow: 0 4px 0 #c9a000;
+  }
+  .btn-yellow:hover { box-shadow: 0 6px 0 #c9a000; transform: translateY(-1px); }
+  .btn-red {
+    background: var(--red);
+    color: white;
+    box-shadow: 0 4px 0 #a01a22;
+  }
+  .btn-red:hover { box-shadow: 0 6px 0 #a01a22; transform: translateY(-1px); }
+  .btn-green {
+    background: var(--green);
+    color: #004d3d;
+    box-shadow: 0 4px 0 #04a07a;
+  }
+  .btn-green:hover { box-shadow: 0 6px 0 #04a07a; transform: translateY(-1px); }
+  .btn-blue {
+    background: var(--light-blue);
+    color: white;
+    box-shadow: 0 4px 0 #2e5d78;
+  }
+  .btn-blue:hover { box-shadow: 0 6px 0 #2e5d78; transform: translateY(-1px); }
+  .btn-gray {
+    background: #dee2e6;
+    color: #495057;
+    box-shadow: 0 4px 0 #adb5bd;
+  }
+  .btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none !important;
+  }
+
+  #file-input { display: none; }
+
+  /* ── Loading spinner ── */
+  .loading-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(29,53,87,0.85);
+    z-index: 999;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    text-align: center;
+    gap: 20px;
+  }
+  .loading-overlay.show { display: flex; }
+  .spinner {
+    width: 64px; height: 64px;
+    border: 6px solid rgba(255,255,255,0.2);
+    border-top-color: var(--yellow);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .loading-text { font-size: 1.3rem; font-weight: 700; }
+  .loading-sub  { font-size: 0.9rem; opacity: 0.7; }
+
+  /* ── Result Card ── */
+  #result-section { display: none; }
+  .result-card {
+    background: white;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.12);
+    margin-bottom: 20px;
+    animation: pop-in 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  @keyframes pop-in {
+    from { transform: scale(0.85); opacity: 0; }
+    to   { transform: scale(1);    opacity: 1; }
+  }
+
+  .result-header {
+    padding: 20px;
+    color: white;
+    position: relative;
+  }
+  .result-header.high    { background: linear-gradient(135deg, #2d6a4f, #40916c); }
+  .result-header.medium  { background: linear-gradient(135deg, #457b9d, #1d3557); }
+  .result-header.low     { background: linear-gradient(135deg, #6c757d, #495057); }
+
+  .result-make {
+    font-size: 0.9rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    opacity: 0.8;
+    letter-spacing: 1px;
+  }
+  .result-name {
+    font-size: 1.6rem;
+    font-weight: 900;
+    line-height: 1.2;
+    margin: 4px 0 6px;
+  }
+  .result-years {
+    font-size: 0.9rem;
+    opacity: 0.8;
+  }
+  .confidence-badge {
+    position: absolute;
+    top: 16px; right: 16px;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    background: rgba(255,255,255,0.25);
+  }
+
+  .rarity-bar {
+    padding: 12px 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-bottom: 1px solid #f0f0f0;
+  }
+  .rarity-label { font-weight: 700; font-size: 0.85rem; color: #666; }
+  .rarity-stars { font-size: 1.3rem; }
+  .value-pill {
+    margin-left: auto;
+    background: #fff3cd;
+    color: #856404;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 700;
+  }
+
+  .result-body { padding: 16px 20px; }
+  .result-desc {
+    font-size: 1rem;
+    color: #333;
+    line-height: 1.5;
+    margin-bottom: 14px;
+  }
+  .fun-fact-box {
+    background: #fff9e6;
+    border-left: 4px solid var(--yellow);
+    border-radius: 0 10px 10px 0;
+    padding: 12px 14px;
+    margin-bottom: 16px;
+  }
+  .fun-fact-label {
+    font-size: 0.75rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    color: #c9a000;
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+  }
+  .fun-fact-text {
+    font-size: 0.95rem;
+    color: #555;
+    line-height: 1.4;
+  }
+
+  .result-photo {
+    width: 100%;
+    max-height: 200px;
+    object-fit: contain;
+    background: #f8f9fa;
+    border-bottom: 1px solid #eee;
+  }
+
+  .result-actions {
+    padding: 16px;
+    display: flex;
+    gap: 10px;
+  }
+
+  /* ── Confetti ── */
+  .confetti-container {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1000;
+    overflow: hidden;
+  }
+  .confetti-piece {
+    position: absolute;
+    width: 10px; height: 10px;
+    top: -10px;
+    border-radius: 2px;
+    animation: confetti-fall linear forwards;
+  }
+  @keyframes confetti-fall {
+    to { transform: translateY(110vh) rotate(720deg); opacity: 0; }
+  }
+
+  /* ── Collection View ── */
+  .collection-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+  }
+  .collection-title {
+    font-size: 1.3rem;
+    font-weight: 900;
+    color: var(--blue);
+  }
+  .badge-count {
+    background: var(--red);
+    color: white;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 800;
+  }
+
+  .stats-row {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+  .stat-card {
+    flex: 1;
+    min-width: 100px;
+    background: white;
+    border-radius: 14px;
+    padding: 14px 12px;
+    text-align: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  }
+  .stat-card.clickable { cursor: pointer; transition: transform 0.15s, box-shadow 0.15s; }
+  .stat-card.clickable:active { transform: scale(0.96); box-shadow: 0 1px 4px rgba(0,0,0,0.1); }
+
+  /* Makes breakdown modal */
+  .makes-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.55);
+    z-index: 400;
+    align-items: flex-end;
+    justify-content: center;
+  }
+  .makes-overlay.show { display: flex; }
+  .makes-sheet {
+    background: white;
+    border-radius: 22px 22px 0 0;
+    width: 100%;
+    max-height: 75vh;
+    overflow-y: auto;
+    animation: slide-up 0.28s ease;
+  }
+  .makes-sheet-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 20px 10px;
+    border-bottom: 1px solid #f0f0f0;
+    position: sticky;
+    top: 0;
+    background: white;
+    z-index: 1;
+  }
+  .makes-sheet-title { font-size: 1.15rem; font-weight: 900; color: var(--navy); }
+  .makes-sheet-close { background: #f0f0f0; border: none; border-radius: 50%; width: 30px; height: 30px; font-size: 1rem; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+  .make-row {
+    display: flex;
+    align-items: center;
+    padding: 13px 20px;
+    gap: 12px;
+    border-bottom: 1px solid #f8f8f8;
+  }
+  .make-row-name { flex: 1; font-size: 1rem; font-weight: 800; color: var(--navy); }
+  .make-row-rare { font-size: 0.75rem; color: #f0a500; font-weight: 700; }
+  .make-row-count {
+    background: var(--navy);
+    color: white;
+    font-size: 0.85rem;
+    font-weight: 900;
+    padding: 4px 13px;
+    border-radius: 20px;
+    min-width: 34px;
+    text-align: center;
+  }
+  .stat-num {
+    font-size: 2rem;
+    font-weight: 900;
+    color: var(--blue);
+    line-height: 1;
+  }
+  .stat-label {
+    font-size: 0.75rem;
+    color: #888;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-top: 4px;
+  }
+
+  .badge-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 14px;
+  }
+
+  .badge-card {
+    background: white;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.09);
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    animation: pop-in 0.3s ease;
+  }
+  .badge-card:hover { transform: translateY(-3px); box-shadow: 0 6px 18px rgba(0,0,0,0.14); }
+
+  .badge-card-photo {
+    width: 100%;
+    height: 100px;
+    object-fit: contain;
+    background: #f0f2f5;
+    border-bottom: 2px solid #f0f0f0;
+    padding: 6px;
+  }
+  .badge-card-no-photo {
+    width: 100%;
+    height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.5rem;
+    background: linear-gradient(135deg, #e9ecef, #dee2e6);
+    border-bottom: 2px solid #f0f0f0;
+  }
+
+  .badge-card-info {
+    padding: 10px 10px 8px;
+  }
+  .badge-card-make {
+    font-size: 0.7rem;
+    color: #999;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .badge-card-name {
+    font-size: 0.85rem;
+    font-weight: 800;
+    color: var(--blue);
+    line-height: 1.2;
+    margin-top: 2px;
+  }
+  .badge-card-rarity {
+    font-size: 0.75rem;
+    margin-top: 4px;
+  }
+
+  .empty-collection {
+    text-align: center;
+    padding: 60px 20px;
+    color: #aaa;
+  }
+  .empty-collection div:first-child { font-size: 4rem; margin-bottom: 12px; }
+  .empty-collection p { font-size: 1.1rem; line-height: 1.5; }
+
+  /* ── Modal for badge detail ── */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+    z-index: 500;
+    align-items: flex-end;
+    padding: 0;
+  }
+  .modal-overlay.show { display: flex; }
+  .modal {
+    background: white;
+    border-radius: 24px 24px 0 0;
+    width: 100%;
+    max-height: 85vh;
+    overflow-y: auto;
+    animation: slide-up 0.3s ease;
+  }
+  @keyframes slide-up {
+    from { transform: translateY(100%); }
+    to   { transform: translateY(0); }
+  }
+  .modal-handle {
+    width: 40px; height: 4px;
+    background: #dee2e6;
+    border-radius: 2px;
+    margin: 12px auto 0;
+  }
+  .modal-content { padding: 20px; }
+  .modal-photo {
+    width: 100%;
+    max-height: 240px;
+    object-fit: contain;
+    background: #f8f9fa;
+    border-radius: 14px;
+    margin-bottom: 16px;
+  }
+  .modal-make { font-size: 0.85rem; color: #999; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
+  .modal-name { font-size: 1.8rem; font-weight: 900; color: var(--blue); margin: 4px 0 6px; }
+  .modal-years { font-size: 0.9rem; color: #666; margin-bottom: 14px; }
+  .modal-desc { font-size: 1rem; color: #444; line-height: 1.5; margin-bottom: 14px; }
+  .modal-fact {
+    background: #fff9e6;
+    border-left: 4px solid var(--yellow);
+    border-radius: 0 10px 10px 0;
+    padding: 12px 14px;
+    margin-bottom: 16px;
+    font-size: 0.9rem;
+    color: #555;
+    line-height: 1.4;
+  }
+  .modal-meta {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+  }
+  .meta-pill {
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 700;
+  }
+  .pill-rarity { background: #e8f4f8; color: var(--light-blue); }
+  .pill-value  { background: #fff3cd; color: #856404; }
+  .pill-date   { background: #f0f0f0; color: #666; }
+  .btn-reidentify {
+    width: 100%;
+    padding: 13px;
+    background: #fff8e1;
+    border: 2px solid #ffe082;
+    border-radius: 14px;
+    color: #7a5c00;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    margin-bottom: 10px;
+  }
+  .btn-reidentify:disabled { opacity: 0.5; cursor: not-allowed; }
+  .reidentify-card {
+    background: #f0f7ff;
+    border: 2px solid #b3d4f5;
+    border-radius: 16px;
+    padding: 14px 16px;
+    margin-bottom: 12px;
+    animation: pop-in 0.3s ease;
+  }
+  .reidentify-card .ri-label { font-size: 0.72rem; font-weight: 800; color: #2980b9; text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 6px; }
+  .reidentify-card .ri-make { font-size: 0.78rem; color: #888; font-weight: 700; text-transform: uppercase; }
+  .reidentify-card .ri-name { font-size: 1.15rem; font-weight: 900; color: var(--navy); margin: 2px 0 4px; }
+  .reidentify-card .ri-desc { font-size: 0.88rem; color: #555; line-height: 1.4; margin-bottom: 10px; }
+  .reidentify-actions { display: flex; gap: 8px; }
+  .btn-accept { flex: 2; padding: 11px; background: var(--blue); color: white; border: none; border-radius: 12px; font-size: 0.95rem; font-weight: 800; cursor: pointer; }
+  .btn-reject { flex: 1; padding: 11px; background: #eee; color: #666; border: none; border-radius: 12px; font-size: 0.9rem; font-weight: 700; cursor: pointer; }
+
+  .modal-delete-btn {
+    width: 100%;
+    padding: 14px;
+    background: #fff0f0;
+    border: 2px solid #ffcdd2;
+    border-radius: 14px;
+    color: var(--red);
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    margin-bottom: 20px;
+  }
+
+  /* ── Responsive ── */
+  @media (min-width: 600px) {
+    .badge-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); }
+    header h1 { font-size: 2.2rem; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>🏆 Badge <span>Hunter</span></h1>
+  <div class="header-sub" id="header-sub">Matthew's Badge Collection</div>
+</header>
+
+<nav>
+  <button class="active" onclick="showView('scan')" id="tab-scan">📷 Scan</button>
+  <button onclick="showView('collection')" id="tab-collection">🏆 Collection</button>
+</nav>
+
+<!-- SCAN VIEW -->
+<div class="view active" id="view-scan">
+
+  <div class="scan-area">
+    <div id="preview-container">
+      <video id="video-preview" autoplay playsinline muted></video>
+      <canvas id="photo-canvas"></canvas>
+      <img id="photo-preview" alt="Captured photo">
+      <div class="camera-overlay" id="camera-overlay"></div>
+      <div class="no-camera-msg" id="no-camera-msg" style="display:none">
+        <div>📷</div>
+        Tap "Upload Photo"<br>to pick a picture
+      </div>
+    </div>
+    <div class="scan-buttons">
+      <button class="btn btn-yellow" id="capture-btn" onclick="capturePhoto()" style="display:none">
+        📸 Snap It!
+      </button>
+      <label class="btn btn-blue" style="cursor:pointer">
+        📁 Upload Photo
+        <input type="file" id="file-input" accept="image/*" capture="environment" onchange="handleFileUpload(event)">
+      </label>
+      <button class="btn btn-gray" id="retake-btn" onclick="retakePhoto()" style="display:none">
+        🔄 Retake
+      </button>
+    </div>
+  </div>
+
+  <!-- Identify button (shows after photo taken) -->
+  <div id="identify-section" style="display:none; margin-bottom: 20px;">
+    <button class="btn btn-red" onclick="identifyBadge()" id="identify-btn">
+      🔍 Identify This Badge!
+    </button>
+  </div>
+
+  <!-- Result card -->
+  <div id="result-section">
+    <div class="result-card" id="result-card">
+      <img id="result-photo" class="result-photo" alt="Badge photo">
+      <div class="result-header" id="result-header">
+        <div class="confidence-badge" id="confidence-badge">High Confidence</div>
+        <div class="result-make" id="result-make">Ford</div>
+        <div class="result-name" id="result-name">Mustang Running Horse</div>
+        <div class="result-years" id="result-years">1965–1973</div>
+      </div>
+      <div class="rarity-bar">
+        <div class="rarity-label">Rarity</div>
+        <div class="rarity-stars" id="rarity-stars">⭐⭐</div>
+        <div class="value-pill" id="value-pill">$10–25</div>
+      </div>
+      <div class="result-body">
+        <div class="result-desc" id="result-desc">Description goes here.</div>
+        <div class="fun-fact-box">
+          <div class="fun-fact-label">⚡ Fun Fact</div>
+          <div class="fun-fact-text" id="fun-fact-text">Fun fact goes here.</div>
+        </div>
+      </div>
+      <div class="result-actions">
+        <button class="btn btn-green" onclick="addToCollection()" id="add-btn" style="flex:2">
+          ➕ Add to Collection!
+        </button>
+        <button class="btn btn-gray" onclick="startNewScan()" style="flex:1">
+          🔄 New Scan
+        </button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- COLLECTION VIEW -->
+<div class="view" id="view-collection">
+  <div class="collection-header">
+    <div class="collection-title">My Badges</div>
+    <div class="badge-count" id="badge-count">0 badges</div>
+  </div>
+
+  <div class="stats-row" id="stats-row"></div>
+
+  <div id="badge-grid" class="badge-grid"></div>
+
+  <div id="empty-collection" class="empty-collection">
+    <div>🚗</div>
+    <p>No badges yet!<br>Scan your first badge to start your collection.</p>
+  </div>
+</div>
+
+<!-- Badge detail modal -->
+<div class="modal-overlay" id="modal-overlay" onclick="closeModal(event)">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-content" id="modal-content"></div>
+  </div>
+</div>
+
+<!-- Makes breakdown sheet -->
+<div class="makes-overlay" id="makes-overlay" onclick="maybeCloseMakes(event)">
+  <div class="makes-sheet">
+    <div class="makes-sheet-head">
+      <div class="makes-sheet-title">🚗 Badges by Make</div>
+      <button class="makes-sheet-close" onclick="closeMakes()">✕</button>
+    </div>
+    <div id="makes-list"></div>
+  </div>
+</div>
+
+<!-- Loading overlay -->
+<div class="loading-overlay" id="loading-overlay">
+  <div class="spinner"></div>
+  <div class="loading-text">Identifying Badge...</div>
+  <div class="loading-sub">Checking my car badge database 🚗</div>
+</div>
+
+<!-- Confetti container -->
+<div class="confetti-container" id="confetti"></div>
+
+<script>
+const RARITY_STARS = { common: '⭐', uncommon: '⭐⭐', rare: '⭐⭐⭐', very_rare: '⭐⭐⭐⭐' };
+const RARITY_LABEL = { common: 'Common', uncommon: 'Uncommon', rare: 'Rare!', very_rare: '🔥 Very Rare!' };
+
+let stream = null;
+let capturedImageDataUrl = null;
+let capturedMimeType = 'image/jpeg';
+let currentResult = null;
+
+// ── Init ──────────────────────────────────────────────────────────────────
+
+window.addEventListener('load', () => {
+  startCamera();
+  loadCollection();
+});
+
+// ── Camera ────────────────────────────────────────────────────────────────
+
+async function startCamera() {
+  try {
+    stream = await navigator.mediaDevices.getUserMedia({
+      video: { facingMode: 'environment', width: { ideal: 1280 }, height: { ideal: 960 } }
+    });
+    const video = document.getElementById('video-preview');
+    video.srcObject = stream;
+    document.getElementById('capture-btn').style.display = 'block';
+    document.getElementById('camera-overlay').style.display = 'block';
+    document.getElementById('no-camera-msg').style.display = 'none';
+  } catch (e) {
+    document.getElementById('capture-btn').style.display = 'none';
+    document.getElementById('camera-overlay').style.display = 'none';
+    document.getElementById('no-camera-msg').style.display = 'flex';
+  }
+}
+
+function capturePhoto() {
+  const video = document.getElementById('video-preview');
+  const canvas = document.getElementById('photo-canvas');
+  canvas.width  = video.videoWidth;
+  canvas.height = video.videoHeight;
+  canvas.getContext('2d').drawImage(video, 0, 0);
+
+  capturedImageDataUrl = canvas.toDataURL('image/jpeg', 0.9);
+  capturedMimeType = 'image/jpeg';
+  showCapturedPhoto(capturedImageDataUrl);
+}
+
+function handleFileUpload(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  capturedMimeType = file.type || 'image/jpeg';
+  const reader = new FileReader();
+  reader.onload = e => {
+    capturedImageDataUrl = e.target.result;
+    showCapturedPhoto(capturedImageDataUrl);
+  };
+  reader.readAsDataURL(file);
+  event.target.value = '';
+}
+
+function showCapturedPhoto(dataUrl) {
+  const preview = document.getElementById('photo-preview');
+  const video   = document.getElementById('video-preview');
+  preview.src = dataUrl;
+  preview.style.display = 'block';
+  video.style.display = 'none';
+  document.getElementById('camera-overlay').style.display = 'none';
+  document.getElementById('capture-btn').style.display = 'none';
+  document.getElementById('retake-btn').style.display = 'block';
+  document.getElementById('identify-section').style.display = 'block';
+  document.getElementById('result-section').style.display = 'none';
+}
+
+function retakePhoto() {
+  capturedImageDataUrl = null;
+  const preview = document.getElementById('photo-preview');
+  const video   = document.getElementById('video-preview');
+  preview.style.display = 'none';
+  video.style.display = 'block';
+  document.getElementById('retake-btn').style.display = 'none';
+  document.getElementById('identify-section').style.display = 'none';
+  document.getElementById('result-section').style.display = 'none';
+  if (stream) {
+    document.getElementById('capture-btn').style.display = 'block';
+    document.getElementById('camera-overlay').style.display = 'block';
+  }
+}
+
+function startNewScan() {
+  retakePhoto();
+  currentResult = null;
+}
+
+// ── Identify ──────────────────────────────────────────────────────────────
+
+async function identifyBadge() {
+  if (!capturedImageDataUrl) return;
+
+  document.getElementById('loading-overlay').classList.add('show');
+
+  try {
+    const resp = await fetch('/api/identify', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ image: capturedImageDataUrl, mimeType: capturedMimeType })
+    });
+    const data = await resp.json();
+    currentResult = data;
+    showResult(data);
+  } catch (e) {
+    alert('Something went wrong — try again!');
+  } finally {
+    document.getElementById('loading-overlay').classList.remove('show');
+  }
+}
+
+function showResult(data) {
+  const conf = data.confidence || 'medium';
+  const rarity = data.rarity || 'common';
+
+  // Header
+  document.getElementById('result-header').className = `result-header ${conf}`;
+  document.getElementById('result-make').textContent = data.make || 'Unknown';
+  document.getElementById('result-name').textContent = data.badge_name || data.model || 'Unknown Badge';
+  document.getElementById('result-years').textContent = data.years ? `📅 ${data.years}` : '';
+  document.getElementById('confidence-badge').textContent =
+    conf === 'high' ? '✅ Identified!' : conf === 'medium' ? '🤔 Pretty Sure' : '❓ Best Guess';
+
+  // Photo
+  const resultPhoto = document.getElementById('result-photo');
+  if (capturedImageDataUrl) {
+    resultPhoto.src = capturedImageDataUrl;
+    resultPhoto.style.display = 'block';
+  } else {
+    resultPhoto.style.display = 'none';
+  }
+
+  // Rarity & value
+  document.getElementById('rarity-stars').textContent = RARITY_STARS[rarity] || '⭐';
+  document.getElementById('value-pill').textContent = data.value_estimate ? `💰 ${data.value_estimate}` : '';
+
+  // Body
+  document.getElementById('result-desc').textContent  = data.description || '';
+  document.getElementById('fun-fact-text').textContent = data.fun_fact || '';
+
+  // Show
+  document.getElementById('result-section').style.display = 'block';
+  document.getElementById('add-btn').disabled = false;
+  document.getElementById('add-btn').textContent = '➕ Add to Collection!';
+
+  // Scroll to result
+  setTimeout(() => {
+    document.getElementById('result-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, 100);
+}
+
+// ── Add to Collection ──────────────────────────────────────────────────────
+
+async function addToCollection() {
+  if (!currentResult) return;
+  const btn = document.getElementById('add-btn');
+  btn.disabled = true;
+  btn.textContent = '⏳ Saving...';
+
+  try {
+    const resp = await fetch('/api/add', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        badge: currentResult,
+        image: capturedImageDataUrl,
+        mimeType: capturedMimeType
+      })
+    });
+    const data = await resp.json();
+    if (data.ok) {
+      btn.textContent = '✅ Added!';
+      btn.style.background = '#06d6a0';
+      shootConfetti();
+      loadCollection();
+    }
+  } catch (e) {
+    btn.disabled = false;
+    btn.textContent = '➕ Add to Collection!';
+    alert('Could not save — try again!');
+  }
+}
+
+// ── Confetti ──────────────────────────────────────────────────────────────
+
+function shootConfetti() {
+  const colors = ['#ffd166','#e63946','#06d6a0','#457b9d','#fb8500','#ffffff'];
+  const container = document.getElementById('confetti');
+  container.innerHTML = '';
+  for (let i = 0; i < 60; i++) {
+    const el = document.createElement('div');
+    el.className = 'confetti-piece';
+    el.style.cssText = `
+      left: ${Math.random() * 100}%;
+      background: ${colors[Math.floor(Math.random() * colors.length)]};
+      width: ${6 + Math.random() * 8}px;
+      height: ${6 + Math.random() * 8}px;
+      border-radius: ${Math.random() > 0.5 ? '50%' : '2px'};
+      animation-duration: ${0.8 + Math.random() * 1.2}s;
+      animation-delay: ${Math.random() * 0.4}s;
+    `;
+    container.appendChild(el);
+  }
+  setTimeout(() => { container.innerHTML = ''; }, 2500);
+}
+
+// ── Collection ────────────────────────────────────────────────────────────
+
+async function loadCollection() {
+  try {
+    const resp = await fetch('/api/collection');
+    const data = await resp.json();
+    renderCollection(data.badges || []);
+  } catch(e) {}
+}
+
+function renderCollection(badges) {
+  const grid  = document.getElementById('badge-grid');
+  const empty = document.getElementById('empty-collection');
+  const count = document.getElementById('badge-count');
+  const stats = document.getElementById('stats-row');
+
+  count.textContent = `${badges.length} badge${badges.length !== 1 ? 's' : ''}`;
+
+  if (badges.length === 0) {
+    grid.innerHTML = '';
+    empty.style.display = 'block';
+    stats.innerHTML = '';
+    return;
+  }
+  empty.style.display = 'none';
+
+  // Stats
+  const makes = new Set(badges.map(b => b.make).filter(Boolean));
+  const rare  = badges.filter(b => b.rarity === 'rare' || b.rarity === 'very_rare').length;
+  stats.innerHTML = `
+    <div class="stat-card">
+      <div class="stat-num">${badges.length}</div>
+      <div class="stat-label">Total</div>
+    </div>
+    <div class="stat-card clickable" onclick="showMakesSheet()">
+      <div class="stat-num">${makes.size}</div>
+      <div class="stat-label">Makes ↗</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num">${rare}</div>
+      <div class="stat-label">Rare+</div>
+    </div>
+  `;
+
+  // Grid
+  grid.innerHTML = badges.slice().reverse().map(b => {
+    const photoEl = b.photo
+      ? `<img class="badge-card-photo" src="${b.photo}" alt="${b.badge_name || ''}" loading="lazy">`
+      : `<div class="badge-card-no-photo">🏅</div>`;
+    const rarity = RARITY_STARS[b.rarity] || '⭐';
+    return `
+      <div class="badge-card" onclick="showBadgeDetail('${b.id}')">
+        ${photoEl}
+        <div class="badge-card-info">
+          <div class="badge-card-make">${b.make || 'Unknown'}</div>
+          <div class="badge-card-name">${b.badge_name || b.model || 'Badge'}</div>
+          <div class="badge-card-rarity">${rarity} ${RARITY_LABEL[b.rarity] || ''}</div>
+        </div>
+      </div>
+    `;
+  }).join('');
+
+  // Stash for modal
+  window._badges = badges;
+}
+
+// ── Badge Detail Modal ─────────────────────────────────────────────────────
+
+function showBadgeDetail(id) {
+  const badge = (window._badges || []).find(b => b.id === id);
+  if (!badge) return;
+
+  const content = document.getElementById('modal-content');
+  const addedDate = badge.added ? new Date(badge.added).toLocaleDateString('en-US', {month:'short',day:'numeric',year:'numeric'}) : '';
+  const rarity = RARITY_STARS[badge.rarity] || '⭐';
+
+  content.innerHTML = `
+    ${badge.photo ? `<img class="modal-photo" src="${badge.photo}" alt="${badge.badge_name || ''}">` : ''}
+    <div class="modal-make">${badge.make || 'Unknown Make'}</div>
+    <div class="modal-name">${badge.badge_name || badge.model || 'Badge'}</div>
+    <div class="modal-years">${badge.years || ''} ${badge.model && badge.years ? '· ' + badge.model : badge.model || ''}</div>
+    <div class="modal-meta">
+      ${badge.rarity ? `<span class="meta-pill pill-rarity">${rarity} ${RARITY_LABEL[badge.rarity]}</span>` : ''}
+      ${badge.value_estimate ? `<span class="meta-pill pill-value">💰 ${badge.value_estimate}</span>` : ''}
+      ${addedDate ? `<span class="meta-pill pill-date">📅 ${addedDate}</span>` : ''}
+    </div>
+    ${badge.description ? `<div class="modal-desc">${badge.description}</div>` : ''}
+    ${badge.fun_fact ? `<div class="modal-fact">⚡ <strong>Fun Fact:</strong> ${badge.fun_fact}</div>` : ''}
+    <button class="btn btn-reidentify" id="reidentify-btn-${badge.id}" onclick="reidentifyBadge('${badge.id}')">🔄 Wrong? Re-identify</button>
+    <div id="reidentify-result-${badge.id}" style="display:none"></div>
+    <button class="modal-delete-btn" onclick="deleteBadge('${badge.id}')">🗑️ Remove from Collection</button>
+  `;
+
+  document.getElementById('modal-overlay').classList.add('show');
+}
+
+function closeModal(event) {
+  if (event.target === document.getElementById('modal-overlay')) {
+    document.getElementById('modal-overlay').classList.remove('show');
+  }
+}
+
+async function deleteBadge(id) {
+  if (!confirm('Remove this badge from your collection?')) return;
+  try {
+    await fetch(`/api/badge/${id}`, { method: 'DELETE' });
+    document.getElementById('modal-overlay').classList.remove('show');
+    loadCollection();
+  } catch(e) {}
+}
+
+// ── View switching ────────────────────────────────────────────────────────
+
+function showView(name) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+  document.getElementById(`view-${name}`).classList.add('active');
+  document.getElementById(`tab-${name}`).classList.add('active');
+  if (name === 'collection') loadCollection();
+  window.scrollTo(0, 0);
+}
+
+async function reidentifyBadge(id) {
+  const btn = document.getElementById(`reidentify-btn-${id}`);
+  const resultBox = document.getElementById(`reidentify-result-${id}`);
+  btn.disabled = true;
+  btn.textContent = '⏳ Re-identifying...';
+  resultBox.style.display = 'none';
+
+  try {
+    const resp = await fetch('/api/reidentify', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id })
+    });
+    const result = await resp.json();
+    if (result.error) throw new Error(result.error);
+
+    const conf = result.confidence === 'high' ? '✅ High confidence' :
+                 result.confidence === 'medium' ? '🤔 Medium confidence' : '❓ Best guess';
+
+    resultBox.innerHTML = `
+      <div class="reidentify-card">
+        <div class="ri-label">New Identification ${conf}</div>
+        <div class="ri-make">${result.make || 'Unknown'} ${result.years ? '· ' + result.years : ''}</div>
+        <div class="ri-name">${result.badge_name || result.model || 'Unknown Badge'}</div>
+        <div class="ri-desc">${result.description || ''}</div>
+        <div class="reidentify-actions">
+          <button class="btn-accept" onclick="acceptReidentify('${id}', ${JSON.stringify(JSON.stringify(result))})">✅ Use This</button>
+          <button class="btn-reject" onclick="cancelReidentify('${id}')">✕ Keep Old</button>
+        </div>
+      </div>
+    `;
+    resultBox.style.display = 'block';
+    btn.textContent = '🔄 Try Again';
+    btn.disabled = false;
+  } catch(e) {
+    btn.textContent = '🔄 Wrong? Re-identify';
+    btn.disabled = false;
+    alert('Re-identification failed — try again!');
+  }
+}
+
+async function acceptReidentify(id, resultJson) {
+  const result = JSON.parse(resultJson);
+  try {
+    const resp = await fetch(`/api/badge/${id}/update`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ badge: result })
+    });
+    const data = await resp.json();
+    if (data.ok) {
+      document.getElementById('modal-overlay').classList.remove('show');
+      loadCollection();
+    }
+  } catch(e) {
+    alert('Could not save — try again!');
+  }
+}
+
+function cancelReidentify(id) {
+  document.getElementById(`reidentify-result-${id}`).style.display = 'none';
+  const btn = document.getElementById(`reidentify-btn-${id}`);
+  btn.textContent = '🔄 Wrong? Re-identify';
+}
+
+function showMakesSheet() {
+  const badges = window._badges || [];
+  const counts = {};
+  const rares  = {};
+  badges.forEach(b => {
+    const m = b.make || 'Unknown';
+    counts[m] = (counts[m] || 0) + 1;
+    if (b.rarity === 'rare' || b.rarity === 'very_rare')
+      rares[m] = (rares[m] || 0) + 1;
+  });
+
+  const sorted = Object.entries(counts).sort((a, b) => b[1] - a[1]);
+
+  document.getElementById('makes-list').innerHTML = sorted.length === 0
+    ? '<div style="padding:24px;text-align:center;color:#bbb">No badges yet</div>'
+    : sorted.map(([make, count]) => {
+        const r = rares[make] || 0;
+        return `
+          <div class="make-row">
+            <div class="make-row-name">${make}</div>
+            ${r ? `<div class="make-row-rare">⭐ ${r} rare</div>` : ''}
+            <div class="make-row-count">${count}</div>
+          </div>`;
+      }).join('');
+
+  document.getElementById('makes-overlay').classList.add('show');
+}
+
+function maybeCloseMakes(e) {
+  if (e.target === document.getElementById('makes-overlay')) closeMakes();
+}
+function closeMakes() {
+  document.getElementById('makes-overlay').classList.remove('show');
+}
+</script>
+</body>
+</html>

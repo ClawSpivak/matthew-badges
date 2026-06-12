@@ -1,0 +1,7 @@
+logs/
+state/wegotused-state.json
+data/
+*.log
+__pycache__/
+.DS_Store
+node_modules/
