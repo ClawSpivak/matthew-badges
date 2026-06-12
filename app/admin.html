@@ -48,12 +48,41 @@ main { max-width: 900px; margin: 0 auto; padding: 28px 24px 60px; }
 .thumb {
   width: 52px; height: 52px; border-radius: 6px;
   object-fit: cover; background: #111113; flex-shrink: 0;
+  cursor: zoom-in; transition: opacity 0.15s;
 }
+.thumb:hover { opacity: 0.8; }
 .thumb-placeholder {
   width: 52px; height: 52px; border-radius: 6px;
   background: var(--s2); display: flex; align-items: center;
   justify-content: center; font-size: 22px; flex-shrink: 0;
 }
+
+/* ── Lightbox ── */
+.lightbox {
+  display: none; position: fixed; inset: 0;
+  background: rgba(0,0,0,0.92);
+  backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+  z-index: 200; align-items: center; justify-content: center;
+  cursor: zoom-out;
+}
+.lightbox.open { display: flex; }
+.lightbox img {
+  max-width: min(90vw, 800px);
+  max-height: 90vh;
+  border-radius: 10px;
+  object-fit: contain;
+  box-shadow: 0 24px 80px rgba(0,0,0,0.8);
+  cursor: default;
+}
+.lightbox-close {
+  position: fixed; top: 20px; right: 20px;
+  background: var(--s2); border: 1px solid var(--border);
+  color: var(--text2); border-radius: 8px;
+  width: 36px; height: 36px; font-size: 18px;
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  transition: background 0.15s;
+}
+.lightbox-close:hover { background: var(--border); color: var(--text); }
 
 .badge-info { flex: 1; min-width: 0; }
 .badge-name { font-size: 0.88rem; font-weight: 600; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -138,6 +167,11 @@ main { max-width: 900px; margin: 0 auto; padding: 28px 24px 60px; }
 
 <div class="toast" id="toast"></div>
 
+<div class="lightbox" id="lightbox">
+  <button class="lightbox-close" id="lightbox-close">✕</button>
+  <img id="lightbox-img" src="" alt="">
+</div>
+
 <script>
 let badges = [];
 
@@ -184,7 +218,7 @@ function rowHtml(b) {
   const date = b.added ? new Date(b.added).toLocaleDateString('en-US', {month:'short',day:'numeric',year:'numeric'}) : '';
   const photoSrc = b.photo ? b.photo : null;
   const img = photoSrc
-    ? `<img class="thumb" src="${photoSrc}" alt="" onerror="this.style.display='none'">`
+    ? `<img class="thumb" src="${photoSrc}" alt="" onclick="openLightbox('${photoSrc}')" onerror="this.style.display='none'">`
     : `<div class="thumb-placeholder">🏅</div>`;
 
   const rescanBtn = `<button class="btn btn-rescan" data-id="${b.id}">Rescan</button>`;
@@ -270,6 +304,21 @@ function attachHandlers() {
     };
   });
 }
+
+function openLightbox(src) {
+  document.getElementById('lightbox-img').src = src;
+  document.getElementById('lightbox').classList.add('open');
+}
+function closeLightbox() {
+  document.getElementById('lightbox').classList.remove('open');
+}
+document.getElementById('lightbox-close').onclick = closeLightbox;
+document.getElementById('lightbox').onclick = e => {
+  if (e.target === document.getElementById('lightbox')) closeLightbox();
+};
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') closeLightbox();
+});
 
 function showToast(msg, type) {
   const t = document.getElementById('toast');
