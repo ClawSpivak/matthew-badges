@@ -336,6 +336,8 @@ class BadgeHandler(BaseHTTPRequestHandler):
 
         if path == "/" or path == "/index.html":
             self.serve_file(os.path.join(BASE_DIR, "index.html"))
+        elif path == "/admin" or path == "/admin.html":
+            self.serve_file(os.path.join(BASE_DIR, "admin.html"))
         elif path == "/gallery" or path == "/gallery.html":
             self.serve_file(os.path.join(BASE_DIR, "gallery.html"))
         elif path == "/api/collection":
@@ -465,8 +467,8 @@ class BadgeHandler(BaseHTTPRequestHandler):
             collection = load_collection()
             before = len(collection["badges"])
             collection["badges"] = [b for b in collection["badges"] if b.get("id") != badge_id]
-            save_collection(collection)
             removed = before - len(collection["badges"])
+            save_collection(collection, badge_name="remove badge" if removed else None)
             self.send_json({"ok": True, "removed": removed})
         else:
             self.send_json({"error": "Not found"}, 404)

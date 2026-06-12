@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Badge Vault — Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg: #09090b; --s1: #18181b; --s2: #27272a;
+  --border: #3f3f46; --border2: #52525b;
+  --text: #fafafa; --text2: #a1a1aa; --text3: #71717a;
+  --amber: #f59e0b; --red: #ef4444; --green: #22c55e; --blue: #3b82f6;
+}
+body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; min-height: 100vh; -webkit-font-smoothing: antialiased; }
+
+.topbar {
+  background: rgba(9,9,11,0.9); backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border);
+  padding: 0 24px; height: 56px;
+  display: flex; align-items: center; justify-content: space-between;
+  position: sticky; top: 0; z-index: 50;
+}
+.topbar-title { font-size: 0.95rem; font-weight: 700; }
+.topbar-title span { color: var(--amber); }
+.topbar-count { font-size: 0.8rem; color: var(--text3); }
+
+main { max-width: 900px; margin: 0 auto; padding: 28px 24px 60px; }
+
+.section-title {
+  font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px;
+  color: var(--text3); font-weight: 700; margin-bottom: 12px;
+}
+
+.badge-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 36px; }
+
+.badge-row {
+  display: flex; align-items: center; gap: 14px;
+  background: var(--s1); border: 1px solid var(--border);
+  border-radius: 10px; padding: 10px 14px;
+  transition: border-color 0.15s;
+}
+.badge-row:hover { border-color: var(--border2); }
+.badge-row.deleting { opacity: 0.4; pointer-events: none; }
+.badge-row.deleted  { display: none; }
+
+.thumb {
+  width: 52px; height: 52px; border-radius: 6px;
+  object-fit: cover; background: #111113; flex-shrink: 0;
+}
+.thumb-placeholder {
+  width: 52px; height: 52px; border-radius: 6px;
+  background: var(--s2); display: flex; align-items: center;
+  justify-content: center; font-size: 22px; flex-shrink: 0;
+}
+
+.badge-info { flex: 1; min-width: 0; }
+.badge-name { font-size: 0.88rem; font-weight: 600; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.badge-meta { font-size: 0.75rem; color: var(--text3); margin-top: 2px; }
+
+.rarity-tag {
+  font-size: 0.65rem; font-weight: 700; text-transform: uppercase;
+  padding: 2px 7px; border-radius: 4px; flex-shrink: 0;
+}
+.rarity-common      { background: #27272a; color: var(--text3); }
+.rarity-uncommon    { background: #1e3a8a22; color: #93c5fd; border: 1px solid #1e3a8a; }
+.rarity-rare        { background: #78350f22; color: #fcd34d; border: 1px solid #78350f; }
+.rarity-ultra-rare  { background: #83184322; color: #f9a8d4; border: 1px solid #831843; }
+.rarity-unknown     { background: #1c1c1e;   color: var(--text3); border: 1px solid var(--border); }
+
+.actions { display: flex; gap: 6px; flex-shrink: 0; }
+
+.btn {
+  font-size: 0.75rem; font-weight: 600;
+  padding: 5px 12px; border-radius: 6px;
+  border: 1px solid var(--border); cursor: pointer;
+  transition: all 0.15s; white-space: nowrap;
+}
+.btn-delete {
+  background: #450a0a22; color: #fca5a5; border-color: #7f1d1d;
+}
+.btn-delete:hover { background: #7f1d1d; color: #fff; border-color: var(--red); }
+.btn-rescan {
+  background: #1c1917; color: #d97706; border-color: #78350f;
+}
+.btn-rescan:hover { background: #78350f; color: #fef3c7; }
+.btn-rescan.scanning {
+  opacity: 0.6; pointer-events: none;
+  animation: pulse 1s ease-in-out infinite;
+}
+@keyframes pulse { 0%,100%{opacity:0.6} 50%{opacity:0.3} }
+
+.toast {
+  position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
+  background: var(--s1); border: 1px solid var(--border);
+  border-radius: 10px; padding: 10px 20px;
+  font-size: 0.85rem; font-weight: 500;
+  opacity: 0; transition: opacity 0.2s;
+  pointer-events: none; z-index: 100;
+  white-space: nowrap;
+}
+.toast.show { opacity: 1; }
+.toast.ok   { border-color: #14532d; color: var(--green); }
+.toast.err  { border-color: #7f1d1d; color: var(--red); }
+
+.spinner {
+  width: 28px; height: 28px; border: 2px solid var(--border);
+  border-top-color: var(--amber); border-radius: 50%;
+  animation: spin 0.7s linear infinite; margin: 60px auto;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.empty-state {
+  text-align: center; padding: 40px; color: var(--text3);
+  font-size: 0.9rem;
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-title">Badge Vault <span>Admin</span></div>
+  <div class="topbar-count" id="topbar-count"></div>
+</div>
+
+<main>
+  <div id="unidentified-section" style="display:none">
+    <div class="section-title">⚠️ Needs attention — unidentified or unknown badges</div>
+    <div class="badge-list" id="unidentified-list"></div>
+  </div>
+
+  <div class="section-title">All badges</div>
+  <div class="badge-list" id="all-list">
+    <div class="spinner"></div>
+  </div>
+</main>
+
+<div class="toast" id="toast"></div>
+
+<script>
+let badges = [];
+
+async function load() {
+  const res  = await fetch('/api/collection');
+  const data = await res.json();
+  badges = data.badges || [];
+  render();
+}
+
+function isUnidentified(b) {
+  return !b.make || b.make === 'Unknown' || !b.badge_name || b.badge_name === 'Unidentified Badge';
+}
+
+function rarity(b) {
+  return (b.rarity || 'common').toLowerCase().replace(' ', '-');
+}
+
+function render() {
+  document.getElementById('topbar-count').textContent = `${badges.length} badge${badges.length !== 1 ? 's' : ''}`;
+
+  const unid = badges.filter(isUnidentified);
+  const rest = badges.filter(b => !isUnidentified(b));
+
+  const unidSection = document.getElementById('unidentified-section');
+  if (unid.length) {
+    unidSection.style.display = 'block';
+    document.getElementById('unidentified-list').innerHTML = unid.map(rowHtml).join('');
+  } else {
+    unidSection.style.display = 'none';
+  }
+
+  document.getElementById('all-list').innerHTML = rest.length
+    ? rest.map(rowHtml).join('')
+    : '<div class="empty-state">No badges yet.</div>';
+
+  attachHandlers();
+}
+
+function rowHtml(b) {
+  const r    = rarity(b);
+  const name = b.badge_name || 'Unidentified Badge';
+  const meta = [b.make, b.model, b.years].filter(Boolean).join(' · ') || 'Unknown';
+  const date = b.added ? new Date(b.added).toLocaleDateString('en-US', {month:'short',day:'numeric',year:'numeric'}) : '';
+  const photoSrc = b.photo ? b.photo : null;
+  const img = photoSrc
+    ? `<img class="thumb" src="${photoSrc}" alt="" onerror="this.style.display='none'">`
+    : `<div class="thumb-placeholder">🏅</div>`;
+
+  const rescanBtn = `<button class="btn btn-rescan" data-id="${b.id}">Rescan</button>`;
+  const deleteBtn = `<button class="btn btn-delete" data-id="${b.id}">Delete</button>`;
+
+  return `
+  <div class="badge-row" id="row-${b.id}">
+    ${img}
+    <div class="badge-info">
+      <div class="badge-name">${name}</div>
+      <div class="badge-meta">${meta}${date ? ' · ' + date : ''}</div>
+    </div>
+    <span class="rarity-tag rarity-${r}">${b.rarity || 'unknown'}</span>
+    <div class="actions">
+      ${rescanBtn}
+      ${deleteBtn}
+    </div>
+  </div>`;
+}
+
+function attachHandlers() {
+  document.querySelectorAll('.btn-delete').forEach(btn => {
+    btn.onclick = async () => {
+      const id  = btn.dataset.id;
+      const row = document.getElementById(`row-${id}`);
+      const name = row.querySelector('.badge-name').textContent;
+      if (!confirm(`Delete "${name}"?\n\nThis will remove it from the collection and push to GitHub.`)) return;
+      row.classList.add('deleting');
+      try {
+        const res = await fetch(`/api/badge/${id}`, { method: 'DELETE' });
+        const data = await res.json();
+        if (data.ok) {
+          row.classList.add('deleted');
+          badges = badges.filter(b => b.id !== id);
+          document.getElementById('topbar-count').textContent = `${badges.length} badge${badges.length !== 1 ? 's' : ''}`;
+          showToast(`"${name}" deleted and pushed to GitHub`, 'ok');
+        } else {
+          row.classList.remove('deleting');
+          showToast('Delete failed', 'err');
+        }
+      } catch(e) {
+        row.classList.remove('deleting');
+        showToast('Error: ' + e.message, 'err');
+      }
+    };
+  });
+
+  document.querySelectorAll('.btn-rescan').forEach(btn => {
+    btn.onclick = async () => {
+      const id  = btn.dataset.id;
+      const row = document.getElementById(`row-${id}`);
+      btn.classList.add('scanning');
+      btn.textContent = 'Scanning…';
+      try {
+        // Step 1: get AI result
+        const res  = await fetch('/api/reidentify', {
+          method: 'POST',
+          headers: {'Content-Type':'application/json'},
+          body: JSON.stringify({ id })
+        });
+        const result = await res.json();
+        if (result.error) throw new Error(result.error);
+
+        // Step 2: save the new identification
+        const upd = await fetch(`/api/badge/${id}/update`, {
+          method: 'POST',
+          headers: {'Content-Type':'application/json'},
+          body: JSON.stringify({ badge: result })
+        });
+        const saved = await upd.json();
+        if (!saved.ok) throw new Error('Save failed');
+
+        // Update local list
+        const idx = badges.findIndex(b => b.id === id);
+        if (idx >= 0) badges[idx] = { ...badges[idx], ...result };
+        render();
+        showToast(`Rescanned: ${result.badge_name || 'updated'}`, 'ok');
+      } catch(e) {
+        btn.classList.remove('scanning');
+        btn.textContent = 'Rescan';
+        showToast('Rescan failed: ' + e.message, 'err');
+      }
+    };
+  });
+}
+
+function showToast(msg, type) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = `toast show ${type}`;
+  setTimeout(() => t.className = 'toast', 3000);
+}
+
+load();
+</script>
+</body>
+</html>
