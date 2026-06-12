@@ -60,36 +60,16 @@ def shrink_image(image_b64, mime_type='image/jpeg', max_px=1024, quality=82):
         return image_b64, mime_type
 
 
-def get_api_key():
-    try:
-        with open(OPENCLAW_CONFIG) as f:
-            cfg = json.load(f)
-        key = cfg.get("env", {}).get("OPENROUTER_API_KEY", "")
-        if key:
-            return key
-    except Exception:
-        pass
-    return os.environ.get("OPENROUTER_API_KEY", "")
+OLLAMA_URL  = "http://localhost:11434/api/chat"
+OLLAMA_MODEL = "llava:13b"
 
 
 def identify_badge(image_b64, mime_type="image/jpeg"):
-    image_b64, mime_type = shrink_image(image_b64, mime_type)
-    api_key = get_api_key()
-    if not api_key:
-        return {"error": "No API key configured"}
+    image_b64, mime_type = shrink_image(image_b64, mime_type, max_px=512)
 
-    prompt = """You are a world-class expert on car badges, emblems, hood ornaments, wheel caps, and automotive logos — you have encyclopedic knowledge of every make and model ever produced.
+    prompt = """You are a world-class expert on car badges, emblems, hood ornaments, wheel caps, and automotive logos.
 
-A kid is showing you a photo of a car badge they found. Your job is to identify it. Be aggressive — always make your best identification even if the photo is blurry, partial, or at an angle. Look for:
-- Shape of the emblem (shield, circle, oval, star, wings, etc.)
-- Any letters or numbers visible, even partial
-- Colors, chrome patterns, or distinctive design elements
-- Country of origin clues (Italian styling, German precision, American chrome, Japanese minimalism)
-- Mounting style (grille badge, trunk emblem, fender script, steering wheel center, wheel cap)
-
-Common badges a kid might find at a swap meet or junkyard: Ford (oval, Mustang horse, F-150 script), Chevrolet (bowtie), Dodge (ram, fratzog), Pontiac (arrowhead), Oldsmobile (rocket), Buick (tri-shield), Cadillac (crest/wreath), Lincoln (star), Mercury (circle), AMC, Plymouth (barracuda/road runner), VW (circle/VW), BMW (roundel), Mercedes (star), Audi (four rings), Porsche (crest), Ferrari (prancing horse), Lamborghini (bull), Alfa Romeo (cross/serpent), Fiat, Lancia, Maserati (trident), Jaguar (leaper), Land Rover, Rolls Royce (RR/Spirit), Bentley (winged B), Opel (lightning), Peugeot (lion), Renault (diamond), Citroën (chevrons), Volvo (iron/arrow), Saab, Toyota (three ovals), Honda (H), Nissan/Datsun, Mazda (M-wings), Subaru (Pleiades stars), Mitsubishi (three diamonds), Suzuki, Isuzu, Triumph (globe), MG (octagon), Austin-Healey, and many more.
-
-IMPORTANT: Even if you're not 100% sure, pick the most likely identification. Only set confidence to "low" as a last resort. A partially visible Chevy bowtie is still a Chevy bowtie.
+A kid is showing you a photo of a car badge they found. Identify it — be aggressive, always make your best guess even if the photo is blurry or partial. Look for shape, letters/numbers, colors, chrome patterns, mounting style, and country-of-origin clues.
 
 Respond with ONLY a JSON object (no markdown, no code blocks):
 {
@@ -98,62 +78,48 @@ Respond with ONLY a JSON object (no markdown, no code blocks):
   "years": "1965-1973",
   "badge_name": "Running Horse Grille Emblem",
   "description": "The iconic galloping mustang horse, one of the most recognizable badges in American automotive history!",
-  "fun_fact": "The Mustang was named after the WWII P-51 Mustang fighter plane, not the wild horse — though the horse logo stuck forever!",
+  "fun_fact": "The Mustang was named after the WWII P-51 Mustang fighter plane, not the wild horse!",
   "rarity": "uncommon",
   "value_estimate": "$20-60",
   "confidence": "high"
 }
 
-Rarity guide:
-- "common" = mass-produced, millions made (basic oval Ford badges, VW roundels, Chevy bowties from common cars)
-- "uncommon" = specific model badges, older cars, less common variants
-- "rare" = pre-1970s, limited production, specialty models, European exotics
-- "very_rare" = pre-war, prototype, coachbuilt, ultra-limited production
-
-Keep description and fun_fact exciting and kid-friendly (8-12 year old audience)!
-If it's genuinely not a car badge, set make to "Unknown" and describe what it actually is."""
+Rarity: "common" = mass-produced millions, "uncommon" = specific model/older variants, "rare" = pre-1970s/limited/European exotics, "very_rare" = pre-war/prototype/ultra-limited.
+Keep description and fun_fact exciting and kid-friendly (8-12 year old audience).
+If genuinely not a car badge, set make to "Unknown"."""
 
     payload = json.dumps({
-        "model": "anthropic/claude-sonnet-4.6",
-        "messages": [
-            {
-                "role": "user",
-                "content": [
-                    {
-                        "type": "image_url",
-                        "image_url": {"url": f"data:{mime_type};base64,{image_b64}"}
-                    },
-                    {
-                        "type": "text",
-                        "text": prompt
-                    }
-                ]
-            }
-        ],
-        "max_tokens": 800
+        "model": OLLAMA_MODEL,
+        "messages": [{
+            "role": "user",
+            "content": prompt,
+            "images": [image_b64]
+        }],
+        "stream": False,
+        "options": {"temperature": 0.2}
     }).encode()
 
     req = urllib.request.Request(
-        "https://openrouter.ai/api/v1/chat/completions",
+        OLLAMA_URL,
         data=payload,
-        headers={
-            "Content-Type": "application/json",
-            "Authorization": f"Bearer {api_key}",
-            "HTTP-Referer": "https://badge-hunter.local",
-            "X-Title": "Badge Hunter"
-        }
+        headers={"Content-Type": "application/json"}
     )
 
     try:
-        with urllib.request.urlopen(req, timeout=30) as r:
+        with urllib.request.urlopen(req, timeout=120) as r:
             resp = json.loads(r.read())
-            content = resp["choices"][0]["message"]["content"].strip()
+            content = resp["message"]["content"].strip()
             # Strip markdown code blocks if present
-            if content.startswith("```"):
+            if "```" in content:
                 content = content.split("```")[1]
                 if content.startswith("json"):
                     content = content[4:]
                 content = content.strip()
+            # Extract first JSON object if there's surrounding text
+            start = content.find("{")
+            end   = content.rfind("}") + 1
+            if start >= 0 and end > start:
+                content = content[start:end]
             return json.loads(content)
     except Exception as e:
         return {"error": str(e), "make": "Unknown", "badge_name": "Unidentified Badge",
