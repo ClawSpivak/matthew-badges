@@ -60,8 +60,16 @@ def shrink_image(image_b64, mime_type='image/jpeg', max_px=1024, quality=82):
         return image_b64, mime_type
 
 
-OLLAMA_URL   = "http://localhost:11434/api/chat"
-OLLAMA_MODEL = "llava-llama3:latest"
+ANTHROPIC_API_URL = "https://api.anthropic.com/v1/messages"
+ANTHROPIC_MODEL   = "claude-haiku-4-5-20251001"
+
+
+def get_anthropic_key():
+    try:
+        with open(OPENCLAW_CONFIG) as f:
+            return json.load(f)["env"]["ANTHROPIC_API_KEY"]
+    except Exception:
+        return os.environ.get("ANTHROPIC_API_KEY", "")
 
 
 def identify_badge(image_b64, mime_type="image/jpeg"):
@@ -79,26 +87,35 @@ Keep description and fun_fact exciting and kid-friendly (8-12 year old audience)
 If genuinely not a car badge, set make to "Unknown"."""
 
     payload = json.dumps({
-        "model": OLLAMA_MODEL,
+        "model": ANTHROPIC_MODEL,
+        "max_tokens": 500,
         "messages": [{
             "role": "user",
-            "content": prompt,
-            "images": [image_b64]
-        }],
-        "stream": False,
-        "options": {"temperature": 0.2}
+            "content": [
+                {"type": "image", "source": {
+                    "type": "base64",
+                    "media_type": mime_type,
+                    "data": image_b64
+                }},
+                {"type": "text", "text": prompt}
+            ]
+        }]
     }).encode()
 
     req = urllib.request.Request(
-        OLLAMA_URL,
+        ANTHROPIC_API_URL,
         data=payload,
-        headers={"Content-Type": "application/json"}
+        headers={
+            "Content-Type": "application/json",
+            "x-api-key": get_anthropic_key(),
+            "anthropic-version": "2023-06-01"
+        }
     )
 
     try:
-        with urllib.request.urlopen(req, timeout=120) as r:
+        with urllib.request.urlopen(req, timeout=30) as r:
             resp = json.loads(r.read())
-            content = resp["message"]["content"].strip()
+            content = resp["content"][0]["text"].strip()
             if "```" in content:
                 content = content.split("```")[1]
                 if content.startswith("json"):
