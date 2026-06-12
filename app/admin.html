@@ -57,6 +57,64 @@ main { max-width: 900px; margin: 0 auto; padding: 28px 24px 60px; }
   justify-content: center; font-size: 22px; flex-shrink: 0;
 }
 
+/* ── Photo picker ── */
+.photo-picker {
+  display: none; position: fixed; inset: 0;
+  background: rgba(0,0,0,0.92);
+  backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+  z-index: 300; align-items: center; justify-content: center;
+  padding: 24px;
+}
+.photo-picker.open { display: flex; }
+.photo-picker-box {
+  background: var(--s1); border: 1px solid var(--border);
+  border-radius: 16px; padding: 24px;
+  max-width: 700px; width: 100%;
+}
+.photo-picker-title {
+  font-size: 0.95rem; font-weight: 700; margin-bottom: 20px;
+  color: var(--text);
+}
+.photo-picker-title span { color: var(--text3); font-weight: 400; }
+.photo-picker-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 16px;
+  margin-bottom: 20px;
+}
+.photo-option {
+  border: 2px solid var(--border); border-radius: 10px;
+  overflow: hidden; cursor: pointer; transition: border-color 0.15s;
+  position: relative;
+}
+.photo-option:hover { border-color: var(--border2); }
+.photo-option.active { border-color: var(--amber); }
+.photo-option img {
+  width: 100%; aspect-ratio: 1; object-fit: cover; display: block;
+  background: #111113;
+}
+.photo-option-label {
+  padding: 8px 10px;
+  font-size: 0.72rem; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.5px; color: var(--text2);
+  display: flex; align-items: center; justify-content: space-between;
+}
+.photo-option.active .photo-option-label { color: var(--amber); }
+.active-badge {
+  font-size: 0.65rem; background: #78350f33; color: var(--amber);
+  border: 1px solid #78350f; padding: 1px 6px; border-radius: 4px;
+}
+.photo-picker-actions {
+  display: flex; gap: 8px; justify-content: flex-end;
+}
+.btn-cancel {
+  background: var(--s2); color: var(--text2); border-color: var(--border);
+}
+.btn-cancel:hover { background: var(--border); color: var(--text); }
+.btn-apply {
+  background: #78350f33; color: var(--amber); border-color: #78350f;
+}
+.btn-apply:hover { background: #78350f; color: #fef3c7; }
+.btn-apply:disabled { opacity: 0.4; pointer-events: none; }
+
 /* ── Lightbox ── */
 .lightbox {
   display: none; position: fixed; inset: 0;
@@ -167,6 +225,26 @@ main { max-width: 900px; margin: 0 auto; padding: 28px 24px 60px; }
 
 <div class="toast" id="toast"></div>
 
+<div class="photo-picker" id="photo-picker">
+  <div class="photo-picker-box">
+    <div class="photo-picker-title">Choose photo — <span id="picker-badge-name"></span></div>
+    <div class="photo-picker-grid">
+      <div class="photo-option" id="opt-original" onclick="selectVersion('original')">
+        <img id="picker-img-original" src="" alt="">
+        <div class="photo-option-label">Original <span id="original-active-badge"></span></div>
+      </div>
+      <div class="photo-option" id="opt-processed" onclick="selectVersion('processed')">
+        <img id="picker-img-processed" src="" alt="">
+        <div class="photo-option-label">Background removed <span id="processed-active-badge"></span></div>
+      </div>
+    </div>
+    <div class="photo-picker-actions">
+      <button class="btn btn-cancel" onclick="closePicker()">Cancel</button>
+      <button class="btn btn-apply" id="btn-apply" onclick="applyVersion()">Use selected</button>
+    </div>
+  </div>
+</div>
+
 <div class="lightbox" id="lightbox">
   <button class="lightbox-close" id="lightbox-close">✕</button>
   <img id="lightbox-img" src="" alt="">
@@ -218,7 +296,7 @@ function rowHtml(b) {
   const date = b.added ? new Date(b.added).toLocaleDateString('en-US', {month:'short',day:'numeric',year:'numeric'}) : '';
   const photoSrc = b.photo ? b.photo : null;
   const img = photoSrc
-    ? `<img class="thumb" src="${photoSrc}" alt="" onclick="openLightbox('${photoSrc}')" onerror="this.style.display='none'">`
+    ? `<img class="thumb" src="${photoSrc}" alt="" onclick="openPicker('${b.id}')" onerror="this.style.display='none'">`
     : `<div class="thumb-placeholder">🏅</div>`;
 
   const rescanBtn = `<button class="btn btn-rescan" data-id="${b.id}">Rescan</button>`;
@@ -303,6 +381,79 @@ function attachHandlers() {
       }
     };
   });
+}
+
+// ── Photo picker ──
+let pickerBadgeId   = null;
+let pickerSelected  = null;
+let pickerCurrent   = 'processed'; // which version is currently active
+
+function openPicker(badgeId) {
+  const b = badges.find(x => x.id === badgeId);
+  if (!b || !b.photo) return;
+  pickerBadgeId  = badgeId;
+  pickerSelected = null;
+
+  const filename = b.photo.replace(/^\/photos\//, '');
+  document.getElementById('picker-badge-name').textContent = b.badge_name || 'Badge';
+  document.getElementById('picker-img-original').src  = `/photos_original/${filename}?t=${Date.now()}`;
+  document.getElementById('picker-img-processed').src = `/photos_processed/${filename}?t=${Date.now()}`;
+
+  // Determine which is currently active by comparing pixel data would be complex —
+  // instead track via a data attribute on the row
+  const row = document.getElementById(`row-${badgeId}`);
+  pickerCurrent = row ? (row.dataset.photoVersion || 'processed') : 'processed';
+
+  document.getElementById('original-active-badge').innerHTML  =
+    pickerCurrent === 'original'  ? '<span class="active-badge">Active</span>' : '';
+  document.getElementById('processed-active-badge').innerHTML =
+    pickerCurrent === 'processed' ? '<span class="active-badge">Active</span>' : '';
+
+  document.getElementById('opt-original').classList.toggle('active',  pickerCurrent === 'original');
+  document.getElementById('opt-processed').classList.toggle('active', pickerCurrent === 'processed');
+  document.getElementById('btn-apply').disabled = true;
+  document.getElementById('photo-picker').classList.add('open');
+}
+
+function selectVersion(version) {
+  pickerSelected = version;
+  document.getElementById('opt-original').classList.toggle('active',  version === 'original');
+  document.getElementById('opt-processed').classList.toggle('active', version === 'processed');
+  document.getElementById('btn-apply').disabled = (version === pickerCurrent);
+}
+
+async function applyVersion() {
+  if (!pickerSelected || pickerSelected === pickerCurrent) { closePicker(); return; }
+  const btn = document.getElementById('btn-apply');
+  btn.textContent = 'Applying…'; btn.disabled = true;
+  try {
+    const res  = await fetch(`/api/badge/${pickerBadgeId}/use-photo`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ version: pickerSelected })
+    });
+    const data = await res.json();
+    if (!data.ok) throw new Error(data.error || 'Failed');
+
+    // Update thumb in the list + mark active version
+    const row = document.getElementById(`row-${pickerBadgeId}`);
+    if (row) {
+      row.dataset.photoVersion = pickerSelected;
+      const thumb = row.querySelector('.thumb');
+      const filename = badges.find(b=>b.id===pickerBadgeId)?.photo?.replace(/^\/photos\//,'');
+      if (thumb && filename) thumb.src = `/photos/${filename}?t=${Date.now()}`;
+    }
+    showToast(`Photo updated to ${pickerSelected} version`, 'ok');
+    closePicker();
+  } catch(e) {
+    btn.textContent = 'Use selected'; btn.disabled = false;
+    showToast('Error: ' + e.message, 'err');
+  }
+}
+
+function closePicker() {
+  document.getElementById('photo-picker').classList.remove('open');
+  document.getElementById('btn-apply').textContent = 'Use selected';
 }
 
 function openLightbox(src) {

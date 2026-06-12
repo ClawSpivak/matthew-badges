@@ -357,6 +357,12 @@ class BadgeHandler(BaseHTTPRequestHandler):
         elif path.startswith("/photos/"):
             photo_name = path[8:]
             self.serve_file(os.path.join(PHOTOS_DIR, photo_name))
+        elif path.startswith("/photos_original/"):
+            photo_name = path[17:]
+            self.serve_file(os.path.join(os.path.dirname(PHOTOS_DIR), "photos_original", photo_name))
+        elif path.startswith("/photos_processed/"):
+            photo_name = path[18:]
+            self.serve_file(os.path.join(os.path.dirname(PHOTOS_DIR), "photos_processed", photo_name))
         else:
             file_path = os.path.join(BASE_DIR, path.lstrip("/"))
             if os.path.isfile(file_path):
@@ -455,6 +461,34 @@ class BadgeHandler(BaseHTTPRequestHandler):
                 image_b64 = base64.b64encode(f.read()).decode()
             result = identify_badge(image_b64, "image/jpeg")
             self.send_json(result)
+
+        elif path.startswith("/api/badge/") and path.endswith("/use-photo"):
+            # Swap the active photo for a badge: {"version": "original" | "processed"}
+            import shutil
+            badge_id = path[11:-10]
+            body     = json.loads(self.read_body())
+            version  = body.get("version", "processed")
+            photos_dir   = PHOTOS_DIR
+            originals_dir = os.path.join(os.path.dirname(photos_dir), "photos_original")
+            collection = load_collection()
+            badge = next((b for b in collection["badges"] if b.get("id") == badge_id), None)
+            if not badge:
+                self.send_json({"error": "Badge not found"}, 404)
+                return
+            filename = os.path.basename(badge.get("photo", ""))
+            if not filename:
+                self.send_json({"error": "No photo on badge"}, 404)
+                return
+            src = os.path.join(originals_dir if version == "original" else
+                               os.path.join(os.path.dirname(photos_dir), "photos_processed"),
+                               filename)
+            dst = os.path.join(photos_dir, filename)
+            if not os.path.isfile(src):
+                self.send_json({"error": f"{version} photo not found"}, 404)
+                return
+            shutil.copy2(src, dst)
+            save_collection(collection, badge_name=f"update photo {badge_id}")
+            self.send_json({"ok": True, "version": version})
 
         else:
             self.send_json({"error": "Not found"}, 404)
