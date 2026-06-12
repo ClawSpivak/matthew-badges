@@ -160,13 +160,13 @@
       "photo": "/photos/2a181378.jpg",
       "make": "Unknown",
       "model": "Series",
-      "years": "All Models",
-      "badge_name": "Car Logo",
-      "description": "A shiny silver logo that says 'series' on it.",
-      "fun_fact": "This logo is a symbol of the car's identity and makes it stand out from other cars.",
-      "rarity": "Common",
-      "value_estimate": "$100-$200",
-      "confidence": "High"
+      "years": "0",
+      "badge_name": "Car Series",
+      "description": "A silver metal plate with the word 'series' written on it in white letters. It is shaped like a rectangle and has a black border around the edges.",
+      "fun_fact": "This badge could be from any car that was part of a series production line!",
+      "rarity": "common",
+      "value_estimate": "$10-$20",
+      "confidence": "high"
     },
     {
       "id": "8f6efcbf",
