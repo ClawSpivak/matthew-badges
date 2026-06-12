@@ -57,16 +57,6 @@
       "confidence": "high"
     },
     {
-      "id": "e967326b",
-      "added": "2026-04-18T08:47:24.936823",
-      "photo": "/photos/057ab298.jpg",
-      "error": "'choices'",
-      "make": "Unknown",
-      "badge_name": "Unidentified Badge",
-      "description": "Couldn't identify this one \u2014 try a clearer photo!",
-      "confidence": "low"
-    },
-    {
       "id": "8cf630c0",
       "added": "2026-04-18T08:48:11.661543",
       "photo": "/photos/9c035cfd.jpg",
@@ -79,16 +69,6 @@
       "rarity": "uncommon",
       "value_estimate": "$25-75",
       "confidence": "high"
-    },
-    {
-      "id": "fc91bf95",
-      "added": "2026-04-18T10:04:48.585133",
-      "photo": "/photos/cb102205.jpg",
-      "error": "HTTP Error 400: Bad Request",
-      "make": "Unknown",
-      "badge_name": "Unidentified Badge",
-      "description": "Couldn't identify this one \u2014 try a clearer photo!",
-      "confidence": "low"
     },
     {
       "id": "06ceaed6",
@@ -133,16 +113,6 @@
       "confidence": "high"
     },
     {
-      "id": "b94d39c4",
-      "added": "2026-04-18T10:10:19.999016",
-      "photo": "/photos/6f7e7b56.jpg",
-      "error": "'choices'",
-      "make": "Unknown",
-      "badge_name": "Unidentified Badge",
-      "description": "Couldn't identify this one \u2014 try a clearer photo!",
-      "confidence": "low"
-    },
-    {
       "id": "f873f22b",
       "added": "2026-04-18T10:10:49.062923",
       "photo": "/photos/808e65b1.jpg",
@@ -155,26 +125,6 @@
       "rarity": "uncommon",
       "value_estimate": "$25-75",
       "confidence": "medium"
-    },
-    {
-      "id": "1f855997",
-      "added": "2026-04-18T10:11:40.329061",
-      "photo": "/photos/f58a8d2b.jpg",
-      "error": "HTTP Error 400: Bad Request",
-      "make": "Unknown",
-      "badge_name": "Unidentified Badge",
-      "description": "Couldn't identify this one \u2014 try a clearer photo!",
-      "confidence": "low"
-    },
-    {
-      "id": "9fc491cf",
-      "added": "2026-04-18T10:12:37.218008",
-      "photo": "/photos/10870353.jpg",
-      "error": "'choices'",
-      "make": "Unknown",
-      "badge_name": "Unidentified Badge",
-      "description": "Couldn't identify this one \u2014 try a clearer photo!",
-      "confidence": "low"
     },
     {
       "id": "2fa79d82",
