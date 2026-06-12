@@ -60,29 +60,19 @@ def shrink_image(image_b64, mime_type='image/jpeg', max_px=1024, quality=82):
         return image_b64, mime_type
 
 
-OLLAMA_URL  = "http://localhost:11434/api/chat"
-OLLAMA_MODEL = "llava:13b"
+OLLAMA_URL   = "http://localhost:11434/api/chat"
+OLLAMA_MODEL = "llava-llama3:latest"
 
 
 def identify_badge(image_b64, mime_type="image/jpeg"):
-    image_b64, mime_type = shrink_image(image_b64, mime_type, max_px=512)
+    image_b64, mime_type = shrink_image(image_b64, mime_type, max_px=1024)
 
     prompt = """You are a world-class expert on car badges, emblems, hood ornaments, wheel caps, and automotive logos.
 
-A kid is showing you a photo of a car badge they found. Identify it — be aggressive, always make your best guess even if the photo is blurry or partial. Look for shape, letters/numbers, colors, chrome patterns, mounting style, and country-of-origin clues.
+A kid is showing you a photo of a car badge they found. Identify what you actually see — look carefully at the real shape, text, logo, colors, and chrome details in the photo. Make your best guess even if the photo is blurry or partial.
 
-Respond with ONLY a JSON object (no markdown, no code blocks):
-{
-  "make": "Ford",
-  "model": "Mustang",
-  "years": "1965-1973",
-  "badge_name": "Running Horse Grille Emblem",
-  "description": "The iconic galloping mustang horse, one of the most recognizable badges in American automotive history!",
-  "fun_fact": "The Mustang was named after the WWII P-51 Mustang fighter plane, not the wild horse!",
-  "rarity": "uncommon",
-  "value_estimate": "$20-60",
-  "confidence": "high"
-}
+Reply with ONLY a JSON object using these exact keys (no markdown, no code blocks, no explanation):
+{"make": "<actual car brand you see>", "model": "<specific model or All Models>", "years": "<year range>", "badge_name": "<what this badge is called>", "description": "<exciting kid-friendly description of what you see>", "fun_fact": "<cool fact about this car or badge>", "rarity": "<common|uncommon|rare|very_rare>", "value_estimate": "<dollar range>", "confidence": "<high|medium|low>"}
 
 Rarity: "common" = mass-produced millions, "uncommon" = specific model/older variants, "rare" = pre-1970s/limited/European exotics, "very_rare" = pre-war/prototype/ultra-limited.
 Keep description and fun_fact exciting and kid-friendly (8-12 year old audience).
@@ -109,13 +99,11 @@ If genuinely not a car badge, set make to "Unknown"."""
         with urllib.request.urlopen(req, timeout=120) as r:
             resp = json.loads(r.read())
             content = resp["message"]["content"].strip()
-            # Strip markdown code blocks if present
             if "```" in content:
                 content = content.split("```")[1]
                 if content.startswith("json"):
                     content = content[4:]
                 content = content.strip()
-            # Extract first JSON object if there's surrounding text
             start = content.find("{")
             end   = content.rfind("}") + 1
             if start >= 0 and end > start:
