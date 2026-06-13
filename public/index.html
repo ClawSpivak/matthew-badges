@@ -4,278 +4,318 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Matthew's Badge Vault</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-  --bg:       #09090b;
-  --s1:       #18181b;
-  --s2:       #27272a;
-  --border:   #3f3f46;
-  --border2:  #52525b;
-  --text:     #fafafa;
-  --text2:    #a1a1aa;
-  --text3:    #71717a;
-  --amber:    #f59e0b;
-  --amber2:   #fbbf24;
-  --blue:     #3b82f6;
-  --green:    #22c55e;
-  --pink:     #ec4899;
-  --r-common:     #52525b;
-  --r-uncommon:   #2563eb;
-  --r-rare:       #d97706;
-  --r-ultra:      #be185d;
+  --bg:        #020917;
+  --bg2:       #040e24;
+  --card:      rgba(8,20,50,0.7);
+  --card-hover:rgba(10,26,62,0.9);
+  --border:    rgba(56,110,200,0.18);
+  --border2:   rgba(96,165,250,0.4);
+  --blue:      #3b82f6;
+  --blue2:     #60a5fa;
+  --blue3:     #93c5fd;
+  --cyan:      #22d3ee;
+  --text:      #eef4ff;
+  --text2:     #7da5d0;
+  --text3:     #3d6080;
+  --gold:      #f59e0b;
+  --gold2:     #fbbf24;
+  --pink:      #e879f9;
+  --green:     #34d399;
+
+  --r-common:   rgba(56,110,200,0.15);
+  --r-uncommon: rgba(34,211,238,0.15);
+  --r-rare:     rgba(245,158,11,0.15);
+  --r-ultra:    rgba(232,121,249,0.15);
 }
 
+html { scroll-behavior: smooth; }
 body {
   background: var(--bg);
   color: var(--text);
   font-family: 'Inter', -apple-system, sans-serif;
   min-height: 100vh;
   -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+/* ── BACKGROUND GLOW ── */
+body::before {
+  content: '';
+  position: fixed;
+  top: -20%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 900px;
+  height: 500px;
+  background: radial-gradient(ellipse, rgba(59,130,246,0.12) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
 }
 
 /* ── TOP BAR ── */
 .topbar {
   position: sticky; top: 0; z-index: 50;
-  background: rgba(9,9,11,0.85);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+  background: rgba(2,9,23,0.75);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
   border-bottom: 1px solid var(--border);
-  padding: 0 24px;
-  height: 60px;
+  padding: 0 32px;
+  height: 64px;
   display: flex; align-items: center; justify-content: space-between;
 }
 .topbar-brand {
-  font-size: 1.05rem; font-weight: 800;
+  font-size: 1rem; font-weight: 800;
   letter-spacing: -0.3px;
-  color: var(--text);
+  background: linear-gradient(90deg, var(--text) 0%, var(--blue3) 100%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
-.topbar-brand span { color: var(--amber); }
 .topbar-stats {
-  display: flex; gap: 24px;
-  font-size: 0.8rem; color: var(--text2);
+  display: flex; gap: 28px;
+  font-size: 0.78rem; color: var(--text2);
 }
-.topbar-stats strong { color: var(--text); font-weight: 600; }
+.topbar-stats strong { color: var(--blue2); font-weight: 700; }
 
 /* ── HERO ── */
 .hero {
-  padding: 48px 24px 32px;
-  max-width: 1100px; margin: 0 auto;
-  border-bottom: 1px solid var(--border);
+  position: relative; z-index: 1;
+  padding: 72px 32px 56px;
+  max-width: 1200px; margin: 0 auto;
+}
+.hero-eyebrow {
+  font-size: 0.72rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 3px;
+  color: var(--blue2);
+  margin-bottom: 16px;
+  display: flex; align-items: center; gap: 10px;
+}
+.hero-eyebrow::before {
+  content: '';
+  display: inline-block;
+  width: 24px; height: 2px;
+  background: var(--blue2);
+  border-radius: 2px;
 }
 .hero h1 {
-  font-size: clamp(2rem, 5vw, 3.2rem);
-  font-weight: 800;
-  letter-spacing: -1.5px;
-  line-height: 1.1;
-  margin-bottom: 8px;
+  font-size: clamp(2.6rem, 6vw, 4.5rem);
+  font-weight: 900;
+  letter-spacing: -2px;
+  line-height: 1.0;
+  margin-bottom: 16px;
 }
-.hero h1 em {
-  font-style: normal;
-  background: linear-gradient(90deg, var(--amber) 0%, var(--amber2) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+.hero h1 .gradient-text {
+  background: linear-gradient(135deg, var(--blue2) 0%, var(--cyan) 100%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 .hero-sub {
-  font-size: 1rem; color: var(--text2); margin-bottom: 28px;
+  font-size: 1.05rem; color: var(--text2);
+  font-weight: 400;
+  max-width: 480px;
+  line-height: 1.6;
+  margin-bottom: 40px;
 }
-.stat-row {
-  display: flex; flex-wrap: wrap; gap: 12px;
-}
+
+/* ── STAT ROW ── */
+.stat-row { display: flex; flex-wrap: wrap; gap: 12px; }
 .stat-pill {
-  background: var(--s1);
+  background: var(--card);
   border: 1px solid var(--border);
-  border-radius: 8px;
-  padding: 10px 18px;
-  display: flex; flex-direction: column; gap: 2px;
+  border-radius: 14px;
+  padding: 14px 22px;
+  display: flex; flex-direction: column; gap: 3px;
+  backdrop-filter: blur(12px);
+  transition: border-color 0.2s, transform 0.2s;
 }
+.stat-pill:hover { border-color: var(--border2); transform: translateY(-2px); }
 .stat-pill-val {
-  font-size: 1.4rem; font-weight: 800; letter-spacing: -0.5px;
-  color: var(--text);
+  font-size: 1.6rem; font-weight: 900; letter-spacing: -1px;
+  background: linear-gradient(135deg, var(--text) 0%, var(--blue3) 100%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
-.stat-pill-label { font-size: 0.72rem; color: var(--text3); text-transform: uppercase; letter-spacing: 0.8px; }
+.stat-pill-label {
+  font-size: 0.68rem; color: var(--text3);
+  text-transform: uppercase; letter-spacing: 1px; font-weight: 600;
+}
 
 /* ── COUNTRY NAV ── */
 .country-nav-wrap {
-  position: sticky; top: 60px; z-index: 40;
-  background: rgba(9,9,11,0.9);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  position: sticky; top: 64px; z-index: 40;
+  background: rgba(2,9,23,0.8);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
   border-bottom: 1px solid var(--border);
 }
 .country-nav {
   display: flex; gap: 4px;
-  padding: 10px 20px;
-  overflow-x: auto;
-  scrollbar-width: none;
-  max-width: 1100px; margin: 0 auto;
+  padding: 12px 28px;
+  overflow-x: auto; scrollbar-width: none;
+  max-width: 1200px; margin: 0 auto;
 }
 .country-nav::-webkit-scrollbar { display: none; }
 .country-tab {
   display: flex; align-items: center; gap: 8px;
-  padding: 7px 14px;
-  border-radius: 8px;
+  padding: 8px 16px;
+  border-radius: 10px;
   border: 1px solid transparent;
-  font-size: 0.82rem; font-weight: 600;
+  font-size: 0.8rem; font-weight: 600;
   color: var(--text2);
   cursor: pointer;
-  transition: all 0.15s;
+  transition: all 0.18s;
   white-space: nowrap;
   background: transparent;
+  letter-spacing: 0.2px;
 }
-.country-tab:hover { background: var(--s1); color: var(--text); }
+.country-tab:hover { background: var(--card); color: var(--text); border-color: var(--border); }
 .country-tab.active {
-  background: var(--s1);
-  border-color: var(--border);
-  color: var(--text);
+  background: rgba(59,130,246,0.12);
+  border-color: rgba(96,165,250,0.3);
+  color: var(--blue2);
 }
-.country-tab .flag { font-size: 1.1rem; }
 .country-tab .count {
-  background: var(--s2);
-  color: var(--text3);
-  font-size: 0.68rem;
-  font-weight: 700;
-  padding: 1px 6px;
-  border-radius: 4px;
-  min-width: 20px;
-  text-align: center;
+  background: rgba(59,130,246,0.12);
+  color: var(--blue2);
+  font-size: 0.65rem; font-weight: 700;
+  padding: 1px 7px; border-radius: 20px;
 }
-.country-tab.active .count { color: var(--amber); }
+.country-tab.active .count { background: rgba(96,165,250,0.2); }
 
 /* ── MAIN ── */
 main {
-  max-width: 1100px; margin: 0 auto;
-  padding: 0 24px 60px;
+  position: relative; z-index: 1;
+  max-width: 1200px; margin: 0 auto;
+  padding: 0 32px 80px;
 }
 
 /* ── COUNTRY SECTION ── */
-.country-section { padding-top: 40px; }
+.country-section { padding-top: 52px; }
 .country-section.hidden { display: none; }
 
 .country-header {
-  display: flex; align-items: center; gap: 12px;
-  margin-bottom: 28px;
-  padding-bottom: 16px;
+  display: flex; align-items: center; gap: 16px;
+  margin-bottom: 36px;
+  padding-bottom: 20px;
   border-bottom: 1px solid var(--border);
 }
-.country-flag-big { font-size: 2rem; }
+.country-flag-big { font-size: 2.4rem; filter: drop-shadow(0 2px 8px rgba(0,0,0,0.5)); }
 .country-header-text h2 {
-  font-size: 1.4rem; font-weight: 800; letter-spacing: -0.5px;
+  font-size: 1.6rem; font-weight: 800; letter-spacing: -0.5px;
 }
-.country-header-text p { font-size: 0.8rem; color: var(--text3); margin-top: 2px; }
+.country-header-text p { font-size: 0.78rem; color: var(--text3); margin-top: 3px; }
 
 /* ── MAKE GROUP ── */
-.make-group { margin-bottom: 36px; }
+.make-group { margin-bottom: 48px; }
 .make-header {
-  display: flex; align-items: center; gap: 10px;
-  margin-bottom: 16px;
+  display: flex; align-items: center; gap: 12px;
+  margin-bottom: 20px;
 }
 .make-name {
-  font-size: 0.85rem; font-weight: 700;
-  text-transform: uppercase; letter-spacing: 1px;
-  color: var(--text2);
+  font-size: 0.72rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 2px;
+  color: var(--blue2);
 }
-.make-line {
-  flex: 1; height: 1px; background: var(--border);
-}
-.make-count {
-  font-size: 0.72rem; color: var(--text3); font-weight: 600;
-}
+.make-line { flex: 1; height: 1px; background: var(--border); }
+.make-count { font-size: 0.7rem; color: var(--text3); font-weight: 600; }
 
-/* ── BADGE GRID ── */
+/* ── BADGE GRID — large photos ── */
 .badge-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 12px;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 16px;
 }
 
 /* ── BADGE CARD ── */
 .badge-card {
-  background: var(--s1);
+  background: var(--card);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: 16px;
   overflow: hidden;
   cursor: pointer;
-  transition: transform 0.15s, box-shadow 0.15s, border-color 0.15s;
+  transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s, background 0.2s;
   position: relative;
+  backdrop-filter: blur(12px);
 }
 .badge-card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 8px 30px rgba(0,0,0,0.5);
+  transform: translateY(-5px);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.6), 0 0 0 1px rgba(96,165,250,0.25);
+  background: var(--card-hover);
   border-color: var(--border2);
 }
-.badge-card[data-rarity="rare"] {
-  border-color: #78350f;
+.badge-card[data-rarity="rare"] { border-color: rgba(245,158,11,0.2); }
+.badge-card[data-rarity="rare"]:hover {
+  border-color: rgba(245,158,11,0.6);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.6), 0 0 30px rgba(245,158,11,0.12);
 }
-.badge-card[data-rarity="rare"]:hover { border-color: var(--amber); }
-.badge-card[data-rarity="ultra-rare"] {
-  border-color: #831843;
+.badge-card[data-rarity="ultra-rare"] { border-color: rgba(232,121,249,0.2); }
+.badge-card[data-rarity="ultra-rare"]:hover {
+  border-color: rgba(232,121,249,0.6);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.6), 0 0 30px rgba(232,121,249,0.15);
 }
-.badge-card[data-rarity="ultra-rare"]:hover { border-color: var(--pink); }
 
 .card-img-wrap {
   position: relative;
-  aspect-ratio: 1;
-  background: #111113;
+  aspect-ratio: 4/3;
+  background: #030b1c;
   overflow: hidden;
 }
 .card-img {
   width: 100%; height: 100%;
   object-fit: cover;
   display: block;
-  transition: transform 0.3s;
+  transition: transform 0.4s ease;
 }
-.badge-card:hover .card-img { transform: scale(1.04); }
+.badge-card:hover .card-img { transform: scale(1.06); }
 .card-img-placeholder {
   width: 100%; height: 100%;
   display: flex; align-items: center; justify-content: center;
-  font-size: 3rem; color: var(--border2);
+  font-size: 3.5rem; color: var(--border2);
 }
-.rarity-dot {
-  position: absolute; top: 8px; right: 8px;
-  width: 8px; height: 8px; border-radius: 50%;
+.card-img-gradient {
+  position: absolute; inset: 0;
+  background: linear-gradient(to top, rgba(2,9,23,0.7) 0%, transparent 50%);
+  pointer-events: none;
 }
-.rarity-dot.common     { background: var(--r-common); }
-.rarity-dot.uncommon   { background: var(--r-uncommon); box-shadow: 0 0 6px var(--r-uncommon); }
-.rarity-dot.rare       { background: var(--amber);  box-shadow: 0 0 8px var(--amber); }
-.rarity-dot.ultra-rare { background: var(--pink);   box-shadow: 0 0 10px var(--pink); animation: pulse 2s ease-in-out infinite; }
-@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
 
-.card-info { padding: 12px; }
+.rarity-badge {
+  position: absolute; top: 10px; right: 10px;
+  font-size: 0.6rem; font-weight: 800;
+  text-transform: uppercase; letter-spacing: 0.8px;
+  padding: 3px 8px; border-radius: 6px;
+  backdrop-filter: blur(8px);
+}
+.rarity-badge.common     { background: rgba(30,50,80,0.8); color: var(--text3); }
+.rarity-badge.uncommon   { background: rgba(34,211,238,0.15); color: var(--cyan); border: 1px solid rgba(34,211,238,0.3); }
+.rarity-badge.rare       { background: rgba(245,158,11,0.15); color: var(--gold2); border: 1px solid rgba(245,158,11,0.3); }
+.rarity-badge.ultra-rare { background: rgba(232,121,249,0.15); color: var(--pink); border: 1px solid rgba(232,121,249,0.3); animation: pulse 2s ease-in-out infinite; }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.5} }
+
+.card-info { padding: 14px 16px 16px; }
 .card-badge-name {
-  font-size: 0.82rem; font-weight: 600;
+  font-size: 0.88rem; font-weight: 600;
   color: var(--text);
-  line-height: 1.35;
+  line-height: 1.4;
   margin-bottom: 6px;
   display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2; -webkit-box-orient: vertical;
   overflow: hidden;
 }
-.card-meta {
-  display: flex; align-items: center; justify-content: space-between;
-  gap: 6px;
+.card-make {
+  font-size: 0.72rem; color: var(--text2);
+  font-weight: 500;
 }
-.rarity-tag {
-  font-size: 0.65rem; font-weight: 700;
-  text-transform: uppercase; letter-spacing: 0.5px;
-  padding: 2px 7px; border-radius: 4px;
-}
-.rarity-tag.common     { background: #1c1c1f; color: var(--text3); }
-.rarity-tag.uncommon   { background: #1e3a8a22; color: #93c5fd; border: 1px solid #1e3a8a; }
-.rarity-tag.rare       { background: #78350f22; color: #fcd34d; border: 1px solid #78350f; }
-.rarity-tag.ultra-rare { background: #83184322; color: #f9a8d4; border: 1px solid #831843; }
-.card-value { font-size: 0.72rem; color: var(--green); font-weight: 600; }
 
 /* ── MODAL ── */
 .modal-bg {
   display: none; position: fixed; inset: 0;
-  background: rgba(0,0,0,0.8);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  background: rgba(0,5,20,0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
   z-index: 200;
   align-items: center; justify-content: center;
   padding: 20px;
@@ -283,108 +323,136 @@ main {
 .modal-bg.open { display: flex; }
 
 .modal {
-  background: var(--s1);
-  border: 1px solid var(--border);
-  border-radius: 20px;
-  max-width: 480px; width: 100%;
+  background: #050f26;
+  border: 1px solid rgba(96,165,250,0.2);
+  border-radius: 24px;
+  max-width: 520px; width: 100%;
   overflow: hidden;
-  max-height: 90vh;
-  overflow-y: auto;
+  max-height: 92vh; overflow-y: auto;
   position: relative;
-  scrollbar-width: thin;
-  scrollbar-color: var(--border) transparent;
+  box-shadow: 0 40px 120px rgba(0,0,0,0.8), 0 0 60px rgba(59,130,246,0.08);
+  scrollbar-width: thin; scrollbar-color: var(--border) transparent;
 }
-.modal-img {
+.modal-img-wrap {
+  position: relative;
   width: 100%;
   aspect-ratio: 4/3;
-  object-fit: cover;
-  display: block;
-  background: #111113;
+  background: #020810;
+  overflow: hidden;
 }
-.modal-body { padding: 24px; }
+.modal-img {
+  width: 100%; height: 100%;
+  object-fit: cover; display: block;
+}
+.modal-img-gradient {
+  position: absolute; inset: 0;
+  background: linear-gradient(to top, rgba(5,15,38,1) 0%, rgba(5,15,38,0.3) 40%, transparent 100%);
+  pointer-events: none;
+}
+.modal-img-overlay {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  padding: 20px 24px 4px;
+}
+.modal-img-rarity {
+  font-size: 0.62rem; font-weight: 800;
+  text-transform: uppercase; letter-spacing: 1px;
+  padding: 3px 10px; border-radius: 6px;
+  display: inline-block; margin-bottom: 8px;
+}
+.modal-img-rarity.common     { background: rgba(30,50,80,0.9); color: var(--text3); }
+.modal-img-rarity.uncommon   { background: rgba(34,211,238,0.2); color: var(--cyan); border: 1px solid rgba(34,211,238,0.4); }
+.modal-img-rarity.rare       { background: rgba(245,158,11,0.2); color: var(--gold2); border: 1px solid rgba(245,158,11,0.4); }
+.modal-img-rarity.ultra-rare { background: rgba(232,121,249,0.2); color: var(--pink); border: 1px solid rgba(232,121,249,0.4); }
+
+.modal-body { padding: 20px 24px 28px; }
 .modal-top {
   display: flex; align-items: flex-start;
   justify-content: space-between; gap: 12px;
-  margin-bottom: 16px;
+  margin-bottom: 4px;
 }
 .modal-title {
-  font-size: 1.3rem; font-weight: 800;
-  letter-spacing: -0.3px; line-height: 1.2;
+  font-size: 1.35rem; font-weight: 800;
+  letter-spacing: -0.4px; line-height: 1.2;
 }
 .modal-close {
   flex-shrink: 0;
-  background: var(--s2); border: 1px solid var(--border);
-  color: var(--text2); border-radius: 8px;
-  width: 32px; height: 32px;
-  font-size: 16px; cursor: pointer;
+  background: rgba(30,50,80,0.6);
+  border: 1px solid var(--border);
+  color: var(--text2); border-radius: 10px;
+  width: 34px; height: 34px;
+  font-size: 15px; cursor: pointer;
   display: flex; align-items: center; justify-content: center;
-  transition: background 0.15s;
+  transition: all 0.15s;
 }
-.modal-close:hover { background: var(--border); color: var(--text); }
+.modal-close:hover { background: rgba(59,130,246,0.2); border-color: var(--border2); color: var(--blue2); }
 
-.modal-make-row {
-  display: flex; align-items: center; gap: 8px;
-  margin-bottom: 20px;
+.modal-make {
+  font-size: 0.82rem; color: var(--text2); margin-bottom: 18px;
+  display: flex; align-items: center; gap: 6px;
 }
-.modal-flag { font-size: 1.1rem; }
-.modal-make-text { font-size: 0.85rem; color: var(--text2); }
 
 .modal-chips { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px; }
 .modal-chip {
-  font-size: 0.72rem; font-weight: 600;
-  padding: 4px 10px; border-radius: 6px;
-  background: var(--s2); color: var(--text3);
+  font-size: 0.7rem; font-weight: 600;
+  padding: 4px 10px; border-radius: 7px;
+  background: rgba(30,50,80,0.6); color: var(--text3);
   border: 1px solid var(--border);
 }
-.modal-chip.rarity-rare       { color: #fcd34d; border-color: #78350f; background: #78350f22; }
-.modal-chip.rarity-uncommon   { color: #93c5fd; border-color: #1e3a8a; background: #1e3a8a22; }
-.modal-chip.rarity-ultra-rare { color: #f9a8d4; border-color: #831843; background: #83184322; }
-.modal-chip.rarity-common     { color: var(--text3); }
-.modal-chip.value { color: var(--green); border-color: #14532d; background: #14532d22; }
 
-.modal-section { margin-bottom: 16px; }
+.modal-section { margin-bottom: 18px; }
 .modal-label {
-  font-size: 0.68rem; text-transform: uppercase; letter-spacing: 1px;
-  color: var(--text3); font-weight: 700; margin-bottom: 6px;
+  font-size: 0.65rem; text-transform: uppercase;
+  letter-spacing: 1.5px; color: var(--text3);
+  font-weight: 700; margin-bottom: 7px;
 }
-.modal-p { font-size: 0.88rem; color: var(--text2); line-height: 1.65; }
+.modal-p {
+  font-size: 0.9rem; color: var(--text2);
+  line-height: 1.7;
+}
 .modal-funfact {
-  background: var(--bg);
-  border: 1px solid var(--border);
-  border-left: 3px solid var(--amber);
-  border-radius: 0 8px 8px 0;
-  padding: 12px 14px;
-  font-size: 0.85rem;
-  color: #fef3c7;
-  line-height: 1.6;
+  background: rgba(59,130,246,0.06);
+  border: 1px solid rgba(59,130,246,0.2);
+  border-left: 3px solid var(--blue2);
+  border-radius: 0 10px 10px 0;
+  padding: 14px 16px;
+  font-size: 0.87rem; color: #c5daff;
+  line-height: 1.65;
 }
 
-/* ── EMPTY / LOADING ── */
-.loading {
-  text-align: center; padding: 80px 20px;
-  color: var(--text3);
-}
+/* ── LOADING ── */
+.loading { text-align: center; padding: 100px 20px; color: var(--text3); }
 .spinner {
-  width: 36px; height: 36px;
-  border: 2px solid var(--border);
-  border-top-color: var(--amber);
+  width: 40px; height: 40px;
+  border: 2px solid rgba(59,130,246,0.15);
+  border-top-color: var(--blue2);
   border-radius: 50%;
-  animation: spin 0.7s linear infinite;
-  margin: 0 auto 14px;
+  animation: spin 0.8s linear infinite;
+  margin: 0 auto 16px;
 }
 @keyframes spin { to { transform: rotate(360deg); } }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 600px) {
+  .topbar { padding: 0 16px; }
+  .hero { padding: 48px 16px 40px; }
+  main { padding: 0 16px 60px; }
+  .country-nav { padding: 10px 12px; }
+  .badge-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 10px; }
+  .topbar-stats { gap: 14px; }
+}
 </style>
 </head>
 <body>
 
 <div class="topbar">
-  <div class="topbar-brand">Matthew's <span>Badge Vault</span></div>
+  <div class="topbar-brand">Matthew's Badge Vault</div>
   <div class="topbar-stats" id="topbar-stats"></div>
 </div>
 
 <div class="hero">
-  <h1>The <em>Collection.</em></h1>
-  <p class="hero-sub">Every badge pulled, identified, and logged.</p>
+  <div class="hero-eyebrow">Car Badge Collection</div>
+  <h1>The <span class="gradient-text">Vault.</span></h1>
+  <p class="hero-sub">Every badge found, identified, and catalogued. From rare pre-war relics to modern classics.</p>
   <div class="stat-row" id="stat-row">
     <div class="stat-pill"><div class="stat-pill-val">—</div><div class="stat-pill-label">Badges</div></div>
   </div>
@@ -401,16 +469,19 @@ main {
 <!-- Modal -->
 <div class="modal-bg" id="modal-bg">
   <div class="modal" id="modal">
-    <img class="modal-img" id="modal-img" src="" alt="">
+    <div class="modal-img-wrap">
+      <img class="modal-img" id="modal-img" src="" alt="">
+      <div class="modal-img-gradient"></div>
+      <div class="modal-img-overlay">
+        <div class="modal-img-rarity" id="modal-img-rarity"></div>
+      </div>
+    </div>
     <div class="modal-body">
       <div class="modal-top">
         <div class="modal-title" id="modal-title"></div>
         <button class="modal-close" id="modal-close">✕</button>
       </div>
-      <div class="modal-make-row">
-        <span class="modal-flag" id="modal-flag"></span>
-        <span class="modal-make-text" id="modal-make-text"></span>
-      </div>
+      <div class="modal-make" id="modal-make"></div>
       <div class="modal-chips" id="modal-chips"></div>
       <div class="modal-section">
         <div class="modal-label">About this badge</div>
@@ -427,7 +498,6 @@ main {
 <script>
 const GITHUB_RAW = 'https://raw.githubusercontent.com/ClawSpivak/matthew-badges/main';
 
-// ── Make → Country map ──
 const MAKE_COUNTRY = {
   ford:'United States', chevrolet:'United States', chevy:'United States',
   dodge:'United States', pontiac:'United States', oldsmobile:'United States',
@@ -437,7 +507,7 @@ const MAKE_COUNTRY = {
   studebaker:'United States', hudson:'United States', nash:'United States',
   willys:'United States', duesenberg:'United States', cord:'United States',
   auburn:'United States', stutz:'United States', raceline:'United States',
-  'jim beam':'United States', beam:'United States', kaiser:'United States',
+  'harley-davidson':'United States', 'jim beam':'United States', beam:'United States', kaiser:'United States',
 
   porsche:'Germany', bmw:'Germany', mercedes:'Germany', 'mercedes-benz':'Germany',
   audi:'Germany', opel:'Germany', volkswagen:'Germany', vw:'Germany',
@@ -456,7 +526,7 @@ const MAKE_COUNTRY = {
 
   peugeot:'France', renault:'France', citroën:'France', citroen:'France',
 
-  volvo:'Sweden', saab:'Sweden',
+  volvo:'Sweden', saab:'Sweden', 'saab-scania':'Sweden',
 
   hyundai:'South Korea', kia:'South Korea',
 };
@@ -475,16 +545,14 @@ const COUNTRY_META = {
 
 const RARITY_ORDER = ['ultra-rare','rare','uncommon','common'];
 const RARITY_LABEL = {
-  'ultra-rare':'⭐ Ultra Rare','rare':'🥇 Rare',
-  'uncommon':'💙 Uncommon','common':'Common',
+  'ultra-rare':'Ultra Rare','rare':'Rare','uncommon':'Uncommon','common':'Common',
 };
 
 function getCountry(make) {
   if (!make) return 'Other';
-  const key = make.toLowerCase().trim();
-  return MAKE_COUNTRY[key] || 'Other';
+  return MAKE_COUNTRY[make.toLowerCase().trim()] || 'Other';
 }
-function rarity(b) { return (b.rarity || 'common').toLowerCase().replace(' ','-'); }
+function rarity(b) { return (b.rarity||'common').toLowerCase().replace(/[\s_]+/g,'-'); }
 function photoUrl(p) {
   if (!p) return null;
   return `${GITHUB_RAW}/app/photos/${p.replace(/^\/photos\//,'')}`;
@@ -504,7 +572,7 @@ async function load() {
     allBadges  = (data.badges || []).sort((a,b)=>{
       const ai = RARITY_ORDER.indexOf(rarity(a));
       const bi = RARITY_ORDER.indexOf(rarity(b));
-      return (ai<0?99:ai)-(bi<0?99:bi);
+      return (ai<0?99:ai) - (bi<0?99:bi);
     });
     render();
   } catch(e) {
@@ -514,7 +582,6 @@ async function load() {
 }
 
 function groupData() {
-  // {country: {make: [badges]}}
   const tree = {};
   allBadges.forEach(b => {
     const country = getCountry(b.make);
@@ -528,12 +595,10 @@ function groupData() {
 
 function render() {
   const tree = groupData();
-
-  // Stats
-  const total  = allBadges.length;
-  const makes  = new Set(allBadges.map(b=>b.make).filter(Boolean)).size;
+  const total     = allBadges.length;
+  const makes     = new Set(allBadges.map(b=>b.make).filter(Boolean)).size;
   const countries = Object.keys(tree).length;
-  const rares  = allBadges.filter(b=>['rare','ultra-rare'].includes(rarity(b))).length;
+  const rares     = allBadges.filter(b=>['rare','ultra-rare'].includes(rarity(b))).length;
 
   document.getElementById('topbar-stats').innerHTML =
     `<span><strong>${total}</strong> badges</span>
@@ -547,7 +612,6 @@ function render() {
     <div class="stat-pill"><div class="stat-pill-val">${rares}</div><div class="stat-pill-label">Rare+</div></div>
   `;
 
-  // Country nav
   const sortedCountries = Object.keys(tree).sort((a,b)=>
     ((COUNTRY_META[a]||{sort:99}).sort) - ((COUNTRY_META[b]||{sort:99}).sort)
   );
@@ -560,25 +624,24 @@ function render() {
       const meta  = COUNTRY_META[c] || {flag:'🌍'};
       const count = Object.values(tree[c]).flat().length;
       return `<button class="country-tab" data-country="${c}" onclick="setCountry('${c}',this)">
-        <span class="flag">${meta.flag}</span> ${c} <span class="count">${count}</span>
+        ${meta.flag} ${c} <span class="count">${count}</span>
       </button>`;
     }).join('');
 
-  // Main content
   document.getElementById('main').innerHTML = sortedCountries.map(country => {
-    const meta   = COUNTRY_META[country] || {flag:'🌍'};
-    const makes  = Object.keys(tree[country]).sort();
-    const total  = Object.values(tree[country]).flat().length;
+    const meta  = COUNTRY_META[country] || {flag:'🌍'};
+    const makeList = Object.keys(tree[country]).sort();
+    const tot   = Object.values(tree[country]).flat().length;
     return `
     <section class="country-section" id="country-${country.replace(/ /g,'_')}" data-country="${country}">
       <div class="country-header">
         <div class="country-flag-big">${meta.flag}</div>
         <div class="country-header-text">
           <h2>${country}</h2>
-          <p>${total} badge${total!==1?'s':''} · ${makes.length} make${makes.length!==1?'s':''}</p>
+          <p>${tot} badge${tot!==1?'s':''} · ${makeList.length} make${makeList.length!==1?'s':''}</p>
         </div>
       </div>
-      ${makes.map(make => {
+      ${makeList.map(make => {
         const badges = tree[country][make];
         return `
         <div class="make-group">
@@ -602,17 +665,17 @@ function badgeCard(b) {
   const img  = pUrl
     ? `<img class="card-img" src="${pUrl}" alt="" loading="lazy" onerror="this.parentNode.innerHTML='<div class=card-img-placeholder>🏅</div>'">`
     : `<div class="card-img-placeholder">🏅</div>`;
+  const rl   = RARITY_LABEL[r] || r;
   return `
   <div class="badge-card" data-rarity="${r}" onclick="openModal('${b.id}')">
     <div class="card-img-wrap">
       ${img}
-      <div class="rarity-dot ${r}"></div>
+      <div class="card-img-gradient"></div>
+      <div class="rarity-badge ${r}">${rl}</div>
     </div>
     <div class="card-info">
       <div class="card-badge-name">${b.badge_name||'Unknown Badge'}</div>
-      <div class="card-meta">
-        <span class="rarity-tag ${r}">${RARITY_LABEL[r]||r}</span>
-      </div>
+      <div class="card-make">${[b.make, b.years].filter(Boolean).join(' · ')}</div>
     </div>
   </div>`;
 }
@@ -622,42 +685,38 @@ function setCountry(country, btn) {
   document.querySelectorAll('.country-tab').forEach(t=>t.classList.remove('active'));
   btn.classList.add('active');
   document.querySelectorAll('.country-section').forEach(s=>{
-    if (country === 'all' || s.dataset.country === country) {
-      s.classList.remove('hidden');
-    } else {
-      s.classList.add('hidden');
-    }
+    if (country === 'all' || s.dataset.country === country) s.classList.remove('hidden');
+    else s.classList.add('hidden');
   });
 }
 
 function openModal(id) {
   const b = allBadges.find(x=>x.id===id);
   if (!b) return;
-  const r      = rarity(b);
-  const pUrl   = photoUrl(b.photo);
+  const r       = rarity(b);
+  const pUrl    = photoUrl(b.photo);
   const country = getCountry(b.make);
-  const flag   = (COUNTRY_META[country]||{flag:'🌍'}).flag;
+  const flag    = (COUNTRY_META[country]||{flag:'🌍'}).flag;
 
   const img = document.getElementById('modal-img');
-  if (pUrl) { img.src = pUrl; img.style.display='block'; }
-  else       { img.style.display='none'; }
+  if (pUrl) { img.src = pUrl; img.style.display = 'block'; }
+  else       { img.style.display = 'none'; }
 
-  document.getElementById('modal-title').textContent    = b.badge_name||'Unknown Badge';
-  document.getElementById('modal-flag').textContent     = flag;
-  document.getElementById('modal-make-text').textContent =
-    [b.make, b.model, b.years].filter(Boolean).join(' · ');
+  document.getElementById('modal-img-rarity').textContent  = RARITY_LABEL[r]||r;
+  document.getElementById('modal-img-rarity').className    = `modal-img-rarity ${r}`;
+  document.getElementById('modal-title').textContent       = b.badge_name||'Unknown Badge';
+  document.getElementById('modal-make').innerHTML          =
+    `<span>${flag}</span> ${[b.make, b.model, b.years].filter(Boolean).join(' · ')}`;
 
   document.getElementById('modal-chips').innerHTML =
-    `<span class="modal-chip rarity-${r}">${RARITY_LABEL[r]||r}</span>` +
-    (b.confidence     ? `<span class="modal-chip">${b.confidence} confidence</span>` : '') +
-    (b.added          ? `<span class="modal-chip">${fmtDate(b.added)}</span>` : '');
+    (b.added ? `<span class="modal-chip">${fmtDate(b.added)}</span>` : '') +
+    (b.confidence ? `<span class="modal-chip">${b.confidence} confidence</span>` : '');
 
   document.getElementById('modal-desc').textContent = b.description||'';
 
   const factWrap = document.getElementById('modal-fact-wrap');
-  const factEl   = document.getElementById('modal-fact');
   if (b.fun_fact) {
-    factEl.textContent = b.fun_fact;
+    document.getElementById('modal-fact').textContent = b.fun_fact;
     factWrap.style.display = 'block';
   } else {
     factWrap.style.display = 'none';
@@ -666,12 +725,15 @@ function openModal(id) {
   document.getElementById('modal-bg').classList.add('open');
 }
 
-document.getElementById('modal-close').onclick = ()=>
+document.getElementById('modal-close').onclick = () =>
   document.getElementById('modal-bg').classList.remove('open');
-document.getElementById('modal-bg').onclick = e=>{
-  if (e.target===document.getElementById('modal-bg'))
+document.getElementById('modal-bg').onclick = e => {
+  if (e.target === document.getElementById('modal-bg'))
     document.getElementById('modal-bg').classList.remove('open');
 };
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') document.getElementById('modal-bg').classList.remove('open');
+});
 
 load();
 </script>
