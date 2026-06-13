@@ -210,10 +210,25 @@ main {
 .country-header-text p { font-size: 0.78rem; color: var(--text3); margin-top: 3px; }
 
 /* ── MAKE GROUP ── */
-.make-group { margin-bottom: 48px; }
+.make-group { margin-bottom: 52px; }
 .make-header {
-  display: flex; align-items: center; gap: 12px;
+  display: flex; align-items: center; gap: 14px;
   margin-bottom: 20px;
+}
+.make-logo-wrap {
+  width: 36px; height: 36px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  overflow: hidden;
+  padding: 4px;
+}
+.make-logo {
+  width: 100%; height: 100%;
+  object-fit: contain;
+  filter: brightness(0) invert(1) opacity(0.85);
 }
 .make-name {
   font-size: 0.72rem; font-weight: 700;
@@ -543,6 +558,59 @@ const COUNTRY_META = {
   'Other':          { flag:'🌍', sort:99 },
 };
 
+// Official brand logos via car-logos CDN
+const LOGO_BASE = 'https://cdn.jsdelivr.net/gh/filippofilip95/car-logos-dataset@master/logos/optimized';
+const BRAND_LOGO = {
+  'ford':            `${LOGO_BASE}/ford.png`,
+  'chevrolet':       `${LOGO_BASE}/chevrolet.png`,
+  'dodge':           `${LOGO_BASE}/dodge.png`,
+  'pontiac':         `${LOGO_BASE}/pontiac.png`,
+  'cadillac':        `${LOGO_BASE}/cadillac.png`,
+  'buick':           `${LOGO_BASE}/buick.png`,
+  'lincoln':         `${LOGO_BASE}/lincoln.png`,
+  'chrysler':        `${LOGO_BASE}/chrysler.png`,
+  'jeep':            `${LOGO_BASE}/jeep.png`,
+  'harley-davidson': `${LOGO_BASE}/harley-davidson.png`,
+  'porsche':         `${LOGO_BASE}/porsche.png`,
+  'bmw':             `${LOGO_BASE}/bmw.png`,
+  'mercedes':        `${LOGO_BASE}/mercedes-benz.png`,
+  'mercedes-benz':   `${LOGO_BASE}/mercedes-benz.png`,
+  'audi':            `${LOGO_BASE}/audi.png`,
+  'opel':            `${LOGO_BASE}/opel.png`,
+  'volkswagen':      `${LOGO_BASE}/volkswagen.png`,
+  'vw':              `${LOGO_BASE}/volkswagen.png`,
+  'ferrari':         `${LOGO_BASE}/ferrari.png`,
+  'lamborghini':     `${LOGO_BASE}/lamborghini.png`,
+  'maserati':        `${LOGO_BASE}/maserati.png`,
+  'alfa romeo':      `${LOGO_BASE}/alfa-romeo.png`,
+  'fiat':            `${LOGO_BASE}/fiat.png`,
+  'toyota':          `${LOGO_BASE}/toyota.png`,
+  'honda':           `${LOGO_BASE}/honda.png`,
+  'nissan':          `${LOGO_BASE}/nissan.png`,
+  'datsun':          `${LOGO_BASE}/nissan.png`,
+  'mazda':           `${LOGO_BASE}/mazda.png`,
+  'subaru':          `${LOGO_BASE}/subaru.png`,
+  'mitsubishi':      `${LOGO_BASE}/mitsubishi.png`,
+  'jaguar':          `${LOGO_BASE}/jaguar.png`,
+  'land rover':      `${LOGO_BASE}/land-rover.png`,
+  'rolls-royce':     `${LOGO_BASE}/rolls-royce.png`,
+  'rolls royce':     `${LOGO_BASE}/rolls-royce.png`,
+  'bentley':         `${LOGO_BASE}/bentley.png`,
+  'aston martin':    `${LOGO_BASE}/aston-martin.png`,
+  'mini':            `${LOGO_BASE}/mini.png`,
+  'volvo':           `${LOGO_BASE}/volvo.png`,
+  'saab':            `${LOGO_BASE}/saab.png`,
+  'saab-scania':     `${LOGO_BASE}/saab.png`,
+  'peugeot':         `${LOGO_BASE}/peugeot.png`,
+  'renault':         `${LOGO_BASE}/renault.png`,
+};
+
+function brandLogoHtml(make) {
+  const logo = BRAND_LOGO[make.toLowerCase().trim()];
+  if (!logo) return '';
+  return `<div class="make-logo-wrap"><img class="make-logo" src="${logo}" alt="${make}" onerror="this.parentNode.style.display='none'"></div>`;
+}
+
 const RARITY_ORDER = ['ultra-rare','rare','uncommon','common'];
 const RARITY_LABEL = {
   'ultra-rare':'Ultra Rare','rare':'Rare','uncommon':'Uncommon','common':'Common',
@@ -646,6 +714,7 @@ function render() {
         return `
         <div class="make-group">
           <div class="make-header">
+            ${brandLogoHtml(make)}
             <span class="make-name">${make}</span>
             <div class="make-line"></div>
             <span class="make-count">${badges.length}</span>
