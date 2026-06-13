@@ -1,0 +1,5 @@
+run = "node web-server.js"
+
+[deployment]
+run = ["node", "web-server.js"]
+deploymentTarget = "cloudrun"
