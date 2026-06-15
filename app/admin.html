@@ -33,53 +33,50 @@ body {
 .topbar {
   background: rgba(2,9,23,0.9); backdrop-filter: blur(20px);
   border-bottom: 1px solid var(--border);
-  padding: 0 20px; height: 60px;
+  padding: 0 16px; height: 60px;
   display: flex; align-items: center; justify-content: space-between;
-  position: sticky; top: 0; z-index: 50;
+  position: sticky; top: 0; z-index: 50; gap: 12px;
 }
-.topbar-title { font-size: 1rem; font-weight: 800; letter-spacing: -0.3px; }
+.topbar-title { font-size: 1rem; font-weight: 800; letter-spacing: -0.3px; white-space: nowrap; }
 .topbar-title span { color: var(--blue2); }
-.topbar-count { font-size: 0.78rem; color: var(--text3); font-weight: 600; }
+.topbar-right { display: flex; align-items: center; gap: 10px; }
+.topbar-count { font-size: 0.78rem; color: var(--text3); font-weight: 600; white-space: nowrap; }
+
+/* Add badge FAB */
+.btn-add-badge {
+  display: flex; align-items: center; gap: 6px;
+  background: var(--blue); color: #fff;
+  border: none; border-radius: 10px;
+  padding: 8px 14px; font-size: 0.78rem; font-weight: 700;
+  cursor: pointer; white-space: nowrap; flex-shrink: 0;
+  transition: background 0.15s;
+}
+.btn-add-badge:hover { background: #2563eb; }
+.btn-add-badge svg { width: 15px; height: 15px; }
 
 /* ── FILTER BAR ── */
 .filter-bar {
-  padding: 14px 16px 0;
+  padding: 12px 16px;
   position: sticky; top: 60px; z-index: 40;
-  background: rgba(2,9,23,0.95); backdrop-filter: blur(12px);
+  background: rgba(2,9,23,0.97); backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--border);
-  padding-bottom: 12px;
+  display: flex; align-items: center; gap: 10px;
 }
-.filter-scroll {
-  display: flex; gap: 8px;
-  overflow-x: auto; scrollbar-width: none;
-  padding-bottom: 2px;
+.filter-label { font-size: 0.72rem; font-weight: 700; color: var(--text3); white-space: nowrap; }
+.make-select {
+  flex: 1; background: var(--s2); color: var(--text);
+  border: 1px solid var(--border2); border-radius: 10px;
+  padding: 8px 12px; font-size: 0.82rem; font-weight: 600;
+  font-family: 'Inter', sans-serif;
+  appearance: none; -webkit-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='none'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%2360a5fa' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 12px center;
+  padding-right: 32px; cursor: pointer;
 }
-.filter-scroll::-webkit-scrollbar { display: none; }
-.filter-chip {
-  display: flex; align-items: center; gap: 5px;
-  padding: 7px 14px; border-radius: 20px;
-  border: 1px solid var(--border);
-  font-size: 0.75rem; font-weight: 600;
-  color: var(--text2); white-space: nowrap;
-  cursor: pointer; transition: all 0.15s;
-  background: transparent; flex-shrink: 0;
-}
-.filter-chip:hover { border-color: var(--border2); color: var(--text); }
-.filter-chip.active {
-  background: rgba(59,130,246,0.15);
-  border-color: rgba(96,165,250,0.4);
-  color: var(--blue2);
-}
-.filter-chip .chip-count {
-  background: rgba(59,130,246,0.12);
-  color: var(--blue2); border-radius: 10px;
-  font-size: 0.65rem; font-weight: 700;
-  padding: 1px 6px;
-}
-.filter-chip.active .chip-count { background: rgba(96,165,250,0.2); }
+.make-select:focus { outline: none; border-color: var(--blue2); }
 
 /* ── MAIN ── */
-main { padding: 16px 16px 80px; max-width: 700px; margin: 0 auto; }
+main { padding: 16px 16px 100px; max-width: 700px; margin: 0 auto; }
 
 /* ── SECTION ── */
 .section-label {
@@ -93,7 +90,7 @@ main { padding: 16px 16px 80px; max-width: 700px; margin: 0 auto; }
 
 /* ── BADGE ROW ── */
 .badge-row {
-  display: flex; align-items: center; gap: 14px;
+  display: flex; align-items: flex-start; gap: 12px;
   background: rgba(8,20,50,0.7);
   border: 1px solid var(--border);
   border-radius: 14px; padding: 12px 14px;
@@ -105,28 +102,32 @@ main { padding: 16px 16px 80px; max-width: 700px; margin: 0 auto; }
 .badge-row.hidden-filter { display: none; }
 
 /* ── THUMB ── */
+.thumb-wrap { position: relative; flex-shrink: 0; }
 .thumb {
-  width: 64px; height: 64px; border-radius: 10px;
-  object-fit: cover; flex-shrink: 0;
-  cursor: pointer; transition: opacity 0.15s;
+  width: 72px; height: 72px; border-radius: 10px;
+  object-fit: cover;
   border: 1px solid var(--border);
+  display: block; cursor: zoom-in;
+  transition: opacity 0.15s;
 }
-.thumb:hover { opacity: 0.8; }
+.thumb:hover { opacity: 0.85; }
 .thumb-placeholder {
-  width: 64px; height: 64px; border-radius: 10px;
+  width: 72px; height: 72px; border-radius: 10px;
   background: var(--s2); border: 1px solid var(--border);
   display: flex; align-items: center; justify-content: center;
-  font-size: 26px; flex-shrink: 0;
+  font-size: 28px; flex-shrink: 0;
 }
 
 /* ── BADGE INFO ── */
 .badge-info { flex: 1; min-width: 0; }
 .badge-name {
-  font-size: 0.9rem; font-weight: 700; color: var(--text);
+  font-size: 0.88rem; font-weight: 700; color: var(--text);
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-  margin-bottom: 3px;
+  margin-bottom: 2px;
 }
-.badge-meta { font-size: 0.72rem; color: var(--text2); margin-bottom: 6px; }
+.badge-meta { font-size: 0.7rem; color: var(--text2); margin-bottom: 8px; line-height: 1.4; }
+
+/* ── ACTION ROWS ── */
 .badge-actions { display: flex; gap: 6px; flex-wrap: wrap; }
 
 /* ── RARITY ── */
@@ -138,16 +139,17 @@ main { padding: 16px 16px 80px; max-width: 700px; margin: 0 auto; }
 .rarity-common     { background: rgba(30,50,80,0.6); color: var(--text3); }
 .rarity-uncommon   { background: rgba(34,211,238,0.1); color: #22d3ee; border: 1px solid rgba(34,211,238,0.25); }
 .rarity-rare       { background: rgba(245,158,11,0.1); color: #fbbf24; border: 1px solid rgba(245,158,11,0.25); }
-.rarity-ultra-rare { background: rgba(232,121,249,0.1); color: #e879f9; border: 1px solid rgba(232,121,249,0.25); }
+.rarity-ultra-rare,
+.rarity-very_rare  { background: rgba(232,121,249,0.1); color: #e879f9; border: 1px solid rgba(232,121,249,0.25); }
 .rarity-unknown    { background: var(--s2); color: var(--text3); border: 1px solid var(--border); }
 
 /* ── BUTTONS ── */
 .btn {
-  font-size: 0.72rem; font-weight: 700;
-  padding: 6px 13px; border-radius: 8px;
+  font-size: 0.7rem; font-weight: 700;
+  padding: 6px 11px; border-radius: 8px;
   border: 1px solid; cursor: pointer;
   transition: all 0.15s; white-space: nowrap;
-  min-height: 34px;
+  min-height: 34px; display: inline-flex; align-items: center; gap: 4px;
 }
 .btn-rescan {
   background: rgba(59,130,246,0.08); color: var(--blue2);
@@ -158,6 +160,16 @@ main { padding: 16px 16px 80px; max-width: 700px; margin: 0 auto; }
   opacity: 0.5; pointer-events: none;
   animation: pulse 1s ease-in-out infinite;
 }
+.btn-retake {
+  background: rgba(245,158,11,0.08); color: #fbbf24;
+  border-color: rgba(245,158,11,0.25);
+}
+.btn-retake:hover { background: rgba(245,158,11,0.18); border-color: var(--amber); }
+.btn-switch {
+  background: rgba(52,211,153,0.07); color: var(--green);
+  border-color: rgba(52,211,153,0.25);
+}
+.btn-switch:hover { background: rgba(52,211,153,0.16); border-color: var(--green); }
 .btn-delete {
   background: rgba(239,68,68,0.08); color: #fca5a5;
   border-color: rgba(239,68,68,0.25);
@@ -165,25 +177,36 @@ main { padding: 16px 16px 80px; max-width: 700px; margin: 0 auto; }
 .btn-delete:hover { background: rgba(239,68,68,0.2); border-color: var(--red); }
 @keyframes pulse { 0%,100%{opacity:0.5} 50%{opacity:0.2} }
 
-/* ── PHOTO PICKER ── */
-.photo-picker {
+/* ── MODAL BASE ── */
+.modal {
   display: none; position: fixed; inset: 0;
   background: rgba(0,0,0,0.92); backdrop-filter: blur(12px);
-  z-index: 300; align-items: center; justify-content: center; padding: 20px;
+  z-index: 300; align-items: flex-end; justify-content: center;
+  padding: 0;
 }
-.photo-picker.open { display: flex; }
-.photo-picker-box {
+.modal.open { display: flex; }
+.modal-box {
   background: var(--s1); border: 1px solid var(--border2);
-  border-radius: 18px; padding: 22px; max-width: 640px; width: 100%;
+  border-radius: 20px 20px 0 0; padding: 24px 20px 40px;
+  width: 100%; max-width: 640px;
+  max-height: 90vh; overflow-y: auto;
 }
-.photo-picker-title {
-  font-size: 0.9rem; font-weight: 700; margin-bottom: 18px;
-  color: var(--text);
+.modal-title {
+  font-size: 1rem; font-weight: 800; margin-bottom: 18px; color: var(--text);
+  display: flex; align-items: center; justify-content: space-between;
 }
-.photo-picker-title span { color: var(--text3); font-weight: 400; }
-.photo-picker-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px; }
+.modal-close {
+  background: var(--s2); border: 1px solid var(--border);
+  color: var(--text2); border-radius: 8px; width: 34px; height: 34px;
+  font-size: 16px; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+
+/* ── PHOTO PICKER MODAL ── */
+.photo-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px; }
 .photo-option {
-  border: 2px solid var(--border); border-radius: 10px;
+  border: 2px solid var(--border); border-radius: 12px;
   overflow: hidden; cursor: pointer; transition: border-color 0.15s;
 }
 .photo-option:hover { border-color: var(--border2); }
@@ -200,22 +223,54 @@ main { padding: 16px 16px 80px; max-width: 700px; margin: 0 auto; }
   color: var(--blue2); border: 1px solid rgba(96,165,250,0.3);
   padding: 1px 6px; border-radius: 4px;
 }
-.photo-picker-actions { display: flex; gap: 8px; justify-content: flex-end; }
+
+/* ── ADD BADGE MODAL ── */
+.add-photo-area {
+  border: 2px dashed var(--border2); border-radius: 14px;
+  padding: 32px 20px; text-align: center; cursor: pointer;
+  transition: background 0.15s; margin-bottom: 16px;
+  position: relative;
+}
+.add-photo-area:hover { background: rgba(59,130,246,0.05); }
+.add-photo-area input[type=file] {
+  position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%;
+}
+.add-photo-preview {
+  width: 100%; max-height: 280px; object-fit: contain;
+  border-radius: 10px; display: none; margin-bottom: 10px;
+}
+.add-photo-hint { color: var(--text3); font-size: 0.82rem; }
+.add-photo-hint b { color: var(--blue2); }
+.scan-status {
+  font-size: 0.82rem; color: var(--text2); text-align: center;
+  padding: 12px; display: none;
+}
+.scan-status.scanning { display: block; }
+.identified-card {
+  background: rgba(59,130,246,0.06); border: 1px solid rgba(59,130,246,0.2);
+  border-radius: 12px; padding: 14px 16px; margin-bottom: 14px; display: none;
+}
+.identified-card.show { display: block; }
+.ic-name { font-size: 0.95rem; font-weight: 800; margin-bottom: 4px; }
+.ic-meta { font-size: 0.75rem; color: var(--text2); }
+
+/* ── MODAL ACTIONS ── */
+.modal-actions { display: flex; gap: 8px; justify-content: flex-end; margin-top: 16px; }
 .btn-cancel {
   background: var(--s2); color: var(--text2);
-  border: 1px solid var(--border); border-radius: 8px;
-  padding: 8px 16px; font-size: 0.78rem; font-weight: 600;
+  border: 1px solid var(--border); border-radius: 10px;
+  padding: 10px 18px; font-size: 0.82rem; font-weight: 600;
   cursor: pointer; transition: all 0.15s;
 }
 .btn-cancel:hover { background: var(--border); color: var(--text); }
-.btn-apply {
-  background: rgba(59,130,246,0.15); color: var(--blue2);
-  border: 1px solid rgba(96,165,250,0.3); border-radius: 8px;
-  padding: 8px 16px; font-size: 0.78rem; font-weight: 700;
-  cursor: pointer; transition: all 0.15s;
+.btn-primary {
+  background: var(--blue); color: #fff;
+  border: none; border-radius: 10px;
+  padding: 10px 18px; font-size: 0.82rem; font-weight: 700;
+  cursor: pointer; transition: background 0.15s;
 }
-.btn-apply:hover { background: rgba(59,130,246,0.3); }
-.btn-apply:disabled { opacity: 0.35; pointer-events: none; }
+.btn-primary:hover { background: #2563eb; }
+.btn-primary:disabled { opacity: 0.35; pointer-events: none; }
 
 /* ── LIGHTBOX ── */
 .lightbox {
@@ -255,24 +310,41 @@ main { padding: 16px 16px 80px; max-width: 700px; margin: 0 auto; }
   border-top-color: var(--blue2); border-radius: 50%;
   animation: spin 0.7s linear infinite; margin: 60px auto;
 }
+.spinner-sm {
+  width: 14px; height: 14px; border: 2px solid rgba(255,255,255,0.3);
+  border-top-color: #fff; border-radius: 50%;
+  animation: spin 0.7s linear infinite; display: inline-block;
+}
 @keyframes spin { to { transform: rotate(360deg); } }
 .empty-state { text-align: center; padding: 40px; color: var(--text3); font-size: 0.88rem; }
+
+/* hidden file input */
+.hidden-file { display: none; }
 </style>
 </head>
 <body>
 
 <div class="topbar">
-  <div class="topbar-title">Badge Vault <span>Control Panel</span></div>
-  <div class="topbar-count" id="topbar-count"></div>
+  <div class="topbar-title">Badge Vault <span>Control</span></div>
+  <div class="topbar-right">
+    <div class="topbar-count" id="topbar-count"></div>
+    <button class="btn-add-badge" onclick="openAddModal()">
+      <svg viewBox="0 0 15 15" fill="none"><path d="M7.5 1v13M1 7.5h13" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      Add Badge
+    </button>
+  </div>
 </div>
 
 <div class="filter-bar">
-  <div class="filter-scroll" id="filter-bar"></div>
+  <span class="filter-label">Make</span>
+  <select class="make-select" id="make-select" onchange="setMake(this.value)">
+    <option value="all">All makes</option>
+  </select>
 </div>
 
 <main>
   <div id="unidentified-section" style="display:none">
-    <div class="section-label">⚠️ Needs attention</div>
+    <div class="section-label">⚠ Needs attention</div>
     <div class="badge-list" id="unidentified-list"></div>
   </div>
   <div class="section-label" id="all-label">All badges</div>
@@ -281,11 +353,14 @@ main { padding: 16px 16px 80px; max-width: 700px; margin: 0 auto; }
 
 <div class="toast" id="toast"></div>
 
-<!-- Photo picker -->
-<div class="photo-picker" id="photo-picker">
-  <div class="photo-picker-box">
-    <div class="photo-picker-title">Choose photo — <span id="picker-badge-name"></span></div>
-    <div class="photo-picker-grid">
+<!-- ── PHOTO SWITCH MODAL ── -->
+<div class="modal" id="switch-modal">
+  <div class="modal-box">
+    <div class="modal-title">
+      <span>Switch Photo — <span id="switch-badge-name" style="color:var(--blue2)"></span></span>
+      <button class="modal-close" onclick="closeSwitchModal()">✕</button>
+    </div>
+    <div class="photo-grid">
       <div class="photo-option" id="opt-original" onclick="selectVersion('original')">
         <img id="picker-img-original" src="" alt="">
         <div class="photo-option-label">Original <span id="original-active-badge"></span></div>
@@ -295,18 +370,75 @@ main { padding: 16px 16px 80px; max-width: 700px; margin: 0 auto; }
         <div class="photo-option-label">BG Removed <span id="processed-active-badge"></span></div>
       </div>
     </div>
-    <div class="photo-picker-actions">
-      <button class="btn-cancel" onclick="closePicker()">Cancel</button>
-      <button class="btn-apply" id="btn-apply" onclick="applyVersion()">Use selected</button>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeSwitchModal()">Cancel</button>
+      <button class="btn-primary" id="btn-apply-switch" onclick="applyVersion()">Use selected</button>
     </div>
   </div>
 </div>
 
-<!-- Lightbox -->
+<!-- ── ADD BADGE MODAL ── -->
+<div class="modal" id="add-modal">
+  <div class="modal-box">
+    <div class="modal-title">
+      <span>Add New Badge</span>
+      <button class="modal-close" onclick="closeAddModal()">✕</button>
+    </div>
+    <div class="add-photo-area" id="add-drop-area">
+      <input type="file" accept="image/*" capture="environment" id="add-file-input" onchange="onAddFile(event)">
+      <img class="add-photo-preview" id="add-preview" src="" alt="">
+      <div class="add-photo-hint" id="add-hint">
+        <div style="font-size:2rem;margin-bottom:8px">📷</div>
+        <b>Tap to take photo</b> or choose from library
+      </div>
+    </div>
+    <div class="scan-status" id="add-scan-status">
+      <div class="spinner-sm"></div>&nbsp; Identifying badge…
+    </div>
+    <div class="identified-card" id="add-id-card">
+      <div class="ic-name" id="add-ic-name"></div>
+      <div class="ic-meta" id="add-ic-meta"></div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeAddModal()">Cancel</button>
+      <button class="btn-primary" id="btn-add-save" onclick="saveNewBadge()" disabled>Save to Collection</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── RETAKE MODAL ── -->
+<div class="modal" id="retake-modal">
+  <div class="modal-box">
+    <div class="modal-title">
+      <span>Retake Photo — <span id="retake-badge-name" style="color:var(--blue2)"></span></span>
+      <button class="modal-close" onclick="closeRetakeModal()">✕</button>
+    </div>
+    <div class="add-photo-area" id="retake-drop-area">
+      <input type="file" accept="image/*" capture="environment" id="retake-file-input" onchange="onRetakeFile(event)">
+      <img class="add-photo-preview" id="retake-preview" src="" alt="">
+      <div class="add-photo-hint" id="retake-hint">
+        <div style="font-size:2rem;margin-bottom:8px">📷</div>
+        <b>Tap to take new photo</b> or choose from library
+      </div>
+    </div>
+    <div class="scan-status" id="retake-scan-status">
+      <div class="spinner-sm"></div>&nbsp; Saving photo &amp; removing background…
+    </div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeRetakeModal()">Cancel</button>
+      <button class="btn-primary" id="btn-retake-save" onclick="saveRetake()" disabled>Save Photo</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── LIGHTBOX ── -->
 <div class="lightbox" id="lightbox">
   <button class="lightbox-close" id="lightbox-close">✕</button>
   <img id="lightbox-img" src="" alt="">
 </div>
+
+<!-- hidden file input for retake (used from row button) -->
+<input type="file" accept="image/*" capture="environment" class="hidden-file" id="retake-trigger">
 
 <script>
 let badges = [];
@@ -322,7 +454,7 @@ async function load() {
 function isUnidentified(b) {
   return !b.make || b.make === 'Unknown' || !b.badge_name || b.badge_name === 'Unidentified Badge';
 }
-function rarity(b) {
+function rarityClass(b) {
   return (b.rarity || 'unknown').toLowerCase().replace(/[\s_]+/g,'-');
 }
 
@@ -330,16 +462,17 @@ function render() {
   const total = badges.length;
   document.getElementById('topbar-count').textContent = `${total} badge${total !== 1 ? 's' : ''}`;
 
-  // Build make filter chips
-  const makes = ['all', ...Array.from(new Set(badges.filter(b => !isUnidentified(b)).map(b => b.make).filter(Boolean))).sort()];
-  document.getElementById('filter-bar').innerHTML = makes.map(m => {
-    const count = m === 'all' ? badges.filter(b => !isUnidentified(b)).length : badges.filter(b => b.make === m).length;
-    return `<button class="filter-chip${m === activeMake ? ' active' : ''}" onclick="setMake('${m.replace(/'/g,"\\'")}')">
-      ${m === 'all' ? 'All' : m} <span class="chip-count">${count}</span>
-    </button>`;
-  }).join('');
+  // Rebuild make dropdown
+  const sel = document.getElementById('make-select');
+  const makes = Array.from(new Set(badges.filter(b => !isUnidentified(b)).map(b => b.make).filter(Boolean))).sort();
+  sel.innerHTML = `<option value="all">All makes (${badges.filter(b=>!isUnidentified(b)).length})</option>` +
+    makes.map(m => {
+      const cnt = badges.filter(b => b.make === m).length;
+      return `<option value="${m}"${activeMake===m?' selected':''}>${m} (${cnt})</option>`;
+    }).join('');
+  if (activeMake !== 'all') sel.value = activeMake;
 
-  // Unidentified section
+  // Unidentified
   const unid = badges.filter(isUnidentified);
   const unidSection = document.getElementById('unidentified-section');
   if (unid.length) {
@@ -349,10 +482,9 @@ function render() {
     unidSection.style.display = 'none';
   }
 
-  // All badges
+  // Main list
   const rest = badges.filter(b => !isUnidentified(b));
-  const label = activeMake === 'all' ? 'All badges' : activeMake;
-  document.getElementById('all-label').textContent = label;
+  document.getElementById('all-label').textContent = activeMake === 'all' ? 'All badges' : activeMake;
   document.getElementById('all-list').innerHTML = rest.length
     ? rest.map(rowHtml).join('')
     : '<div class="empty-state">No badges yet.</div>';
@@ -363,9 +495,6 @@ function render() {
 
 function setMake(make) {
   activeMake = make;
-  document.querySelectorAll('.filter-chip').forEach(c => {
-    c.classList.toggle('active', c.textContent.trim().startsWith(make === 'all' ? 'All' : make));
-  });
   document.getElementById('all-label').textContent = make === 'all' ? 'All badges' : make;
   applyFilter();
 }
@@ -378,24 +507,26 @@ function applyFilter() {
 }
 
 function rowHtml(b) {
-  const r    = rarity(b);
+  const rc   = rarityClass(b);
   const name = b.badge_name || 'Unidentified Badge';
   const meta = [b.make, b.model, b.years].filter(Boolean).join(' · ') || 'Unknown';
   const date = b.added ? new Date(b.added).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}) : '';
   const img  = b.photo
-    ? `<img class="thumb" src="${b.photo}" alt="" onclick="openPicker('${b.id}')" onerror="this.style.display='none'">`
+    ? `<img class="thumb" src="${b.photo}?t=${Date.now()}" alt="" onclick="openLightbox('${b.photo}')" onerror="this.style.display='none'">`
     : `<div class="thumb-placeholder">🏅</div>`;
 
   return `
   <div class="badge-row" id="row-${b.id}" data-make="${b.make || ''}">
-    ${img}
+    <div class="thumb-wrap">${img}</div>
     <div class="badge-info">
-      <div class="rarity-tag rarity-${r}">${b.rarity || 'unknown'}</div>
+      <div class="rarity-tag rarity-${rc}">${b.rarity || 'unknown'}</div>
       <div class="badge-name">${name}</div>
       <div class="badge-meta">${meta}${date ? ' · ' + date : ''}</div>
       <div class="badge-actions">
-        <button class="btn btn-rescan" data-id="${b.id}">Rescan</button>
-        <button class="btn btn-delete" data-id="${b.id}">Delete</button>
+        <button class="btn btn-rescan"  data-id="${b.id}">🔍 Rescan</button>
+        <button class="btn btn-retake"  data-id="${b.id}" data-name="${name.replace(/"/g,'&quot;')}">📷 Retake</button>
+        <button class="btn btn-switch"  data-id="${b.id}" data-name="${name.replace(/"/g,'&quot;')}">🖼 Switch Photo</button>
+        <button class="btn btn-delete"  data-id="${b.id}">🗑 Delete</button>
       </div>
     </div>
   </div>`;
@@ -404,14 +535,13 @@ function rowHtml(b) {
 function attachHandlers() {
   document.querySelectorAll('.btn-rescan').forEach(btn => {
     btn.onclick = async () => {
-      const id  = btn.dataset.id;
-      btn.classList.add('scanning');
-      btn.textContent = 'Scanning…';
+      const id = btn.dataset.id;
+      btn.classList.add('scanning'); btn.textContent = 'Scanning…';
       try {
         const res    = await fetch('/api/reidentify', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({id}) });
         const result = await res.json();
         if (result.error) throw new Error(result.error);
-        const upd  = await fetch(`/api/badge/${id}/update`, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({badge: result}) });
+        const upd   = await fetch(`/api/badge/${id}/update`, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({badge: result}) });
         const saved = await upd.json();
         if (!saved.ok) throw new Error('Save failed');
         const idx = badges.findIndex(b => b.id === id);
@@ -419,17 +549,24 @@ function attachHandlers() {
         render();
         showToast(`Rescanned: ${result.badge_name || 'updated'}`, 'ok');
       } catch(e) {
-        btn.classList.remove('scanning');
-        btn.textContent = 'Rescan';
+        btn.classList.remove('scanning'); btn.textContent = '🔍 Rescan';
         showToast('Rescan failed: ' + e.message, 'err');
       }
     };
   });
 
+  document.querySelectorAll('.btn-retake').forEach(btn => {
+    btn.onclick = () => openRetakeModal(btn.dataset.id, btn.dataset.name);
+  });
+
+  document.querySelectorAll('.btn-switch').forEach(btn => {
+    btn.onclick = () => openSwitchModal(btn.dataset.id, btn.dataset.name);
+  });
+
   document.querySelectorAll('.btn-delete').forEach(btn => {
     btn.onclick = async () => {
-      const id  = btn.dataset.id;
-      const row = document.getElementById(`row-${id}`);
+      const id   = btn.dataset.id;
+      const row  = document.getElementById(`row-${id}`);
       const name = row.querySelector('.badge-name').textContent;
       if (!confirm(`Delete "${name}"?`)) return;
       row.classList.add('deleting');
@@ -453,72 +590,214 @@ function attachHandlers() {
   });
 }
 
-// ── Photo picker ──
-let pickerBadgeId = null, pickerSelected = null, pickerCurrent = 'processed';
+// ── SWITCH PHOTO MODAL ──
+let switchBadgeId = null, switchSelected = null, switchCurrent = 'processed';
 
-function openPicker(badgeId) {
+function openSwitchModal(badgeId, badgeName) {
   const b = badges.find(x => x.id === badgeId);
-  if (!b || !b.photo) { openLightbox(badges.find(x=>x.id===badgeId)?.photo); return; }
-  pickerBadgeId = badgeId; pickerSelected = null;
-  const filename = b.photo.replace(/^\/photos\//, '');
-  document.getElementById('picker-badge-name').textContent = b.badge_name || 'Badge';
+  if (!b) return;
+  switchBadgeId = badgeId; switchSelected = null;
+  const filename = (b.photo || '').replace(/^\/photos\//, '');
+  document.getElementById('switch-badge-name').textContent = badgeName;
   document.getElementById('picker-img-original').src  = `/photos_original/${filename}?t=${Date.now()}`;
   document.getElementById('picker-img-processed').src = `/photos_processed/${filename}?t=${Date.now()}`;
-  const row = document.getElementById(`row-${badgeId}`);
-  pickerCurrent = row?.dataset.photoVersion || 'processed';
-  document.getElementById('original-active-badge').innerHTML  = pickerCurrent === 'original'  ? '<span class="active-badge">Active</span>' : '';
-  document.getElementById('processed-active-badge').innerHTML = pickerCurrent === 'processed' ? '<span class="active-badge">Active</span>' : '';
-  document.getElementById('opt-original').classList.toggle('active',  pickerCurrent === 'original');
-  document.getElementById('opt-processed').classList.toggle('active', pickerCurrent === 'processed');
-  document.getElementById('btn-apply').disabled = true;
-  document.getElementById('photo-picker').classList.add('open');
+  switchCurrent = 'processed';
+  document.getElementById('original-active-badge').innerHTML  = '';
+  document.getElementById('processed-active-badge').innerHTML = '<span class="active-badge">Active</span>';
+  document.getElementById('opt-original').classList.remove('active');
+  document.getElementById('opt-processed').classList.add('active');
+  document.getElementById('btn-apply-switch').disabled = true;
+  document.getElementById('switch-modal').classList.add('open');
 }
 
 function selectVersion(v) {
-  pickerSelected = v;
-  document.getElementById('opt-original').classList.toggle('active', v === 'original');
+  switchSelected = v;
+  document.getElementById('opt-original').classList.toggle('active',  v === 'original');
   document.getElementById('opt-processed').classList.toggle('active', v === 'processed');
-  document.getElementById('btn-apply').disabled = (v === pickerCurrent);
+  document.getElementById('btn-apply-switch').disabled = (v === switchCurrent);
 }
 
 async function applyVersion() {
-  if (!pickerSelected || pickerSelected === pickerCurrent) { closePicker(); return; }
-  const btn = document.getElementById('btn-apply');
+  if (!switchSelected || switchSelected === switchCurrent) { closeSwitchModal(); return; }
+  const btn = document.getElementById('btn-apply-switch');
   btn.textContent = 'Applying…'; btn.disabled = true;
   try {
-    const res  = await fetch(`/api/badge/${pickerBadgeId}/use-photo`, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({version: pickerSelected}) });
+    const res  = await fetch(`/api/badge/${switchBadgeId}/use-photo`, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({version: switchSelected}) });
     const data = await res.json();
     if (!data.ok) throw new Error(data.error || 'Failed');
-    const row = document.getElementById(`row-${pickerBadgeId}`);
+    const row = document.getElementById(`row-${switchBadgeId}`);
     if (row) {
-      row.dataset.photoVersion = pickerSelected;
+      const b  = badges.find(x => x.id === switchBadgeId);
+      const fn = (b?.photo || '').replace(/^\/photos\//,'');
       const thumb = row.querySelector('.thumb');
-      const fn = badges.find(b=>b.id===pickerBadgeId)?.photo?.replace(/^\/photos\//,'');
       if (thumb && fn) thumb.src = `/photos/${fn}?t=${Date.now()}`;
     }
-    showToast(`Photo updated`, 'ok');
-    closePicker();
+    showToast('Photo updated', 'ok');
+    closeSwitchModal();
   } catch(e) {
     btn.textContent = 'Use selected'; btn.disabled = false;
     showToast('Error: ' + e.message, 'err');
   }
 }
 
-function closePicker() {
-  document.getElementById('photo-picker').classList.remove('open');
-  document.getElementById('btn-apply').textContent = 'Use selected';
+function closeSwitchModal() {
+  document.getElementById('switch-modal').classList.remove('open');
+  document.getElementById('btn-apply-switch').textContent = 'Use selected';
 }
 
-// ── Lightbox ──
+// ── ADD BADGE MODAL ──
+let addImageB64 = null, addMimeType = 'image/jpeg', addResult = null;
+
+function openAddModal() {
+  addImageB64 = null; addResult = null;
+  document.getElementById('add-preview').style.display = 'none';
+  document.getElementById('add-hint').style.display = 'block';
+  document.getElementById('add-scan-status').classList.remove('scanning');
+  document.getElementById('add-id-card').classList.remove('show');
+  document.getElementById('btn-add-save').disabled = true;
+  document.getElementById('add-file-input').value = '';
+  document.getElementById('add-modal').classList.add('open');
+}
+function closeAddModal() {
+  document.getElementById('add-modal').classList.remove('open');
+}
+
+async function onAddFile(evt) {
+  const file = evt.target.files[0];
+  if (!file) return;
+  addMimeType = file.type || 'image/jpeg';
+  const b64 = await fileToB64(file);
+  addImageB64 = b64;
+
+  const preview = document.getElementById('add-preview');
+  preview.src = `data:${addMimeType};base64,${b64}`;
+  preview.style.display = 'block';
+  document.getElementById('add-hint').style.display = 'none';
+
+  // Auto-identify
+  document.getElementById('add-scan-status').classList.add('scanning');
+  document.getElementById('add-id-card').classList.remove('show');
+  document.getElementById('btn-add-save').disabled = true;
+  try {
+    const res = await fetch('/api/identify', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({ image: b64, mimeType: addMimeType })
+    });
+    addResult = await res.json();
+    document.getElementById('add-scan-status').classList.remove('scanning');
+    document.getElementById('add-ic-name').textContent = addResult.badge_name || 'Unknown Badge';
+    document.getElementById('add-ic-meta').textContent = [addResult.make, addResult.model, addResult.years].filter(Boolean).join(' · ');
+    document.getElementById('add-id-card').classList.add('show');
+    document.getElementById('btn-add-save').disabled = false;
+  } catch(e) {
+    document.getElementById('add-scan-status').classList.remove('scanning');
+    showToast('Identification failed: ' + e.message, 'err');
+  }
+}
+
+async function saveNewBadge() {
+  if (!addImageB64) return;
+  const btn = document.getElementById('btn-add-save');
+  btn.textContent = 'Saving…'; btn.disabled = true;
+  try {
+    const res  = await fetch('/api/add', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({ image: addImageB64, mimeType: addMimeType, badge: addResult || {} })
+    });
+    const data = await res.json();
+    if (!data.ok) throw new Error(data.error || 'Save failed');
+    badges.push(data.entry);
+    render();
+    showToast(`Added: ${data.entry.badge_name || 'new badge'}`, 'ok');
+    closeAddModal();
+  } catch(e) {
+    btn.textContent = 'Save to Collection'; btn.disabled = false;
+    showToast('Error: ' + e.message, 'err');
+  }
+}
+
+// ── RETAKE MODAL ──
+let retakeBadgeId = null, retakeImageB64 = null, retakeMimeType = 'image/jpeg';
+
+function openRetakeModal(badgeId, badgeName) {
+  retakeBadgeId = badgeId; retakeImageB64 = null;
+  document.getElementById('retake-badge-name').textContent = badgeName;
+  document.getElementById('retake-preview').style.display = 'none';
+  document.getElementById('retake-hint').style.display = 'block';
+  document.getElementById('retake-scan-status').classList.remove('scanning');
+  document.getElementById('btn-retake-save').disabled = true;
+  document.getElementById('retake-file-input').value = '';
+  document.getElementById('retake-modal').classList.add('open');
+}
+function closeRetakeModal() {
+  document.getElementById('retake-modal').classList.remove('open');
+}
+
+async function onRetakeFile(evt) {
+  const file = evt.target.files[0];
+  if (!file) return;
+  retakeMimeType = file.type || 'image/jpeg';
+  retakeImageB64 = await fileToB64(file);
+  const preview = document.getElementById('retake-preview');
+  preview.src = `data:${retakeMimeType};base64,${retakeImageB64}`;
+  preview.style.display = 'block';
+  document.getElementById('retake-hint').style.display = 'none';
+  document.getElementById('btn-retake-save').disabled = false;
+}
+
+async function saveRetake() {
+  if (!retakeImageB64 || !retakeBadgeId) return;
+  const btn = document.getElementById('btn-retake-save');
+  btn.disabled = true;
+  document.getElementById('retake-scan-status').classList.add('scanning');
+  try {
+    const res  = await fetch(`/api/badge/${retakeBadgeId}/retake`, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({ image: retakeImageB64, mimeType: retakeMimeType })
+    });
+    const data = await res.json();
+    if (!data.ok) throw new Error(data.error || 'Failed');
+    const row = document.getElementById(`row-${retakeBadgeId}`);
+    if (row) {
+      const thumb = row.querySelector('.thumb');
+      if (thumb) thumb.src = `${data.photo}?t=${Date.now()}`;
+    }
+    const idx = badges.findIndex(b => b.id === retakeBadgeId);
+    if (idx >= 0) badges[idx].photo = data.photo;
+    showToast('Photo updated', 'ok');
+    closeRetakeModal();
+  } catch(e) {
+    btn.disabled = false;
+    document.getElementById('retake-scan-status').classList.remove('scanning');
+    showToast('Error: ' + e.message, 'err');
+  }
+}
+
+// ── LIGHTBOX ──
 function openLightbox(src) {
   if (!src) return;
-  document.getElementById('lightbox-img').src = src;
+  document.getElementById('lightbox-img').src = src + `?t=${Date.now()}`;
   document.getElementById('lightbox').classList.add('open');
 }
 function closeLightbox() { document.getElementById('lightbox').classList.remove('open'); }
 document.getElementById('lightbox-close').onclick = closeLightbox;
 document.getElementById('lightbox').onclick = e => { if (e.target === document.getElementById('lightbox')) closeLightbox(); };
-document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeLightbox(); closePicker(); } });
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') { closeLightbox(); closeSwitchModal(); closeAddModal(); closeRetakeModal(); }
+});
+
+// ── UTILS ──
+function fileToB64(file) {
+  return new Promise((resolve, reject) => {
+    const r = new FileReader();
+    r.onload = () => resolve(r.result.split(',')[1]);
+    r.onerror = reject;
+    r.readAsDataURL(file);
+  });
+}
 
 function showToast(msg, type) {
   const t = document.getElementById('toast');

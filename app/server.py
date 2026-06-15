@@ -44,6 +44,54 @@ OPENCLAW_CONFIG = os.path.expanduser("~/.openclaw/openclaw.json")
 os.makedirs(PHOTOS_DIR, exist_ok=True)
 
 
+def remove_background(raw_bytes):
+    try:
+        from rembg import remove as rembg_remove
+        result = rembg_remove(raw_bytes)
+        # convert PNG result back to JPEG on white bg
+        img = Image.open(io.BytesIO(result)).convert("RGBA")
+        bg = Image.new("RGBA", img.size, (255, 255, 255, 255))
+        bg.paste(img, mask=img.split()[3])
+        bg = bg.convert("RGB")
+        buf = io.BytesIO()
+        bg.save(buf, format="JPEG", quality=88)
+        return buf.getvalue()
+    except Exception:
+        return raw_bytes
+
+
+def save_photos(image_b64, mime_type, existing_filename=None):
+    """Save original + bg-removed versions. Returns filename."""
+    import shutil
+    if "," in image_b64:
+        image_b64 = image_b64.split(",", 1)[1]
+    raw = base64.b64decode(image_b64)
+    # normalise to JPEG
+    img = Image.open(io.BytesIO(raw)).convert("RGB")
+    buf = io.BytesIO()
+    img.save(buf, format="JPEG", quality=90)
+    raw_jpg = buf.getvalue()
+
+    filename = existing_filename or f"{uuid.uuid4().hex[:8]}.jpg"
+    orig_dir = os.path.join(os.path.dirname(PHOTOS_DIR), "photos_original")
+    proc_dir = os.path.join(os.path.dirname(PHOTOS_DIR), "photos_processed")
+    os.makedirs(orig_dir, exist_ok=True)
+    os.makedirs(proc_dir, exist_ok=True)
+
+    with open(os.path.join(orig_dir, filename), "wb") as f:
+        f.write(raw_jpg)
+
+    processed = remove_background(raw_jpg)
+    with open(os.path.join(proc_dir, filename), "wb") as f:
+        f.write(processed)
+
+    # Active photo defaults to processed
+    with open(os.path.join(PHOTOS_DIR, filename), "wb") as f:
+        f.write(processed)
+
+    return filename
+
+
 def shrink_image(image_b64, mime_type='image/jpeg', max_px=1024, quality=82):
     """Resize image to max_px on longest side before sending to API."""
     try:
@@ -376,18 +424,10 @@ class BadgeHandler(BaseHTTPRequestHandler):
             image_b64 = body.get("image", "")
             mime_type = body.get("mimeType", "image/jpeg")
 
-            # Save photo
             photo_filename = None
             if image_b64:
-                if "," in image_b64:
-                    image_b64 = image_b64.split(",", 1)[1]
-                ext = ".jpg" if "jpeg" in mime_type else ".png"
-                photo_filename = f"{uuid.uuid4().hex[:8]}{ext}"
-                photo_path = os.path.join(PHOTOS_DIR, photo_filename)
-                with open(photo_path, "wb") as f:
-                    f.write(base64.b64decode(image_b64))
+                photo_filename = save_photos(image_b64, mime_type)
 
-            # Add to collection
             collection = load_collection()
             entry = {
                 "id": uuid.uuid4().hex[:8],
@@ -432,6 +472,26 @@ class BadgeHandler(BaseHTTPRequestHandler):
                 image_b64 = base64.b64encode(f.read()).decode()
             result = identify_badge(image_b64, "image/jpeg")
             self.send_json(result)
+
+        elif path.startswith("/api/badge/") and path.endswith("/retake"):
+            badge_id = path[11:-7]
+            body = json.loads(self.read_body())
+            image_b64 = body.get("image", "")
+            mime_type = body.get("mimeType", "image/jpeg")
+            if not image_b64:
+                self.send_json({"error": "No image provided"}, 400)
+                return
+            collection = load_collection()
+            badge = next((b for b in collection["badges"] if b.get("id") == badge_id), None)
+            if not badge:
+                self.send_json({"error": "Badge not found"}, 404)
+                return
+            # Reuse existing filename if possible so paths stay consistent
+            existing_fn = os.path.basename(badge.get("photo", "")) or None
+            filename = save_photos(image_b64, mime_type, existing_filename=existing_fn)
+            badge["photo"] = f"/photos/{filename}"
+            save_collection(collection, badge_name=f"retake {badge_id}")
+            self.send_json({"ok": True, "photo": badge["photo"]})
 
         elif path.startswith("/api/badge/") and path.endswith("/use-photo"):
             # Swap the active photo for a badge: {"version": "original" | "processed"}
