@@ -599,7 +599,7 @@ function groupByCountry() {
 
 function renderFlagMatrix() {
   const tree = groupByCountry();
-  const countries = Object.keys(tree).sort((a,b)=>(COUNTRY_SORT[a]||99)-(COUNTRY_SORT[b]||99));
+  const countries = Object.keys(tree).sort((a,b)=>(COUNTRY_SORT[a]??99)-(COUNTRY_SORT[b]??99));
 
   document.getElementById('flag-matrix-view').innerHTML = `
     <div class="flag-matrix">
