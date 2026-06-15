@@ -161,6 +161,72 @@ body::before {
 }
 .leaflet-container { background: #020917 !important; }
 
+/* Map brand panel */
+.map-brand-panel {
+  display: none;
+  position: absolute; bottom: 24px; left: 50%; transform: translateX(-50%);
+  z-index: 1000;
+  background: rgba(4,14,36,0.96);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(96,165,250,0.3);
+  border-radius: 18px;
+  padding: 20px 24px;
+  min-width: 320px; max-width: 520px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.7), 0 0 40px rgba(59,130,246,0.08);
+}
+.map-brand-panel.visible { display: block; }
+.map-panel-header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 16px;
+}
+.map-panel-country {
+  display: flex; align-items: center; gap: 10px;
+}
+.map-panel-flag {
+  width: 36px; height: 24px; border-radius: 4px; overflow: hidden;
+  border: 1px solid rgba(96,165,250,0.3);
+  flex-shrink: 0;
+}
+.map-panel-flag img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.map-panel-name { font-size: 0.95rem; font-weight: 800; letter-spacing: -0.2px; }
+.map-panel-close {
+  background: rgba(30,50,80,0.6); border: 1px solid var(--border);
+  color: var(--text2); border-radius: 8px; width: 28px; height: 28px;
+  font-size: 13px; cursor: pointer; display: flex; align-items: center; justify-content: center;
+  transition: all 0.15s; flex-shrink: 0;
+}
+.map-panel-close:hover { background: rgba(59,130,246,0.2); color: var(--blue2); }
+.map-panel-brands {
+  display: flex; flex-wrap: wrap; gap: 10px;
+}
+.map-panel-brand-btn {
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(56,110,200,0.2);
+  border-radius: 12px; padding: 12px 16px;
+  cursor: pointer; transition: all 0.18s; min-width: 80px;
+}
+.map-panel-brand-btn:hover {
+  background: rgba(59,130,246,0.15);
+  border-color: rgba(96,165,250,0.5);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+}
+.map-panel-brand-logo {
+  width: 40px; height: 40px; object-fit: contain;
+  filter: brightness(0) invert(1) opacity(0.85);
+}
+.map-panel-brand-name {
+  font-size: 0.6rem; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.5px; color: var(--text3); text-align: center;
+}
+.map-panel-brand-btn:hover .map-panel-brand-name { color: var(--blue3); }
+.map-panel-brand-letter {
+  width: 40px; height: 40px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.2rem; font-weight: 800; color: var(--blue2);
+}
+
 /* Custom map marker */
 .map-marker {
   display: flex; flex-direction: column; align-items: center; gap: 5px;
@@ -481,8 +547,18 @@ body::before {
   </div>
 
   <!-- Map view -->
-  <div class="map-view" id="map-view">
+  <div class="map-view" id="map-view" style="position:relative">
     <div id="map"></div>
+    <div class="map-brand-panel" id="map-brand-panel">
+      <div class="map-panel-header">
+        <div class="map-panel-country">
+          <div class="map-panel-flag"><img id="map-panel-flag-img" src="" alt=""></div>
+          <div class="map-panel-name" id="map-panel-name"></div>
+        </div>
+        <button class="map-panel-close" onclick="closeMapPanel()">✕</button>
+      </div>
+      <div class="map-panel-brands" id="map-panel-brands"></div>
+    </div>
   </div>
 
   <!-- Breadcrumb -->
@@ -825,6 +901,34 @@ function openModal(id) {
   document.getElementById('modal-bg').classList.add('open');
 }
 
+/* ── MAP PANEL ── */
+function openMapPanel(country, makeTree) {
+  const code    = COUNTRY_FLAG_CODE[country];
+  const flagSrc = code ? `https://flagcdn.com/w160/${code}.png` : '';
+  const makes   = Object.keys(makeTree).sort();
+
+  document.getElementById('map-panel-flag-img').src = flagSrc;
+  document.getElementById('map-panel-name').textContent = country;
+
+  document.getElementById('map-panel-brands').innerHTML = makes.map(make => {
+    const logo  = brandLogo(make);
+    const inner = logo
+      ? `<img class="map-panel-brand-logo" src="${logo}" alt="${make}" onerror="this.style.display='none'">`
+      : `<div class="map-panel-brand-letter">${make[0]}</div>`;
+    const count = makeTree[make].length;
+    return `<button class="map-panel-brand-btn" onclick="showBrand(event,'${country}','${make.replace(/'/g,"\\'")}');switchView('flags')">
+      ${inner}
+      <div class="map-panel-brand-name">${make}<br><span style="color:var(--blue2);font-size:0.55rem">${count} badge${count!==1?'s':''}</span></div>
+    </button>`;
+  }).join('');
+
+  document.getElementById('map-brand-panel').classList.add('visible');
+}
+
+function closeMapPanel() {
+  document.getElementById('map-brand-panel').classList.remove('visible');
+}
+
 /* ── VIEW SWITCHING ── */
 let mapInitialized = false;
 
@@ -881,18 +985,7 @@ function initMap() {
 
     L.marker(coords, { icon })
       .addTo(map)
-      .on('click', () => {
-        switchView('flags');
-        // Brief delay so flag matrix renders, then show brands
-        setTimeout(() => {
-          const safeId = country.replace(/ /g,'_');
-          const card = document.getElementById(`flag-${safeId}`);
-          if (card && !card.classList.contains('flipped')) {
-            card.classList.add('flipped');
-            card.scrollIntoView({ behavior: 'smooth', block: 'center' });
-          }
-        }, 150);
-      });
+      .on('click', () => openMapPanel(country, tree[country]));
   });
 }
 
