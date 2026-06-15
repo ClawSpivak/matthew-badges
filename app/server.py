@@ -473,6 +473,29 @@ class BadgeHandler(BaseHTTPRequestHandler):
             result = identify_badge(image_b64, "image/jpeg")
             self.send_json(result)
 
+        elif path.startswith("/api/badge/") and path.endswith("/rotate"):
+            import shutil
+            badge_id = path[11:-7]
+            body = json.loads(self.read_body())
+            degrees = int(body.get("degrees", 90))  # 90 or -90
+            collection = load_collection()
+            badge = next((b for b in collection["badges"] if b.get("id") == badge_id), None)
+            if not badge or not badge.get("photo"):
+                self.send_json({"error": "Badge not found"}, 404)
+                return
+            filename = os.path.basename(badge["photo"])
+            # Rotate all three copies (photos, photos_original, photos_processed)
+            for folder in [PHOTOS_DIR,
+                           os.path.join(os.path.dirname(PHOTOS_DIR), "photos_original"),
+                           os.path.join(os.path.dirname(PHOTOS_DIR), "photos_processed")]:
+                fp = os.path.join(folder, filename)
+                if os.path.isfile(fp):
+                    img = Image.open(fp).convert("RGB")
+                    img = img.rotate(-degrees, expand=True)  # PIL rotates CCW, flip sign
+                    img.save(fp, format="JPEG", quality=90)
+            save_collection(collection, badge_name=f"rotate {badge_id}")
+            self.send_json({"ok": True})
+
         elif path.startswith("/api/badge/") and path.endswith("/retake"):
             badge_id = path[11:-7]
             body = json.loads(self.read_body())

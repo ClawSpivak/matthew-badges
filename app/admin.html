@@ -170,6 +170,11 @@ main { padding: 16px 16px 100px; max-width: 700px; margin: 0 auto; }
   border-color: rgba(52,211,153,0.25);
 }
 .btn-switch:hover { background: rgba(52,211,153,0.16); border-color: var(--green); }
+.btn-rotate {
+  background: rgba(167,139,250,0.07); color: #a78bfa;
+  border-color: rgba(167,139,250,0.25);
+}
+.btn-rotate:hover { background: rgba(167,139,250,0.16); border-color: #a78bfa; }
 .btn-delete {
   background: rgba(239,68,68,0.08); color: #fca5a5;
   border-color: rgba(239,68,68,0.25);
@@ -525,6 +530,8 @@ function rowHtml(b) {
       <div class="badge-actions">
         <button class="btn btn-rescan"  data-id="${b.id}">🔍 Rescan</button>
         <button class="btn btn-retake"  data-id="${b.id}" data-name="${name.replace(/"/g,'&quot;')}">📷 Retake</button>
+        <button class="btn btn-rotate"  data-id="${b.id}" data-deg="-90">↺ Rotate L</button>
+        <button class="btn btn-rotate"  data-id="${b.id}" data-deg="90">↻ Rotate R</button>
         <button class="btn btn-switch"  data-id="${b.id}" data-name="${name.replace(/"/g,'&quot;')}">🖼 Switch Photo</button>
         <button class="btn btn-delete"  data-id="${b.id}">🗑 Delete</button>
       </div>
@@ -557,6 +564,28 @@ function attachHandlers() {
 
   document.querySelectorAll('.btn-retake').forEach(btn => {
     btn.onclick = () => openRetakeModal(btn.dataset.id, btn.dataset.name);
+  });
+
+  document.querySelectorAll('.btn-rotate').forEach(btn => {
+    btn.onclick = async () => {
+      const id  = btn.dataset.id;
+      const deg = parseInt(btn.dataset.deg);
+      const orig = btn.textContent;
+      btn.textContent = '…'; btn.style.pointerEvents = 'none';
+      try {
+        const res  = await fetch(`/api/badge/${id}/rotate`, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({degrees: deg}) });
+        const data = await res.json();
+        if (!data.ok) throw new Error('Rotate failed');
+        const row = document.getElementById(`row-${id}`);
+        const thumb = row?.querySelector('.thumb');
+        if (thumb) thumb.src = thumb.src.replace(/\?t=\d+/, '') + `?t=${Date.now()}`;
+        showToast('Photo rotated', 'ok');
+      } catch(e) {
+        showToast('Rotate failed: ' + e.message, 'err');
+      } finally {
+        btn.textContent = orig; btn.style.pointerEvents = '';
+      }
+    };
   });
 
   document.querySelectorAll('.btn-switch').forEach(btn => {
