@@ -10,29 +10,38 @@ const https = require('https');
 const fs    = require('fs');
 const path  = require('path');
 
-const PORT         = process.env.PORT || 3000;
-const GITHUB_RAW   = 'https://raw.githubusercontent.com/ClawSpivak/matthew-badges/main';
+const PORT           = process.env.PORT || 3000;
+const GITHUB_RAW     = 'https://raw.githubusercontent.com/ClawSpivak/matthew-badges/main';
 const COLLECTION_URL = `${GITHUB_RAW}/state/badge-collection.json`;
-const CACHE_TTL    = 60000;
+const HTML_URL       = `${GITHUB_RAW}/public/index.html`;
+const CACHE_TTL      = 60000;
 
-let _cache = null;
-let _cacheAt = 0;
+let _dataCache = null, _dataCacheAt = 0;
+let _htmlCache = null, _htmlCacheAt = 0;
 
-function fetchCollection() {
-  if (_cache && Date.now() - _cacheAt < CACHE_TTL) return Promise.resolve(_cache);
+function fetchGithub(url) {
   return new Promise((resolve, reject) => {
-    https.get(COLLECTION_URL, { timeout: 8000 }, res => {
+    https.get(url, { timeout: 8000 }, res => {
       let body = '';
       res.on('data', c => body += c);
-      res.on('end', () => {
-        try {
-          _cache = JSON.parse(body);
-          _cacheAt = Date.now();
-          resolve(_cache);
-        } catch(e) { reject(new Error('Bad JSON from GitHub')); }
-      });
+      res.on('end', () => resolve(body));
     }).on('error', reject).on('timeout', () => reject(new Error('GitHub timeout')));
   });
+}
+
+async function fetchCollection() {
+  if (_dataCache && Date.now() - _dataCacheAt < CACHE_TTL) return _dataCache;
+  const body = await fetchGithub(COLLECTION_URL);
+  _dataCache = JSON.parse(body);
+  _dataCacheAt = Date.now();
+  return _dataCache;
+}
+
+async function fetchHtml() {
+  if (_htmlCache && Date.now() - _htmlCacheAt < CACHE_TTL) return _htmlCache;
+  _htmlCache = await fetchGithub(HTML_URL);
+  _htmlCacheAt = Date.now();
+  return _htmlCache;
 }
 
 function send(res, status, contentType, body) {
@@ -46,8 +55,12 @@ function send(res, status, contentType, body) {
 
 http.createServer(async (req, res) => {
   if (req.method === 'GET' && req.url === '/') {
-    const html = fs.readFileSync(path.join(__dirname, 'public', 'index.html'), 'utf8');
-    send(res, 200, 'text/html; charset=utf-8', html);
+    try {
+      const html = await fetchHtml();
+      send(res, 200, 'text/html; charset=utf-8', html);
+    } catch(e) {
+      send(res, 502, 'text/plain', 'Could not load page. Try refreshing.');
+    }
     return;
   }
 
