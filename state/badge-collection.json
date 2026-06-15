@@ -307,6 +307,20 @@
       "rarity": "uncommon",
       "value_estimate": "$50-$300",
       "confidence": "high"
+    },
+    {
+      "id": "9c748928",
+      "added": "2026-06-15T17:29:50.010736",
+      "photo": "/photos/763703cf.jpg",
+      "make": "Pontiac",
+      "model": "All Models",
+      "years": "1957-1981",
+      "badge_name": "Pontiac Chief Arrowhead Emblem",
+      "description": "This awesome badge shows a Native American chief's head inside a shield shape! The chief has cool feathers pointing outward like arrows, and there's a circle in the middle. It's made of shiny metal with dark black parts that make it look really tough and powerful!",
+      "fun_fact": "Pontiac named their whole car brand after a famous Native American leader! This badge was one of the coolest car logos ever made, and people loved how it looked on the front of fast, exciting cars from the 1950s to 1970s.",
+      "rarity": "uncommon",
+      "value_estimate": "$25-75",
+      "confidence": "high"
     }
   ]
 }
