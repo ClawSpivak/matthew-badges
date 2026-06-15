@@ -293,6 +293,20 @@
       "rarity": "common",
       "value_estimate": "$10-25",
       "confidence": "high"
+    },
+    {
+      "id": "c5dd3525",
+      "added": "2026-06-15T17:23:01.627310",
+      "photo": "/photos/10a335b3.jpg",
+      "make": "Jaguar",
+      "model": "All Models",
+      "years": "1945-present",
+      "badge_name": "Leaping Jaguar Hood Ornament",
+      "description": "A shiny chrome jaguar frozen mid-leap with its mouth wide open! This sleek metal cat was placed on top of Jaguar car hoods to show speed and power. When the car zoomed down the road, this proud jaguar looked like it was pouncing through the air!",
+      "fun_fact": "The Leaping Jaguar became so famous that it's one of the most recognizable hood ornaments in the world! Jaguar drivers loved showing off this fierce metal cat on their luxury sports cars.",
+      "rarity": "uncommon",
+      "value_estimate": "$50-$300",
+      "confidence": "high"
     }
   ]
 }
