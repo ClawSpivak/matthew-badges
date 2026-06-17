@@ -531,6 +531,20 @@
       "rarity": "common",
       "value_estimate": "$5-$15 per cap",
       "confidence": "high"
+    },
+    {
+      "id": "e35ebc38",
+      "added": "2026-06-17T08:15:33.635228",
+      "photo": "/photos/5752a51d.jpg",
+      "make": "Unknown",
+      "model": "Unknown",
+      "years": "Unknown",
+      "badge_name": "Unknown Symbol Badge",
+      "description": "This is a mysterious circular badge with a sleek silver rim and black center featuring a white hourglass or bowtie-shaped symbol in the middle. It looks like it could be from a car, but it doesn't match any major car brand's logo that we can identify!",
+      "fun_fact": "The hourglass or figure-8 shape is sometimes used in car design to represent speed, balance, or infinity - pretty cool symbolism for a vehicle!",
+      "rarity": "unknown",
+      "value_estimate": "Unknown",
+      "confidence": "low"
     }
   ]
 }
