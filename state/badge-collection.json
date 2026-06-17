@@ -391,6 +391,20 @@
       "rarity": "common",
       "value_estimate": "$5-$25",
       "confidence": "high"
+    },
+    {
+      "id": "0ce3b10f",
+      "added": "2026-06-17T08:06:51.117801",
+      "photo": "/photos/4b2fe133.jpg",
+      "make": "Chevrolet",
+      "model": "All Models",
+      "years": "1958-1987",
+      "badge_name": "Chevrolet Script Emblem",
+      "description": "This is a shiny chrome badge with the word 'CHEVROLET' written in fancy flowing letters! It's the kind of badge you'd find on classic American cars from way back. The letters are raised up from the surface and catch the light beautifully.",
+      "fun_fact": "Chevrolet is one of America's most famous car brands, and this classic script badge has been used on millions of vehicles over the decades. It's like a time capsule from when cars looked totally different from today!",
+      "rarity": "common",
+      "value_estimate": "$5-$30",
+      "confidence": "high"
     }
   ]
 }
