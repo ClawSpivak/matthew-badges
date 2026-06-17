@@ -363,6 +363,20 @@
       "rarity": "uncommon",
       "value_estimate": "$15-40",
       "confidence": "medium"
+    },
+    {
+      "id": "0c635277",
+      "added": "2026-06-17T08:04:23.128374",
+      "photo": "/photos/fb352a22.jpg",
+      "make": "Citro\u00ebn",
+      "model": "All Models",
+      "years": "1950s-present",
+      "badge_name": "Citro\u00ebn Double Chevron",
+      "description": "Two shiny black chevron arrows pointing forward - this is the famous Citro\u00ebn symbol that means 'forward thinking'! It's like two lightning bolts made of metal that show power and speed.",
+      "fun_fact": "The double chevron design comes from engineer Andr\u00e9 Citro\u00ebn's inspiration from seeing a type of gear teeth - he thought two chevrons together looked powerful and modern, kind of like a rocket pointing to the future!",
+      "rarity": "common",
+      "value_estimate": "$5-15",
+      "confidence": "high"
     }
   ]
 }
