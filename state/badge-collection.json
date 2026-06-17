@@ -741,6 +741,20 @@
       "rarity": "common",
       "value_estimate": "$5-$20",
       "confidence": "high"
+    },
+    {
+      "id": "b193979b",
+      "added": "2026-06-17T08:28:22.329458",
+      "photo": "/photos/476aa054.jpg",
+      "make": "BMW",
+      "model": "All Models",
+      "years": "1960s-Present",
+      "badge_name": "BMW Roundel / Hood Badge",
+      "description": "This is the famous BMW roundel - a circular badge with four sections in blue and white, surrounded by a black ring with the letters 'BMW' written on it! It's like the superhero symbol of German cars, instantly recognizable on every BMW from tiny cars to super-fast sports cars.",
+      "fun_fact": "The blue and white colors in the BMW logo represent the colors of Bavaria, Germany, where BMW was founded in 1916. The roundel design has been used for over 100 years and is one of the most iconic car badges in the world!",
+      "rarity": "common",
+      "value_estimate": "$15-50",
+      "confidence": "high"
     }
   ]
 }
