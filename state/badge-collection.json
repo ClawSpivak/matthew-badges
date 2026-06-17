@@ -489,6 +489,20 @@
       "rarity": "common",
       "value_estimate": "$5-$20",
       "confidence": "high"
+    },
+    {
+      "id": "be030577",
+      "added": "2026-06-17T08:12:57.803222",
+      "photo": "/photos/5aa6f4e3.jpg",
+      "make": "Chevrolet",
+      "model": "All Models",
+      "years": "1960s-1970s",
+      "badge_name": "Chevrolet Script Emblem",
+      "description": "A cool vintage chrome badge spelling out 'CHEVROLET' in fancy script letters! It's the kind of shiny metal nameplate that proud Chevy owners would have displayed on their cars to show everyone what awesome vehicle they were driving.",
+      "fun_fact": "Chevrolet is one of America's most famous car brands, and these script badges were used on thousands of classic cars! The Chevy logo has been around since 1911 and is instantly recognizable to car lovers everywhere.",
+      "rarity": "uncommon",
+      "value_estimate": "$15-50",
+      "confidence": "high"
     }
   ]
 }
