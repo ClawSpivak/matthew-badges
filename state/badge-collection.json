@@ -461,6 +461,20 @@
       "rarity": "common",
       "value_estimate": "$5-15",
       "confidence": "high"
+    },
+    {
+      "id": "fcc97621",
+      "added": "2026-06-17T08:10:47.159597",
+      "photo": "/photos/83ecd26e.jpg",
+      "make": "Renault",
+      "model": "All Models",
+      "years": "1970s-1980s",
+      "badge_name": "Renault Diamond Badge",
+      "description": "A shiny metallic diamond-shaped badge with a blue center, chrome edges, and a classic 3D design that catches the light brilliantly! This iconic badge sat proudly on the front of Renault cars and is a treasure from the golden age of French automobiles.",
+      "fun_fact": "Renault's diamond badge became one of the most recognizable car logos in Europe! The 3D design made it look like a sparkling gem on the hood, and collectors love finding original vintage versions like this one.",
+      "rarity": "uncommon",
+      "value_estimate": "$15-$45",
+      "confidence": "high"
     }
   ]
 }
