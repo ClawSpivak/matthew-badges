@@ -797,6 +797,20 @@
       "rarity": "common",
       "value_estimate": "$5-$25",
       "confidence": "high"
+    },
+    {
+      "id": "a7a6044a",
+      "added": "2026-06-17T08:31:45.399155",
+      "photo": "/photos/ab959f10.jpg",
+      "make": "Mercedes-Benz",
+      "model": "All Models",
+      "years": "1950s-present",
+      "badge_name": "Mercedes-Benz Tri-Star Wheel Cap / Hub Cap Emblem",
+      "description": "A shiny silver circle with three pointed triangular shapes pointing outward, like a three-pointed star! This is the iconic Mercedes-Benz logo that appears on wheel centers and hub caps. The three points represent the company's goal to motorize transportation on land, sea, and air!",
+      "fun_fact": "The three-pointed star inside a circle is one of the most famous car logos in the world! Mercedes-Benz has been using this design since 1909, and it's instantly recognizable by car enthusiasts everywhere. When you see this badge spinning on a car wheel, you know it's a Mercedes!",
+      "rarity": "common",
+      "value_estimate": "$5-$25",
+      "confidence": "high"
     }
   ]
 }
