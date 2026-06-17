@@ -713,6 +713,20 @@
       "rarity": "common",
       "value_estimate": "$5-$25",
       "confidence": "high"
+    },
+    {
+      "id": "0949dfb7",
+      "added": "2026-06-17T08:26:41.769076",
+      "photo": "/photos/ca3cd03c.jpg",
+      "make": "BMW",
+      "model": "All Models",
+      "years": "1959-Present",
+      "badge_name": "BMW Roundel Hood Badge",
+      "description": "This is the famous BMW logo with its iconic blue and white circle split into four sections! The black ring around it with 'BMW' letters is what you'd see on the hood of a BMW car. It's like the car's signature that tells everyone what brand it is!",
+      "fun_fact": "The blue and white quarters in the BMW logo were inspired by the Bavarian flag because BMW stands for Bayerische Motoren Werke, which means 'Bavarian Motor Works' in German! It's like the car is wearing a piece of Bavaria on its hood!",
+      "rarity": "common",
+      "value_estimate": "$15-50",
+      "confidence": "high"
     }
   ]
 }
