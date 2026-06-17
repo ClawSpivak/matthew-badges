@@ -755,6 +755,20 @@
       "rarity": "common",
       "value_estimate": "$15-50",
       "confidence": "high"
+    },
+    {
+      "id": "102d3886",
+      "added": "2026-06-17T08:29:11.078677",
+      "photo": "/photos/f7aa43cf.jpg",
+      "make": "Mercedes-Benz",
+      "model": "All Models",
+      "years": "1909-Present",
+      "badge_name": "Mercedes-Benz Three-Pointed Star Hood Ornament",
+      "description": "This is the iconic three-pointed star from Mercedes-Benz, one of the most famous car badges in the world! The three points represent the company's ambition to motorize transportation on land, sea, and air. It's mounted on a sleek black circle with a little stem that attaches to the hood of the car.",
+      "fun_fact": "The three-pointed star has been Mercedes-Benz's symbol for over 110 years! The three points stand for the founders' dream that their engines would power vehicles everywhere - on roads, in boats, and in airplanes. It's one of the oldest and most recognizable logos in automotive history!",
+      "rarity": "common",
+      "value_estimate": "$30-80",
+      "confidence": "high"
     }
   ]
 }
