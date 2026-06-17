@@ -783,6 +783,20 @@
       "rarity": "common",
       "value_estimate": "$15-$40",
       "confidence": "high"
+    },
+    {
+      "id": "b9eb3551",
+      "added": "2026-06-17T08:30:56.856420",
+      "photo": "/photos/f745cfee.jpg",
+      "make": "Chevrolet",
+      "model": "All Models",
+      "years": "1960s-1970s",
+      "badge_name": "Chevrolet Bowtie Emblem",
+      "description": "This is the famous Chevrolet bowtie logo! It's a simple but iconic design with two triangular shapes pointing toward each other, kind of like a fancy bowtie you'd wear to a fancy dinner. The chrome and smooth finish makes it super shiny and cool-looking on a car's hood or grille.",
+      "fun_fact": "The Chevrolet bowtie is one of the most recognized car logos in the world! It's been used since 1913 and appears on millions of Chevy cars. Some people say it looks like a bowtie, while others think it looks like a steering wheel or even a gold bar!",
+      "rarity": "common",
+      "value_estimate": "$5-$25",
+      "confidence": "high"
     }
   ]
 }
