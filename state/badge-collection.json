@@ -825,6 +825,20 @@
       "rarity": "common",
       "value_estimate": "$15-40",
       "confidence": "high"
+    },
+    {
+      "id": "6f700dda",
+      "added": "2026-06-17T08:34:40.749808",
+      "photo": "/photos/812a592f.jpg",
+      "make": "Mercedes-Benz",
+      "model": "All Models",
+      "years": "2000s-2010s",
+      "badge_name": "Mercedes-Benz Owner's Badge / Ownership Plaque",
+      "description": "A sleek rectangular metal badge that says 'Mercedes-Benz' in fancy letters! This is a special owner's badge or plaque that proud Mercedes owners display to show they own one of the world's most luxurious and famous cars. It's made of shiny metal and sits flat on surfaces.",
+      "fun_fact": "Mercedes-Benz is one of the oldest car companies in the world, founded way back in 1926! Their three-pointed star logo is one of the most recognized symbols in the entire world, representing their dream to motorize transportation on land, sea, and air.",
+      "rarity": "common",
+      "value_estimate": "$5-$20",
+      "confidence": "high"
     }
   ]
 }
