@@ -517,6 +517,20 @@
       "rarity": "uncommon",
       "value_estimate": "$15-40",
       "confidence": "high"
+    },
+    {
+      "id": "5219d0bd",
+      "added": "2026-06-17T08:14:23.942949",
+      "photo": "/photos/8b8ea917.jpg",
+      "make": "Fiat",
+      "model": "All Models",
+      "years": "1960s-present",
+      "badge_name": "Fiat Hub Cap / Wheel Center Cap",
+      "description": "A shiny chrome wheel center cap with the iconic Fiat logo in bold white letters on a deep blue circle! This badge sits right in the middle of the car's wheel and spins along with it as you drive. It's like a little piece of Italian automotive history spinning on the road!",
+      "fun_fact": "Fiat is an Italian car company whose name stands for 'Fabbrica Italiana Automobili Torino' (Italian Automobile Factory Turin). They've been making cute, zippy cars since 1899, and these wheel badges have been a signature look for decades!",
+      "rarity": "common",
+      "value_estimate": "$5-$15 per cap",
+      "confidence": "high"
     }
   ]
 }
