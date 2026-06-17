@@ -657,6 +657,20 @@
       "rarity": "common",
       "value_estimate": "$5-30",
       "confidence": "high"
+    },
+    {
+      "id": "2954540b",
+      "added": "2026-06-17T08:23:48.565079",
+      "photo": "/photos/5eb55b37.jpg",
+      "make": "BMW",
+      "model": "All Models",
+      "years": "1970s-Present",
+      "badge_name": "BMW Roundel with Black Ring",
+      "description": "This is the iconic BMW logo with the famous blue and white circle divided into four quarters, surrounded by a shiny black ring with the BMW letters on top! It's like a super cool target symbol that shows this car is from BMW, a fancy car company from Germany.",
+      "fun_fact": "The blue and white colors in the BMW roundel represent Bavaria, the region in Germany where BMW was founded! The logo has been used for over 100 years and is one of the most recognizable car badges in the entire world!",
+      "rarity": "common",
+      "value_estimate": "$5-15",
+      "confidence": "high"
     }
   ]
 }
