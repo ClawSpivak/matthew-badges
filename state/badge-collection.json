@@ -405,6 +405,20 @@
       "rarity": "common",
       "value_estimate": "$5-$30",
       "confidence": "high"
+    },
+    {
+      "id": "5129686c",
+      "added": "2026-06-17T08:07:38.916779",
+      "photo": "/photos/6670fe9d.jpg",
+      "make": "Hummer",
+      "model": "All Models",
+      "years": "2003-2010",
+      "badge_name": "Hummer H2/H3 Grille Badge",
+      "description": "A cool chrome square badge with the bold letter 'H' inside! This badge sits right in the middle of the massive grille on super-tough Hummer vehicles. It's shiny and looks super strong, just like the giant truck it represents!",
+      "fun_fact": "Hummer vehicles are so big and powerful that they were originally based on military trucks used by soldiers! The H2 and H3 were civilian versions that regular people could buy, and they were some of the largest SUVs ever made.",
+      "rarity": "uncommon",
+      "value_estimate": "$15-35",
+      "confidence": "high"
     }
   ]
 }
