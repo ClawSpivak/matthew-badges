@@ -769,6 +769,20 @@
       "rarity": "common",
       "value_estimate": "$30-80",
       "confidence": "high"
+    },
+    {
+      "id": "76d4552a",
+      "added": "2026-06-17T08:30:10.074880",
+      "photo": "/photos/fc46dce9.jpg",
+      "make": "Mercedes-Benz",
+      "model": "All Models",
+      "years": "2010s-2020s",
+      "badge_name": "Center Cap / Wheel Cap",
+      "description": "A shiny circular Mercedes-Benz badge with the famous three-pointed star symbol in the middle! The three points represent the brand's ambition to motorize transportation on land, sea, and air. It's mounted on a wheel and surrounded by a mesh pattern that helps with cooling.",
+      "fun_fact": "Mercedes-Benz has been using the three-pointed star logo since 1909, making it one of the oldest car logos in the world! The star is so iconic that it's instantly recognizable anywhere on Earth.",
+      "rarity": "common",
+      "value_estimate": "$15-$40",
+      "confidence": "high"
     }
   ]
 }
