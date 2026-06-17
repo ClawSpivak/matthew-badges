@@ -643,6 +643,20 @@
       "rarity": "common",
       "value_estimate": "$5-$25",
       "confidence": "high"
+    },
+    {
+      "id": "dbb3353f",
+      "added": "2026-06-17T08:23:16.640161",
+      "photo": "/photos/04d815d6.jpg",
+      "make": "BMW",
+      "model": "All Models",
+      "years": "1917-Present",
+      "badge_name": "BMW Roundel / Circular Badge",
+      "description": "This is the famous BMW logo! It's a circular badge with a black ring on the outside and a blue and white quartered circle in the middle. The 'BMW' letters sit proudly around the edge. It's one of the most recognizable car badges in the whole world!",
+      "fun_fact": "The blue and white colors in the BMW logo represent Bavaria, the German state where BMW was founded in 1917. Originally, BMW made airplane engines, and the circular design was meant to look like a spinning propeller!",
+      "rarity": "common",
+      "value_estimate": "$5-30",
+      "confidence": "high"
     }
   ]
 }
