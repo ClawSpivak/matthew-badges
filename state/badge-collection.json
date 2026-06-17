@@ -349,6 +349,20 @@
       "rarity": "uncommon",
       "value_estimate": "$15-40",
       "confidence": "medium"
+    },
+    {
+      "id": "cd7c322b",
+      "added": "2026-06-17T08:02:36.449932",
+      "photo": "/photos/f514cd30.jpg",
+      "make": "Chevrolet",
+      "model": "All Models",
+      "years": "1960s-1970s",
+      "badge_name": "Chevrolet Double Arrow/Chevron Badge",
+      "description": "Two sleek black arrow-shaped badges that point forward like a speeding race car! These shiny chrome-trimmed chevrons represent speed and forward movement, and they were used on classic Chevrolet cars to show they were built for going fast.",
+      "fun_fact": "The double chevron design was a signature Chevrolet mark during the muscle car era - a time when car makers made some of the coolest, most powerful vehicles ever built! This badge would have been on legendary cars like Camaros and Chevelles!",
+      "rarity": "uncommon",
+      "value_estimate": "$15-40",
+      "confidence": "medium"
     }
   ]
 }
