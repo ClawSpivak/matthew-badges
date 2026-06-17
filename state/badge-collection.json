@@ -377,6 +377,20 @@
       "rarity": "common",
       "value_estimate": "$5-15",
       "confidence": "high"
+    },
+    {
+      "id": "5f3ba90b",
+      "added": "2026-06-17T08:05:59.814990",
+      "photo": "/photos/284a87be.jpg",
+      "make": "Infiniti",
+      "model": "All Models",
+      "years": "1989-present",
+      "badge_name": "Infiniti Double Oval Logo",
+      "description": "This shiny chrome badge shows two connected oval shapes that look like an hourglass or figure-8! It's the special symbol of Infiniti, a luxury car brand that makes super fancy vehicles. The polished metal catches the light and gleams beautifully!",
+      "fun_fact": "The Infiniti double oval design represents two overlapping circles that symbolize infinity and perfection - kind of like how the number 8 turned sideways looks like the infinity symbol! Infiniti is a Japanese luxury brand that rivals fancy European cars.",
+      "rarity": "common",
+      "value_estimate": "$5-$25",
+      "confidence": "high"
     }
   ]
 }
