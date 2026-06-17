@@ -447,6 +447,20 @@
       "rarity": "common",
       "value_estimate": "$5-25",
       "confidence": "high"
+    },
+    {
+      "id": "9d8728cc",
+      "added": "2026-06-17T08:10:11.191863",
+      "photo": "/photos/ce41ee27.jpg",
+      "make": "Peugeot",
+      "model": "All Models",
+      "years": "2010s-Present",
+      "badge_name": "Peugeot Lion Head Emblem",
+      "description": "A sleek black shield-shaped badge featuring a fierce lion's head in profile, with the word 'PEUGEOT' written vertically on the left side. The lion looks super cool and powerful, like it's ready for adventure!",
+      "fun_fact": "Peugeot has used a lion as their symbol since 1847 because lions represent strength, courage, and speed - just like their cars! The lion became their official logo way back in the 1900s and has been protecting Peugeot's reputation ever since.",
+      "rarity": "common",
+      "value_estimate": "$5-15",
+      "confidence": "high"
     }
   ]
 }
