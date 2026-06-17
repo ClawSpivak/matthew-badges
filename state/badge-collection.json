@@ -419,6 +419,20 @@
       "rarity": "uncommon",
       "value_estimate": "$15-35",
       "confidence": "high"
+    },
+    {
+      "id": "e9d49f1e",
+      "added": "2026-06-17T08:08:27.898947",
+      "photo": "/photos/8aa24f4b.jpg",
+      "make": "Lancia",
+      "model": "All Models",
+      "years": "1960s-1980s",
+      "badge_name": "Lancia Logo Emblem",
+      "description": "A sleek black circular badge with bold silver letters spelling 'LANCIA' - an Italian car company known for making stylish and innovative vehicles! The metallic letters shine brightly against the black background, giving it a sophisticated look.",
+      "fun_fact": "Lancia was a legendary Italian automaker that created some of the most beautiful and technologically advanced cars in Europe! They were famous for inventing the first modern car with a unibody design, which made cars stronger and lighter at the same time.",
+      "rarity": "uncommon",
+      "value_estimate": "$15-40",
+      "confidence": "high"
     }
   ]
 }
