@@ -503,6 +503,20 @@
       "rarity": "uncommon",
       "value_estimate": "$15-50",
       "confidence": "high"
+    },
+    {
+      "id": "810c02b5",
+      "added": "2026-06-17T08:13:45.329297",
+      "photo": "/photos/f3abdb78.jpg",
+      "make": "Geely",
+      "model": "All Models",
+      "years": "2010-present",
+      "badge_name": "Geely Logo Emblem",
+      "description": "A shiny chrome hexagonal badge with a geometric design inside - it looks like a futuristic shield made of smooth metal that catches the light! The shape is bold and angular, kind of like a crystal or gem you'd find in a video game.",
+      "fun_fact": "Geely is a Chinese car company that's been growing super fast, and they even bought famous car brands like Volvo! This modern badge shows how they're creating cool, sleek cars for the future.",
+      "rarity": "uncommon",
+      "value_estimate": "$15-40",
+      "confidence": "high"
     }
   ]
 }
