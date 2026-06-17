@@ -559,6 +559,20 @@
       "rarity": "common",
       "value_estimate": "$0-5",
       "confidence": "low"
+    },
+    {
+      "id": "8f88a4bf",
+      "added": "2026-06-17T08:17:10.509579",
+      "photo": "/photos/f42eb2cb.jpg",
+      "make": "BMW",
+      "model": "All Models",
+      "years": "1960s-1970s",
+      "badge_name": "BMW Roundel Emblem",
+      "description": "This is the iconic BMW badge showing the famous circular design split into four quarters - blue and white represent the Bavarian flag, with a spinning propeller in the center! The blue represents the sky and the white represents a spinning propeller, honoring BMW's history of making aircraft engines before cars.",
+      "fun_fact": "BMW originally made airplane engines during World War I, which is why their logo features a propeller! The roundel design has been their symbol since 1917 and is one of the most recognized car badges in the world.",
+      "rarity": "common",
+      "value_estimate": "$10-50",
+      "confidence": "high"
     }
   ]
 }
