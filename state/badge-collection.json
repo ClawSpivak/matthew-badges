@@ -811,6 +811,20 @@
       "rarity": "common",
       "value_estimate": "$5-$25",
       "confidence": "high"
+    },
+    {
+      "id": "875b817b",
+      "added": "2026-06-17T08:33:53.543988",
+      "photo": "/photos/e0efd8c9.jpg",
+      "make": "Mercedes-Benz",
+      "model": "All Models",
+      "years": "1909-present",
+      "badge_name": "Mercedes-Benz Three-Pointed Star",
+      "description": "This is the famous three-pointed star from Mercedes-Benz, one of the coolest car logos in the world! The three points represent the company's dream to motorize transportation on land, sea, and air. It's surrounded by a shiny chrome circle that makes it look super sleek and official.",
+      "fun_fact": "The three-pointed star has been Mercedes-Benz's symbol for over 110 years! Each point stands for a different vision: one for cars on land, one for boats on water, and one for airplanes in the sky. That's pretty ambitious!",
+      "rarity": "common",
+      "value_estimate": "$15-40",
+      "confidence": "high"
     }
   ]
 }
