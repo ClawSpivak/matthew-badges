@@ -629,6 +629,20 @@
       "rarity": "common",
       "value_estimate": "$5-15",
       "confidence": "high"
+    },
+    {
+      "id": "2f51bcd4",
+      "added": "2026-06-17T08:20:48.444802",
+      "photo": "/photos/87f51eb1.jpg",
+      "make": "BMW",
+      "model": "All Models",
+      "years": "1917-Present",
+      "badge_name": "BMW Roundel Logo",
+      "description": "This is the super cool roundel badge from BMW, a famous German car company! It has a circle split into four parts - two opposite quarters are blue and white, which are the colors of Bavaria, Germany. The black ring around it has 'BMW' written on the sides. This badge is found on the front, back, and steering wheel of BMW cars!",
+      "fun_fact": "The BMW roundel has been used since 1917 and legend says it represents a spinning airplane propeller! BMW actually started by making airplane engines before they ever made cars. That's why the logo kind of looks like a propeller spinning through the air!",
+      "rarity": "common",
+      "value_estimate": "$5-$25",
+      "confidence": "high"
     }
   ]
 }
