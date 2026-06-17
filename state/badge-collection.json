@@ -321,6 +321,20 @@
       "rarity": "rare",
       "value_estimate": "$40-120",
       "confidence": "high"
+    },
+    {
+      "id": "ba75c1fc",
+      "added": "2026-06-17T08:00:59.448193",
+      "photo": "/photos/c299218a.jpg",
+      "make": "Nissan",
+      "model": "All Models",
+      "years": "1965-1990s",
+      "badge_name": "Nissan Circle Emblem with Horizontal Bar",
+      "description": "A sleek black circular badge with the word 'NISSAN' written across a metal bar in the middle! The circle design with two metal rings on the sides makes it look super cool and modern. It's like a target or a steering wheel symbol that shows this car is made by Nissan, a famous Japanese car company.",
+      "fun_fact": "Nissan started as a small Japanese company and grew to become one of the biggest car makers in the world! This classic badge design was used on thousands of cars for decades, making it one of the most recognizable logos in automotive history.",
+      "rarity": "common",
+      "value_estimate": "$5-$15",
+      "confidence": "high"
     }
   ]
 }
