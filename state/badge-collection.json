@@ -601,6 +601,20 @@
       "rarity": "common",
       "value_estimate": "$5-$25",
       "confidence": "high"
+    },
+    {
+      "id": "07ce4f09",
+      "added": "2026-06-17T08:19:19.909413",
+      "photo": "/photos/5a6c2200.jpg",
+      "make": "BMW",
+      "model": "All Models",
+      "years": "1917-Present",
+      "badge_name": "BMW Roundel / Hood Badge",
+      "description": "This is the super cool BMW logo - the famous blue and white circle divided into four quarters! The 'BMW' letters on the black ring stand for Bayerische Motoren Werke, which is German for Bavarian Motor Works. It's one of the most recognizable car badges in the whole world!",
+      "fun_fact": "The blue and white colors in the BMW logo actually come from the flag of Bavaria, Germany, where BMW was founded! Some people used to think the logo looked like a spinning airplane propeller because BMW originally made airplane engines before they made cars.",
+      "rarity": "common",
+      "value_estimate": "$15-40",
+      "confidence": "high"
     }
   ]
 }
