@@ -545,6 +545,20 @@
       "rarity": "unknown",
       "value_estimate": "Unknown",
       "confidence": "low"
+    },
+    {
+      "id": "a53c32db",
+      "added": "2026-06-17T08:16:07.444151",
+      "photo": "/photos/fca17466.jpg",
+      "make": "Unknown",
+      "model": "N/A",
+      "years": "Unknown",
+      "badge_name": "Unknown Object",
+      "description": "This looks like a black plastic box or container with a reflective surface, but it's not actually a car badge or emblem. It might be a lens cover, a clip, or some other automotive part, but it doesn't have the typical shape or design of a car logo!",
+      "fun_fact": "Car badges come in all shapes and sizes - from shiny metal emblems to colorful logos - but this mysterious object doesn't quite fit the pattern of a classic car badge!",
+      "rarity": "common",
+      "value_estimate": "$0-5",
+      "confidence": "low"
     }
   ]
 }
