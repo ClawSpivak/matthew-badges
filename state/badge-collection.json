@@ -685,6 +685,20 @@
       "rarity": "common",
       "value_estimate": "$15-50",
       "confidence": "high"
+    },
+    {
+      "id": "2ba8ea65",
+      "added": "2026-06-17T08:25:11.004720",
+      "photo": "/photos/635cf4f3.jpg",
+      "make": "Dodge",
+      "model": "All Models",
+      "years": "2000s-2010s",
+      "badge_name": "Dodge DRIVETRAIN Badge",
+      "description": "A sleek black and silver badge that says 'DRIVE' in bold letters with a dynamic crossed X design below it, showing this Dodge has cool performance features!",
+      "fun_fact": "Dodge badges like this were used to show which type of drivetrain or performance package a car had - kind of like a superhero logo that tells you the car has special powers!",
+      "rarity": "uncommon",
+      "value_estimate": "$15-35",
+      "confidence": "medium"
     }
   ]
 }
