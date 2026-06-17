@@ -671,6 +671,20 @@
       "rarity": "common",
       "value_estimate": "$5-15",
       "confidence": "high"
+    },
+    {
+      "id": "45a5e8a6",
+      "added": "2026-06-17T08:24:30.492255",
+      "photo": "/photos/5177c4f9.jpg",
+      "make": "BMW",
+      "model": "All Models",
+      "years": "1959-present",
+      "badge_name": "BMW Roundel / Wheel Cap Emblem",
+      "description": "This is the famous BMW circle logo with four sections - two dark blue and two white - representing the colors of Bavaria, Germany! The silver metallic ring around it makes it super shiny and cool-looking, and you can see the 'BMW' letters curved around the edge. This iconic badge has been on the front and back of BMW cars for over 60 years!",
+      "fun_fact": "The BMW roundel (circle badge) was first used in 1959 and is one of the most recognized car logos in the entire world! The four sections represent the Bavarian flag, and legend has it that the design was inspired by a spinning airplane propeller from when BMW made aircraft engines!",
+      "rarity": "common",
+      "value_estimate": "$15-50",
+      "confidence": "high"
     }
   ]
 }
