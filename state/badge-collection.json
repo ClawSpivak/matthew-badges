@@ -475,6 +475,20 @@
       "rarity": "uncommon",
       "value_estimate": "$15-$45",
       "confidence": "high"
+    },
+    {
+      "id": "71250f3d",
+      "added": "2026-06-17T08:12:03.265990",
+      "photo": "/photos/71188eea.jpg",
+      "make": "BMW",
+      "model": "All Models",
+      "years": "1990s-2000s",
+      "badge_name": "BMW Roundel Wheel Cap / Hub Cap Emblem",
+      "description": "This is a shiny BMW badge with the famous blue and white circle design! The badge has a cool chrome ring around it that looks like a fancy picture frame. Inside, you can see the classic BMW logo with its four sections - half blue, half white, and a white propeller-like shape in the middle. It's the kind of badge you'd find on the center of a car's wheel!",
+      "fun_fact": "BMW stands for Bavarian Motor Works, and their famous roundel logo has been around since 1917! The blue and white colors represent the Bavarian flag of Germany, where BMW was founded. These wheel cap badges spin and stay upright as the wheel turns - pretty cool engineering!",
+      "rarity": "common",
+      "value_estimate": "$5-$20",
+      "confidence": "high"
     }
   ]
 }
