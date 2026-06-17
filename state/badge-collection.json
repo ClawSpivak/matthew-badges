@@ -573,6 +573,20 @@
       "rarity": "common",
       "value_estimate": "$10-50",
       "confidence": "high"
+    },
+    {
+      "id": "7bb1ce16",
+      "added": "2026-06-17T08:18:19.228091",
+      "photo": "/photos/73155c2d.jpg",
+      "make": "Skoda",
+      "model": "All Models",
+      "years": "1990s-present",
+      "badge_name": "Skoda Winged Arrow Emblem",
+      "description": "This awesome badge shows a green arrow with wings shooting through a circle, like a superhero logo! The word SKODA is written around the top in shiny silver letters, and there's a fancy decorative design on the side that looks like fancy scrollwork.",
+      "fun_fact": "Skoda is a Czech car company with a super long history - they've been making cars since 1895! The winged arrow represents speed and progress, making every Skoda owner feel like they're driving something special and fast!",
+      "rarity": "common",
+      "value_estimate": "$5-15",
+      "confidence": "high"
     }
   ]
 }
