@@ -1077,6 +1077,20 @@
       "rarity": "common",
       "value_estimate": "$5-15",
       "confidence": "high"
+    },
+    {
+      "id": "6d4e0160",
+      "added": "2026-07-20T21:02:29.645332",
+      "photo": "/photos/41e073f1.jpg",
+      "make": "Unknown",
+      "model": "Not a car badge",
+      "years": "N/A",
+      "badge_name": "Metal rings/bands",
+      "description": "These look like four shiny black metal rings or bands connected together - they might be parts from a car, but they're not a badge or emblem! They could be trim rings, decorative bands, or connector pieces from a vehicle.",
+      "fun_fact": "Metal rings like these are sometimes used as decorative trim on car wheels, lights, or other parts to make them look extra cool and shiny!",
+      "rarity": "common",
+      "value_estimate": "$5-20",
+      "confidence": "low"
     }
   ]
 }
