@@ -993,6 +993,20 @@
       "rarity": "uncommon",
       "value_estimate": "$15-$40",
       "confidence": "high"
+    },
+    {
+      "id": "767566ed",
+      "added": "2026-07-20T20:57:15.121803",
+      "photo": "/photos/bb1c7de5.jpg",
+      "make": "Tesla",
+      "model": "All Models",
+      "years": "2003-Present",
+      "badge_name": "Tesla T Logo / Roundel",
+      "description": "This is the iconic Tesla logo - a sleek silver circular badge with a lightning bolt-shaped 'T' in the middle! It's like a superhero symbol for electric cars. The smooth, metallic finish makes it look super modern and futuristic.",
+      "fun_fact": "Tesla named their company after Nikola Tesla, a brilliant inventor who discovered amazing things about electricity over 100 years ago! The lightning bolt in the logo represents electric power and speed.",
+      "rarity": "common",
+      "value_estimate": "$5-15",
+      "confidence": "high"
     }
   ]
 }
