@@ -867,6 +867,20 @@
       "rarity": "common",
       "value_estimate": "$5-$30",
       "confidence": "high"
+    },
+    {
+      "id": "09d2558a",
+      "added": "2026-07-20T20:46:35.688502",
+      "photo": "/photos/70217328.jpg",
+      "make": "Suzuki",
+      "model": "All Models",
+      "years": "2000s-present",
+      "badge_name": "Suzuki Emblem",
+      "description": "A shiny silver circle with a bold 'S' design cut out in the middle! The 'S' looks like it's made of geometric shapes - triangles and rectangles - arranged in a super cool, modern way. It catches the light and sparkles like a jewel!",
+      "fun_fact": "Suzuki is a Japanese car company that makes all kinds of vehicles, from tiny cars to motorcycles and even ATVs! The 'S' in their logo stands for Suzuki, and this geometric style makes their cars look sleek and futuristic on the road.",
+      "rarity": "common",
+      "value_estimate": "$5-15",
+      "confidence": "high"
     }
   ]
 }
