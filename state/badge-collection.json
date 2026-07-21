@@ -909,6 +909,20 @@
       "rarity": "common",
       "value_estimate": "$5-25",
       "confidence": "high"
+    },
+    {
+      "id": "0d4865e6",
+      "added": "2026-07-20T20:51:50.094153",
+      "photo": "/photos/2f662163.jpg",
+      "make": "Volkswagen",
+      "model": "All Models",
+      "years": "1960s-present",
+      "badge_name": "VW Front Grille Emblem",
+      "description": "This is the famous Volkswagen badge! It's a circular chrome emblem with a big 'V' and 'W' inside - it stands for Volkswagen, which means 'People's Car' in German. The metallic gray color and shiny chrome ring make it look super cool on the front of the car!",
+      "fun_fact": "Volkswagen was originally created in Germany in the 1930s and the VW badge has become one of the most recognizable car logos in the entire world! The 'Beetle' is the most famous VW car ever made, and millions of people love them.",
+      "rarity": "common",
+      "value_estimate": "$15-$50",
+      "confidence": "high"
     }
   ]
 }
