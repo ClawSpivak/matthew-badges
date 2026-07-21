@@ -951,6 +951,20 @@
       "rarity": "uncommon",
       "value_estimate": "$15-$45",
       "confidence": "high"
+    },
+    {
+      "id": "c966135d",
+      "added": "2026-07-20T20:54:51.892156",
+      "photo": "/photos/8896be24.jpg",
+      "make": "Volkswagen",
+      "model": "All Models",
+      "years": "1960s-1970s",
+      "badge_name": "VW Grille Badge/Hood Emblem",
+      "description": "A cool circular metal badge with the famous VW (Volkswagen) logo split into geometric sections! It's like a puzzle made of metal that shows the stylized V and W letters. This shiny chrome badge would sit proudly on the front grille or hood of a classic Volkswagen car.",
+      "fun_fact": "Volkswagen means 'people's car' in German, and this badge represents one of the most iconic car brands in the world! The VW logo design has barely changed since it was created in the 1930s, making it one of the longest-lasting car logos ever.",
+      "rarity": "uncommon",
+      "value_estimate": "$15-$40",
+      "confidence": "high"
     }
   ]
 }
