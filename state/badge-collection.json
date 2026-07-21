@@ -923,6 +923,20 @@
       "rarity": "common",
       "value_estimate": "$15-$50",
       "confidence": "high"
+    },
+    {
+      "id": "db382df2",
+      "added": "2026-07-20T20:52:52.916156",
+      "photo": "/photos/60afc8d7.jpg",
+      "make": "Volkswagen",
+      "model": "All Models",
+      "years": "1960s-1970s",
+      "badge_name": "VW Roundel Emblem",
+      "description": "A cool circular badge with the letters 'VW' (Volkswagen) inside two curved bands that look like they're spinning! The shiny silver metal has a futuristic design that makes it look like a stylized propeller or lightning bolt.",
+      "fun_fact": "Volkswagen means 'people's car' in German, and this badge has been on VW cars for over 60 years! The VW logo is one of the most recognizable car badges in the entire world.",
+      "rarity": "common",
+      "value_estimate": "$5-15",
+      "confidence": "high"
     }
   ]
 }
