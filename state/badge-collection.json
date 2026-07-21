@@ -1007,6 +1007,20 @@
       "rarity": "common",
       "value_estimate": "$5-15",
       "confidence": "high"
+    },
+    {
+      "id": "8124edf5",
+      "added": "2026-07-20T20:57:56.294482",
+      "photo": "/photos/dacdd57c.jpg",
+      "make": "BMW",
+      "model": "All Models",
+      "years": "1970s-1980s",
+      "badge_name": "BMW Kidney Grille Emblem",
+      "description": "This is a cool BMW badge that sits on the front grille! It shows the classic kidney-shaped design with vertical chrome bars that look like a grille. The metallic silver and black colors make it super shiny and modern-looking. BMW used this style on many of their awesome cars during the 70s and 80s!",
+      "fun_fact": "BMW's kidney grille design has been their signature look for over 90 years! The two kidney-shaped sections represent the brand's racing heritage, and early BMW sports cars were known for their incredible speed and handling on race tracks!",
+      "rarity": "uncommon",
+      "value_estimate": "$15-45",
+      "confidence": "medium"
     }
   ]
 }
