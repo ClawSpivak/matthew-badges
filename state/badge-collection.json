@@ -1105,6 +1105,20 @@
       "rarity": "common",
       "value_estimate": "$0-5",
       "confidence": "high"
+    },
+    {
+      "id": "0919eeaf",
+      "added": "2026-07-20T21:04:09.790395",
+      "photo": "/photos/62ce2f3e.jpg",
+      "make": "Jaguar",
+      "model": "All Models",
+      "years": "1935-1970s",
+      "badge_name": "Jaguar Leaping Cat Hood Ornament",
+      "description": "A sleek metal statue of a jumping jaguar cat that sits proudly on the hood of classic Jaguar sports cars! The chrome cat is frozen mid-leap, showing power and speed.",
+      "fun_fact": "This famous leaping jaguar symbol represents speed, grace, and wild power - exactly what Jaguar wanted their fancy sports cars to feel like! Some versions were removable so owners could take them off and keep them safe.",
+      "rarity": "uncommon",
+      "value_estimate": "$150-$800",
+      "confidence": "high"
     }
   ]
 }
