@@ -839,6 +839,20 @@
       "rarity": "common",
       "value_estimate": "$5-$20",
       "confidence": "high"
+    },
+    {
+      "id": "cf272e6e",
+      "added": "2026-07-20T20:43:27.059227",
+      "photo": "/photos/111c6bbe.jpg",
+      "make": "Hyundai",
+      "model": "All Models",
+      "years": "2003-2009",
+      "badge_name": "Hyundai Logo/Emblem",
+      "description": "This is the famous H-shaped logo from Hyundai, a major car company from South Korea! The silvery badge looks like a stylized letter H that's been stretched and curved to look super cool. It's made of shiny chrome metal that catches the light beautifully!",
+      "fun_fact": "The Hyundai H logo was designed to look like two people shaking hands, symbolizing friendship and trust between the company and its customers. Hyundai started making cars in 1967 and is now one of the biggest car manufacturers in the world!",
+      "rarity": "common",
+      "value_estimate": "$5-15",
+      "confidence": "high"
     }
   ]
 }
