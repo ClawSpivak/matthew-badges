@@ -965,6 +965,20 @@
       "rarity": "uncommon",
       "value_estimate": "$15-$40",
       "confidence": "high"
+    },
+    {
+      "id": "8f258efd",
+      "added": "2026-07-20T20:55:40.149783",
+      "photo": "/photos/f03c42fb.jpg",
+      "make": "Peugeot",
+      "model": "All Models",
+      "years": "1960s-1970s",
+      "badge_name": "Peugeot Lion Hood Ornament",
+      "description": "A shiny metal lion figure that sits proudly on the hood of a Peugeot car! The lion has its front paws raised up like it's about to pounce, and its mane flows back majestically. This cool chrome ornament shows everyone that this is a brave Peugeot on the road!",
+      "fun_fact": "The Peugeot lion has been the symbol of the brand since 1847 - that's almost 180 years! The lion represents strength and courage, which is why Peugeot cars are known for being tough and reliable.",
+      "rarity": "uncommon",
+      "value_estimate": "$25-$75",
+      "confidence": "high"
     }
   ]
 }
