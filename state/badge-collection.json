@@ -1021,6 +1021,20 @@
       "rarity": "uncommon",
       "value_estimate": "$15-45",
       "confidence": "medium"
+    },
+    {
+      "id": "b49adb2b",
+      "added": "2026-07-20T20:59:18.009842",
+      "photo": "/photos/02c2ecba.jpg",
+      "make": "Volkswagen",
+      "model": "All Models",
+      "years": "1960s-present",
+      "badge_name": "VW Logo/Emblem",
+      "description": "This is the famous Volkswagen badge! It shows a big 'V' and 'W' inside a circle, kind of like two mountains meeting. The shiny chrome circle protects the logo, and it's mounted flat on a surface. This iconic symbol has been on VW cars for over 60 years!",
+      "fun_fact": "The VW logo was designed in the 1930s and stands for 'Volkswagen,' which means 'people's car' in German! Millions of people around the world instantly recognize this badge - it's one of the most famous car logos ever made!",
+      "rarity": "common",
+      "value_estimate": "$5-20",
+      "confidence": "high"
     }
   ]
 }
