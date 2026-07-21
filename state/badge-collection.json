@@ -1063,6 +1063,20 @@
       "rarity": "common",
       "value_estimate": "$5-15",
       "confidence": "high"
+    },
+    {
+      "id": "a89b5a92",
+      "added": "2026-07-20T21:01:51.601872",
+      "photo": "/photos/65788921.jpg",
+      "make": "Audi",
+      "model": "All Models",
+      "years": "1932-present",
+      "badge_name": "Audi Four Rings Emblem",
+      "description": "Four shiny silver rings linked together in a circle! Each ring represents one of the four car companies that merged to create Audi. It's like a super cool chain that represents teamwork and history!",
+      "fun_fact": "The four rings stand for Audi, DKW, Horch, and Wanderer - four different car companies that joined forces in 1932 to become one powerful team. It's one of the most famous car logos in the world!",
+      "rarity": "common",
+      "value_estimate": "$5-15",
+      "confidence": "high"
     }
   ]
 }
