@@ -937,6 +937,20 @@
       "rarity": "common",
       "value_estimate": "$5-15",
       "confidence": "high"
+    },
+    {
+      "id": "35fe7aaf",
+      "added": "2026-07-20T20:53:30.404568",
+      "photo": "/photos/870e9b4a.jpg",
+      "make": "Volkswagen",
+      "model": "All Models",
+      "years": "1960s-1970s",
+      "badge_name": "VW Hubcap Center Emblem",
+      "description": "A shiny chrome circle with the famous VW logo (that cool V and W inside a circle) sitting proudly in the center of a wheel cover! It's like a medal of honor for your car's wheels, showing off that classic Volkswagen style with its bold geometric design and gleaming metal finish.",
+      "fun_fact": "Volkswagen means 'people's car' in German, and these badges were found on millions of Bugs and other VW models that became icons of cool, affordable driving around the world!",
+      "rarity": "uncommon",
+      "value_estimate": "$15-$45",
+      "confidence": "high"
     }
   ]
 }
