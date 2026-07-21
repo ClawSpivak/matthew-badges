@@ -1091,6 +1091,20 @@
       "rarity": "common",
       "value_estimate": "$5-20",
       "confidence": "low"
+    },
+    {
+      "id": "5fcb7817",
+      "added": "2026-07-20T21:03:13.989847",
+      "photo": "/photos/beace2f1.jpg",
+      "make": "Unknown",
+      "model": "Not a car badge",
+      "years": "N/A",
+      "badge_name": "Metal rings/circles",
+      "description": "Four shiny black metal rings linked together in a chain! These look like they could be part of a car's suspension system, engine parts, or decorative trim - but they're not a car badge or emblem. They're just cool metal rings sitting on a tiled floor.",
+      "fun_fact": "Metal rings like these are sometimes used in cars for structural support, hanging parts, or as decorative elements, but this particular set doesn't match any famous car badge design!",
+      "rarity": "common",
+      "value_estimate": "$0-5",
+      "confidence": "high"
     }
   ]
 }
