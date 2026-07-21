@@ -881,6 +881,20 @@
       "rarity": "common",
       "value_estimate": "$5-15",
       "confidence": "high"
+    },
+    {
+      "id": "be1cee32",
+      "added": "2026-07-20T20:48:04.089612",
+      "photo": "/photos/e476b52b.jpg",
+      "make": "Mercedes-Benz",
+      "model": "All Models",
+      "years": "1990s-2000s",
+      "badge_name": "Wheel Center Cap / Hub Cap",
+      "description": "This is the center cap that goes in the middle of a Mercedes-Benz wheel! It has the famous three-pointed star logo that Mercedes uses on all their cars. The three points represent the company's goal to motorize transportation on land, sea, and air. This cap keeps dirt and dust out of the wheel while looking super cool!",
+      "fun_fact": "The Mercedes three-pointed star is one of the most recognizable logos in the world! It's been used since 1909, and the company started making some of the first cars ever created. These center caps are designed to snap or screw onto the wheel to protect it and show off that fancy Mercedes badge!",
+      "rarity": "common",
+      "value_estimate": "$15-50",
+      "confidence": "high"
     }
   ]
 }
