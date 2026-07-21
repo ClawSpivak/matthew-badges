@@ -853,6 +853,20 @@
       "rarity": "common",
       "value_estimate": "$5-15",
       "confidence": "high"
+    },
+    {
+      "id": "1173d29b",
+      "added": "2026-07-20T20:45:43.635009",
+      "photo": "/photos/177c0175.jpg",
+      "make": "Volkswagen",
+      "model": "All Models",
+      "years": "1960s-present",
+      "badge_name": "VW Grille Emblem / Front Badge",
+      "description": "This is the famous Volkswagen 'VW' logo that goes on the front grille of VW cars! The 'V' and 'W' letters are stacked inside a circle, and this chrome version has cool geometric cutouts that look like a design from the future. It's shiny and silvery, catching light like a superhero badge!",
+      "fun_fact": "Volkswagen means 'people's car' in German, and the VW logo has been used for over 80 years! Millions of people around the world recognize this badge instantly - it's one of the most famous car logos ever created!",
+      "rarity": "common",
+      "value_estimate": "$5-$30",
+      "confidence": "high"
     }
   ]
 }
