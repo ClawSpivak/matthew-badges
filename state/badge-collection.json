@@ -1035,6 +1035,20 @@
       "rarity": "common",
       "value_estimate": "$5-20",
       "confidence": "high"
+    },
+    {
+      "id": "a2cfd079",
+      "added": "2026-07-20T20:59:55.255760",
+      "photo": "/photos/c3d7b3fd.jpg",
+      "make": "Volkswagen",
+      "model": "All Models",
+      "years": "1960s-present",
+      "badge_name": "VW Roundel/Circle Badge",
+      "description": "This is the classic Volkswagen logo - a silver circle with a stylized 'VW' in the middle that looks like two V's touching! It's one of the most recognizable car badges in the whole world, and you can find it on millions of VW cars everywhere.",
+      "fun_fact": "The VW stands for 'Volkswagen,' which is German for 'people's car' - it was designed to be affordable for regular families, not just rich people! This logo has been almost the same for over 60 years!",
+      "rarity": "common",
+      "value_estimate": "$5-15",
+      "confidence": "high"
     }
   ]
 }
