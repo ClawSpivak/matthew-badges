@@ -895,6 +895,20 @@
       "rarity": "common",
       "value_estimate": "$15-50",
       "confidence": "high"
+    },
+    {
+      "id": "4ba25f65",
+      "added": "2026-07-20T20:51:07.605790",
+      "photo": "/photos/7c4ca45b.jpg",
+      "make": "Chevrolet",
+      "model": "All Models",
+      "years": "1968-1980s",
+      "badge_name": "Chevrolet Bow-Tie Emblem",
+      "description": "A shiny silver and black circular badge with a distinctive bowtie shape in the middle! The bowtie is divided into sections with sleek chrome lines that sparkle in the light. It's like a fancy necktie made of metal on the car's grille or wheel cap!",
+      "fun_fact": "The Chevrolet bowtie logo has been around since 1913 and is one of the most recognizable car badges in the world! It's been on millions of Chevy cars, trucks, and even race cars!",
+      "rarity": "common",
+      "value_estimate": "$5-25",
+      "confidence": "high"
     }
   ]
 }
