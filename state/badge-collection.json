@@ -979,6 +979,20 @@
       "rarity": "uncommon",
       "value_estimate": "$25-$75",
       "confidence": "high"
+    },
+    {
+      "id": "737592d9",
+      "added": "2026-07-20T20:56:33.580789",
+      "photo": "/photos/7eaf589b.jpg",
+      "make": "Fiat",
+      "model": "All Models",
+      "years": "1970s-1980s",
+      "badge_name": "Fiat Horn Pad Badge",
+      "description": "A cool circular badge with a shiny silver ring and a black center featuring a bold yellow and gold 'FIAT' logo! This badge sits right in the middle of the steering wheel horn pad and looks super sleek with its metallic finish.",
+      "fun_fact": "Fiat is an Italian car company, and 'FIAT' stands for 'Fabbrica Italiana Automobili Torino' which means Italian Automobile Factory Turin - pretty cool that it's from Italy, the land of sports cars!",
+      "rarity": "uncommon",
+      "value_estimate": "$15-$40",
+      "confidence": "high"
     }
   ]
 }
