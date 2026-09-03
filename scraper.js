@@ -299,7 +299,20 @@ function sendTelegram(msg) {
   const yardLabel = FULL ? 'All Yards' : '📍 Pennsburg';
   let msg = `🚗 <b>WeGotUsed ${yardLabel} — ${today}</b>\n`;
   msg += `${cars.length} vehicles | ${newToday.length} new since last check\n\n`;
-  msg += `<b>By Make:</b>\n${makesSummary}\n`;
+
+  if (newToday.length > 0) {
+    const MAX_LISTED = 40;
+    msg += `<b>New Arrivals (${newToday.length}):</b>\n`;
+    for (const c of newToday.slice(0, MAX_LISTED)) {
+      msg += `• ${c.year} ${c.make} ${c.model}${FULL ? ` [${c.yard}]` : ''}\n`;
+    }
+    if (newToday.length > MAX_LISTED) {
+      msg += `  …and ${newToday.length - MAX_LISTED} more\n`;
+    }
+    msg += `\n`;
+  }
+
+  msg += `<b>By Make (all inventory):</b>\n${makesSummary}\n`;
 
   const pennsburgHits = hits.filter(h => h.yard === 'PENNSBURG');
   const otherHits = hits.filter(h => h.yard !== 'PENNSBURG');
