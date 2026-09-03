@@ -26,8 +26,16 @@ const DUMP = process.argv.includes('--dump');
 const FULL = process.argv.includes('--full'); // Pull all yards, all 4000+ records
 
 const INVENTORY_PENNSBURG = 'https://wegotused.com/our-inventory/?inv[yard]=pennsburg&inv[make]=&inv[model]=&inv[manufacturer]=&inv[year]=&inv[part]=&inv[sort][yard_date]=0';
+const INVENTORY_ALLENTOWN = 'https://wegotused.com/our-inventory/?inv[yard]=allentown&inv[make]=&inv[model]=&inv[manufacturer]=&inv[year]=&inv[part]=&inv[sort][yard_date]=0';
 const INVENTORY_ALL = 'https://wegotused.com/our-inventory/?inv[yard]=all&inv[make]=&inv[model]=&inv[manufacturer]=&inv[year]=&inv[part]=&inv[sort][yard_date]=0&inv[sort][yard_city]=1';
-const INVENTORY_BASE = FULL ? INVENTORY_ALL : INVENTORY_PENNSBURG;
+
+// Default (no flag): Pennsburg + Allentown, both within reasonable driving
+// distance. Hazle Township is excluded — ~90mi, deliberately not monitored.
+// --full pulls every yard including Hazle Township (~4500+ records).
+const DEFAULT_YARDS = [
+  { label: 'Pennsburg', base: INVENTORY_PENNSBURG },
+  { label: 'Allentown', base: INVENTORY_ALLENTOWN },
+];
 
 // ── Badges worth hunting ─────────────────────────────────────────────
 const BADGE_TARGETS = [
@@ -163,36 +171,25 @@ function parseRow(raw) {
   };
 }
 
-// ── Main scrape ───────────────────────────────────────────────────────
-async function scrapeAll(opts = {}) {
-  const { fullScan = false, stopAfterDate = null } = opts;
-  const maxPages = fullScan ? 300 : 10; // ~4500 records max at 15/page
-
-  const browser = await puppeteer.launch({
-    executablePath: CHROMIUM,
-    headless: true,
-    args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage'],
-  });
-
-  const page = await browser.newPage();
-  await page.setUserAgent('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36');
-
+// ── Scrape one yard (paginated) using a shared browser page ────────────
+async function scrapeYard(page, baseUrl, opts = {}) {
+  const { maxPages, stopAfterDate = null, label = '' } = opts;
   const allRows = [];
   let pageIdx = 0; // inv[page] is 0-indexed after first page
   let done = false;
 
   while (!done && pageIdx <= maxPages) {
     const url = pageIdx === 0
-      ? INVENTORY_BASE
-      : `${INVENTORY_BASE}&inv[page]=${pageIdx}`;
+      ? baseUrl
+      : `${baseUrl}&inv[page]=${pageIdx}`;
 
-    console.error(`Fetching page ${pageIdx + 1} (inv[page]=${pageIdx})... total so far: ${allRows.length}`);
+    console.error(`[${label}] Fetching page ${pageIdx + 1} (inv[page]=${pageIdx})... total so far: ${allRows.length}`);
 
     let rows;
     try {
       rows = await scrapePage(page, url);
     } catch (e) {
-      console.error(`Page ${pageIdx} error: ${e.message}`);
+      console.error(`[${label}] Page ${pageIdx} error: ${e.message}`);
       break;
     }
 
@@ -208,7 +205,7 @@ async function scrapeAll(opts = {}) {
         const [m, d, y] = oldestOnPage.yardDate.split('/');
         const isoDate = `${y}-${m}-${d}`;
         if (isoDate < stopAfterDate) {
-          console.error(`Reached cars older than ${stopAfterDate}, stopping.`);
+          console.error(`[${label}] Reached cars older than ${stopAfterDate}, stopping.`);
           done = true;
         }
       }
@@ -222,6 +219,35 @@ async function scrapeAll(opts = {}) {
 
     if (!hasNext) break;
     pageIdx++;
+  }
+
+  return allRows;
+}
+
+// ── Main scrape ───────────────────────────────────────────────────────
+// Default: Pennsburg + Allentown (DEFAULT_YARDS), one page per yard scan.
+// --full: single scan of every yard via inv[yard]=all (includes Hazle Township).
+async function scrapeAll(opts = {}) {
+  const { fullScan = false, stopAfterDate = null } = opts;
+
+  const browser = await puppeteer.launch({
+    executablePath: CHROMIUM,
+    headless: true,
+    args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage'],
+  });
+
+  const page = await browser.newPage();
+  await page.setUserAgent('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36');
+
+  let allRows = [];
+
+  if (fullScan) {
+    allRows = await scrapeYard(page, INVENTORY_ALL, { maxPages: 300, stopAfterDate, label: 'ALL' });
+  } else {
+    for (const yard of DEFAULT_YARDS) {
+      const rows = await scrapeYard(page, yard.base, { maxPages: 10, stopAfterDate, label: yard.label });
+      allRows.push(...rows);
+    }
   }
 
   await browser.close();
@@ -296,7 +322,7 @@ function sendTelegram(msg) {
     .map(([make, count]) => `  ${make}: ${count}`)
     .join('\n');
 
-  const yardLabel = FULL ? 'All Yards' : '📍 Pennsburg';
+  const yardLabel = FULL ? 'All Yards' : '📍 Pennsburg + Allentown';
   let msg = `🚗 <b>WeGotUsed ${yardLabel} — ${today}</b>\n`;
   msg += `${cars.length} vehicles | ${newToday.length} new since last check\n\n`;
 
@@ -304,7 +330,7 @@ function sendTelegram(msg) {
     const MAX_LISTED = 40;
     msg += `<b>New Arrivals (${newToday.length}):</b>\n`;
     for (const c of newToday.slice(0, MAX_LISTED)) {
-      msg += `• ${c.year} ${c.make} ${c.model}${FULL ? ` [${c.yard}]` : ''}\n`;
+      msg += `• ${c.year} ${c.make} ${c.model} [${c.yard}]\n`;
     }
     if (newToday.length > MAX_LISTED) {
       msg += `  …and ${newToday.length - MAX_LISTED} more\n`;
