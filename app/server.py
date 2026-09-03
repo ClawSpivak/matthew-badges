@@ -179,6 +179,54 @@ If genuinely not a car badge, set make to "Unknown"."""
                 "description": "Couldn't identify this one — try a clearer photo!", "confidence": "low"}
 
 
+def generate_ideas(owned_makes):
+    owned_str = ", ".join(sorted(set(m for m in owned_makes if m))) or "none yet"
+
+    prompt = f"""You are a fun, encouraging mentor helping a kid grow his car badge/emblem collection.
+
+He already has badges from these makes: {owned_str}.
+
+He specifically wants RARE, HARD-TO-GET EXOTIC badges — Ferrari, Lamborghini, Porsche, Bentley, Rolls-Royce, Aston Martin, Bugatti, Maserati, McLaren — the kind you basically never find at a regular self-service junkyard.
+
+Give him 6 creative, realistic ideas (assume a parent/adult can help with driving, asking, etc.) for how to actually find or get one of these rare badges. Mix easy wins with bigger swings. Think broadly: car shows and cruise nights, exotic dealership service departments, owners' clubs (Ferrari Club of America, Porsche Club of America, etc.), collision-repair/specialty shops, online collector marketplaces and swap groups, estate sales, Cars & Coffee events, trading with other badge collectors.
+
+Reply with ONLY a JSON object, no markdown, no code fences:
+{{"ideas": [{{"title": "<short punchy title>", "difficulty": "<easy|medium|hard>", "description": "<2-3 exciting kid-friendly sentences on what to actually do>", "tip": "<one concrete practical tip, e.g. what to say or where to look>"}}]}}"""
+
+    payload = json.dumps({
+        "model": ANTHROPIC_MODEL,
+        "max_tokens": 900,
+        "messages": [{"role": "user", "content": prompt}]
+    }).encode()
+
+    req = urllib.request.Request(
+        ANTHROPIC_API_URL,
+        data=payload,
+        headers={
+            "Content-Type": "application/json",
+            "x-api-key": get_anthropic_key(),
+            "anthropic-version": "2023-06-01"
+        }
+    )
+
+    try:
+        with urllib.request.urlopen(req, timeout=30) as r:
+            resp = json.loads(r.read())
+            content = resp["content"][0]["text"].strip()
+            if "```" in content:
+                content = content.split("```")[1]
+                if content.startswith("json"):
+                    content = content[4:]
+                content = content.strip()
+            start = content.find("{")
+            end   = content.rfind("}") + 1
+            if start >= 0 and end > start:
+                content = content[start:end]
+            return json.loads(content)
+    except Exception as e:
+        return {"error": str(e), "ideas": []}
+
+
 RARITY_ORDER = ['very_rare', 'rare', 'uncommon', 'common', '']
 
 FILLS = {
@@ -408,7 +456,13 @@ class BadgeHandler(BaseHTTPRequestHandler):
         parsed = urlparse(self.path)
         path = parsed.path
 
-        if path == "/api/identify":
+        if path == "/api/ideas":
+            collection = load_collection()
+            owned_makes = [b.get("make", "") for b in collection.get("badges", [])]
+            result = generate_ideas(owned_makes)
+            self.send_json(result)
+
+        elif path == "/api/identify":
             body = json.loads(self.read_body())
             image_b64 = body.get("image", "")
             mime_type = body.get("mimeType", "image/jpeg")

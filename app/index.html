@@ -638,6 +638,56 @@
     .badge-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); }
     header h1 { font-size: 2.2rem; }
   }
+
+  /* ── Ideas view ── */
+  .ideas-intro {
+    background: white;
+    border-radius: 20px;
+    padding: 20px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    margin-bottom: 16px;
+    text-align: center;
+  }
+  .ideas-intro h2 { font-size: 1.2rem; color: var(--blue); margin-bottom: 6px; }
+  .ideas-intro p { font-size: 0.9rem; color: #6c757d; margin-bottom: 14px; }
+
+  .idea-card {
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+    padding: 16px;
+    margin-bottom: 12px;
+    border-left: 5px solid var(--orange);
+    animation: pop-in 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  .idea-card-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+  }
+  .idea-title { font-size: 1.05rem; font-weight: 800; color: var(--blue); }
+  .idea-difficulty {
+    font-size: 0.7rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    padding: 3px 10px;
+    border-radius: 20px;
+    white-space: nowrap;
+  }
+  .diff-easy   { background: #d4f5e9; color: #04a07a; }
+  .diff-medium { background: #fff3cd; color: #b8860b; }
+  .diff-hard   { background: #fde0e0; color: var(--red); }
+  .idea-desc { font-size: 0.92rem; color: #495057; line-height: 1.5; margin-bottom: 8px; }
+  .idea-tip {
+    font-size: 0.85rem;
+    background: var(--bg);
+    border-radius: 10px;
+    padding: 8px 12px;
+    color: var(--blue);
+  }
+  .ideas-empty { text-align: center; color: #6c757d; padding: 30px 10px; }
 </style>
 </head>
 <body>
@@ -650,6 +700,7 @@
 <nav>
   <button class="active" onclick="showView('scan')" id="tab-scan">📷 Scan</button>
   <button onclick="showView('collection')" id="tab-collection">🏆 Collection</button>
+  <button onclick="showView('ideas')" id="tab-ideas">💡 Ideas</button>
 </nav>
 
 <!-- SCAN VIEW -->
@@ -739,6 +790,16 @@
   </div>
 </div>
 
+<!-- IDEAS VIEW -->
+<div class="view" id="view-ideas">
+  <div class="ideas-intro">
+    <h2>🎯 Hunt Down Exotic Badges</h2>
+    <p>Ferrari, Lambo, Porsche, Bentley... the hard ones. Get fresh ideas on where to actually find them.</p>
+    <button class="btn btn-yellow" onclick="generateIdeas()">💡 Get Ideas!</button>
+  </div>
+  <div id="ideas-list"></div>
+</div>
+
 <!-- Badge detail modal -->
 <div class="modal-overlay" id="modal-overlay" onclick="closeModal(event)">
   <div class="modal">
@@ -761,8 +822,8 @@
 <!-- Loading overlay -->
 <div class="loading-overlay" id="loading-overlay">
   <div class="spinner"></div>
-  <div class="loading-text">Identifying Badge...</div>
-  <div class="loading-sub">Checking my car badge database 🚗</div>
+  <div class="loading-text" id="loading-text">Identifying Badge...</div>
+  <div class="loading-sub" id="loading-sub">Checking my car badge database 🚗</div>
 </div>
 
 <!-- Confetti container -->
@@ -1099,6 +1160,45 @@ function showView(name) {
   document.getElementById(`tab-${name}`).classList.add('active');
   if (name === 'collection') loadCollection();
   window.scrollTo(0, 0);
+}
+
+// ── Ideas ─────────────────────────────────────────────────────────────────
+
+async function generateIdeas() {
+  document.getElementById('loading-text').textContent = 'Brainstorming...';
+  document.getElementById('loading-sub').textContent = 'Thinking up ways to find rare badges 💡';
+  document.getElementById('loading-overlay').classList.add('show');
+
+  try {
+    const resp = await fetch('/api/ideas', { method: 'POST' });
+    const data = await resp.json();
+    renderIdeas(data.ideas || []);
+  } catch (e) {
+    document.getElementById('ideas-list').innerHTML =
+      '<div class="ideas-empty">Couldn\'t brainstorm right now — try again!</div>';
+  } finally {
+    document.getElementById('loading-overlay').classList.remove('show');
+    document.getElementById('loading-text').textContent = 'Identifying Badge...';
+    document.getElementById('loading-sub').textContent = 'Checking my car badge database 🚗';
+  }
+}
+
+function renderIdeas(ideas) {
+  const container = document.getElementById('ideas-list');
+  if (!ideas.length) {
+    container.innerHTML = '<div class="ideas-empty">No ideas came back — try again!</div>';
+    return;
+  }
+  container.innerHTML = ideas.map(idea => `
+    <div class="idea-card">
+      <div class="idea-card-head">
+        <div class="idea-title">${idea.title || 'Idea'}</div>
+        <div class="idea-difficulty diff-${(idea.difficulty || 'medium').toLowerCase()}">${idea.difficulty || 'medium'}</div>
+      </div>
+      <div class="idea-desc">${idea.description || ''}</div>
+      ${idea.tip ? `<div class="idea-tip">💡 ${idea.tip}</div>` : ''}
+    </div>
+  `).join('');
 }
 
 async function reidentifyBadge(id) {
