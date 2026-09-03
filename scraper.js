@@ -300,12 +300,12 @@ function sendTelegram(msg) {
     return isoDate >= sinceDate;
   });
 
-  // Group ALL inventory by make
-  const byMake = {};
+  // Group ALL inventory by make + model
+  const byMakeModel = {};
   for (const car of cars) {
-    const make = car.make || 'Unknown';
-    if (!byMake[make]) byMake[make] = 0;
-    byMake[make]++;
+    const key = `${car.make || 'Unknown'} ${car.model || ''}`.trim();
+    if (!byMakeModel[key]) byMakeModel[key] = 0;
+    byMakeModel[key]++;
   }
 
   // Badge hits in NEW arrivals
@@ -316,11 +316,15 @@ function sendTelegram(msg) {
   }
 
   // Build message
-  const makesSummary = Object.entries(byMake)
-    .sort((a, b) => b[1] - a[1])
-    .slice(0, 15)
-    .map(([make, count]) => `  ${make}: ${count}`)
+  const MAX_MAKE_MODEL_LISTED = 25;
+  const sortedMakeModel = Object.entries(byMakeModel).sort((a, b) => b[1] - a[1]);
+  const makesSummary = sortedMakeModel
+    .slice(0, MAX_MAKE_MODEL_LISTED)
+    .map(([makeModel, count]) => `  ${makeModel}: ${count}`)
     .join('\n');
+  const makesSummaryMore = sortedMakeModel.length > MAX_MAKE_MODEL_LISTED
+    ? `\n  …and ${sortedMakeModel.length - MAX_MAKE_MODEL_LISTED} more`
+    : '';
 
   const yardLabel = FULL ? 'All Yards' : '📍 Pennsburg + Allentown';
   let msg = `🚗 <b>WeGotUsed ${yardLabel} — ${today}</b>\n`;
@@ -338,7 +342,7 @@ function sendTelegram(msg) {
     msg += `\n`;
   }
 
-  msg += `<b>By Make (all inventory):</b>\n${makesSummary}\n`;
+  msg += `<b>By Make &amp; Model (all inventory):</b>\n${makesSummary}${makesSummaryMore}\n`;
 
   const pennsburgHits = hits.filter(h => h.yard === 'PENNSBURG');
   const otherHits = hits.filter(h => h.yard !== 'PENNSBURG');
